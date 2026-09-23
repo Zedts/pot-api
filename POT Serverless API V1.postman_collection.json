@@ -1,0 +1,824 @@
+{
+  "info": {
+    "_postman_id": "321639c0-23e8-4fb1-ad62-75ae56977c7d",
+    "name": "POT Serverless API V1",
+    "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41770428"
+  },
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check whether the API serverless instance is active and running."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth (Public)",
+      "item": [
+        {
+          "name": "1. Email Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n    console.log('Saved token to collection:', jsonData.data.token);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"tes\",\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\",\n  \"no_hp\": \"081399887766\"\n  // \"status\": \"active\" // \"active\" (default) or \"inactive\"\n  // \"role\": \"user\" // \"user\" (default) or \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Registers a new user account and returns a 30-day JWT Bearer token."
+          },
+          "response": [
+            {
+              "name": "1. Email Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama\": \"tes\",\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\",\n  \"no_hp\": \"081399887766\"\n  // \"status\": \"active\" // \"active\" (default) or \"inactive\"\n  // \"role\": \"user\" // \"user\" (default) or \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "553"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"229-YYn8nYuKQg6LrmvKTaQmTrNEag4\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:39:33 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Account registered successfully.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InFLQkZjS3N5MXFnR1NlMzF2a1dOWFJoUW50MjMiLCJlbWFpbCI6InRlc0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzkwMTY3MTczLCJleHAiOjE3OTI3NTkxNzN9.LpiPv4NKsDYJ15LbbDKu_6XOCpHwqZL1mBWrpDu60iQ\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Email Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n    console.log('Saved token to collection:', jsonData.data.token);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates user credentials and stores the 30-day token into {{token}}."
+          },
+          "response": [
+            {
+              "name": "2. Email Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "538"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"21a-qcurTB6PyYQuWd+CS2YQyUpov3Q\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:40:16 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InFLQkZjS3N5MXFnR1NlMzF2a1dOWFJoUW50MjMiLCJlbWFpbCI6InRlc0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzkwMTY3MjE2LCJleHAiOjE3OTI3NTkyMTZ9.A5Ew2l0yqMpI_OnH6O5x5PL3WmcKnd1zpJaYVZzghi4\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Google Sign-In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();\nif (jsonData.data && jsonData.data.token) {\n    pm.collectionVariables.set('token', jsonData.data.token);\n    console.log('Saved token to collection:', jsonData.data.token);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idToken\": \"PUT_YOUR_GOOGLE_ID_TOKEN_HERE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/google",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "google"
+              ]
+            },
+            "description": "Authenticates with a Google OAuth ID token, syncing the user profile and returning a 30-day token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users (Protected - Bearer Token)",
+      "item": [
+        {
+          "name": "1. Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Retrieve profile for currently authenticated user."
+          },
+          "response": [
+            {
+              "name": "1. Get My Profile",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/me",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "me"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "303"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"12f-bv6VhH1ObEq7Q2Nu4ZxX4cP9VDM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:42:47 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Current user profile retrieved.\",\n  \"data\": {\n    \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n    \"nama\": \"tes\",\n    \"email\": \"tes@example.com\",\n    \"role\": \"user\",\n    \"no_hp\": \"081399887766\",\n    \"status\": \"active\",\n    \"authProvider\": \"password\",\n    \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n    \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Users (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "List all registered users. Restricted strictly to admin role."
+          },
+          "response": [
+            {
+              "name": "2. Get All Users (Admin Only)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "790"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"316-8Vdeowi/V8UW5ccN/GovkNJNlMU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:47:23 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Users retrieved successfully.\",\n  \"count\": 3,\n  \"data\": [\n    {\n      \"id\": \"aQjQbTRivSbPJhAud8d2\",\n      \"nama\": \"Budi Santoso\",\n      \"email\": \"budi@pot.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081298765432\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-22T07:29:23.413Z\",\n      \"updatedAt\": \"2026-09-22T09:41:14.035Z\"\n    },\n    {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"update tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:45:14.354Z\"\n    },\n    {\n      \"id\": \"xAIwFfn5bbSFzVfMHB9L\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\",\n      \"no_hp\": \"081234567890\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-22T07:29:23.080Z\",\n      \"updatedAt\": \"2026-09-22T09:41:13.532Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                  "description": "User ID to query"
+                }
+              ]
+            },
+            "description": "Retrieve user profile by ID."
+          },
+          "response": [
+            {
+              "name": "3. Get User by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                      "description": "User ID to query"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "307"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"133-wwdobkldJbVYyUMVubgjIJkOJmg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:45:36 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"User retrieved successfully.\",\n  \"data\": {\n    \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n    \"nama\": \"update tes\",\n    \"email\": \"tes@example.com\",\n    \"role\": \"user\",\n    \"no_hp\": \"081399887766\",\n    \"status\": \"active\",\n    \"authProvider\": \"password\",\n    \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n    \"updatedAt\": \"2026-09-23T12:45:14.354Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"update tes\",\n  \"no_hp\": \"081399887766\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                  "description": "User ID to update"
+                }
+              ]
+            },
+            "description": "Update profile fields (nama, role, no_hp, password, status)."
+          },
+          "response": [
+            {
+              "name": "4. Update User",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama\": \"update tes\",\n  \"no_hp\": \"081399887766\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                      "description": "User ID to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "305"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"131-IFcueBEYkHIURZfaQWQkiYwxst8\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:45:14 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"User updated successfully.\",\n  \"data\": {\n    \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n    \"nama\": \"update tes\",\n    \"email\": \"tes@example.com\",\n    \"role\": \"user\",\n    \"no_hp\": \"081399887766\",\n    \"status\": \"active\",\n    \"authProvider\": \"password\",\n    \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n    \"updatedAt\": \"2026-09-23T12:45:14.354Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete User (Admin Only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                  "description": "User ID to delete"
+                }
+              ]
+            },
+            "description": "Permanently deletes user from Firestore. Admin only."
+          },
+          "response": [
+            {
+              "name": "5. Delete User (Admin Only)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                      "description": "User ID to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "103"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"67-ZY30LRM8A03jLqXYM1z9PUZrprc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 12:47:55 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"User with ID 'qKBFcKsy1qgGSe31vkWNXRhQnt23' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
