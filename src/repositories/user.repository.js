@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const User = require('../models/user.model');
+const { ROLES } = require('../constants/roles');
 
 /**
  * User Repository
@@ -23,7 +24,7 @@ class UserRepository {
     const dataToSave = {
       nama: userData.nama,
       email: userData.email ? userData.email.toLowerCase().trim() : '',
-      role: userData.role || 'user',
+      role: userData.role || ROLES.UNASSIGNED,
       no_hp: userData.no_hp || '',
       password: userData.password || null,
       status: userData.status || 'active',

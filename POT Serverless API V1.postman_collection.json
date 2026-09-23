@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "321639c0-23e8-4fb1-ad62-75ae56977c7d",
+    "_postman_id": "edbab175-8036-43a0-837a-c18c50a5059e",
     "name": "POT Serverless API V1",
     "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -56,7 +56,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nama\": \"tes\",\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\",\n  \"no_hp\": \"081399887766\"\n  // \"status\": \"active\" // \"active\" (default) or \"inactive\"\n  // \"role\": \"user\" // \"user\" (default) or \"admin\"\n}",
+              "raw": "{\n  \"nama\": \"tes\",\n  \"email\": \"tes@example.com\",\n  \"password\": \"tes#123\",\n  \"no_hp\": \"081399887766\"\n  // \"status\": \"active\" // \"active\" (default) or \"inactive\"\n  // \"role\": \"unassigned\" // \"unassigned\" (default), \"produksi\", \"pengirim\", \"spg\", \"admin\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -144,7 +144,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Account registered successfully.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InFLQkZjS3N5MXFnR1NlMzF2a1dOWFJoUW50MjMiLCJlbWFpbCI6InRlc0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzkwMTY3MTczLCJleHAiOjE3OTI3NTkxNzN9.LpiPv4NKsDYJ15LbbDKu_6XOCpHwqZL1mBWrpDu60iQ\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Account registered successfully.\",\n  \"data\": {\n    \"token\": \"\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
             }
           ]
         },
@@ -259,7 +259,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InFLQkZjS3N5MXFnR1NlMzF2a1dOWFJoUW50MjMiLCJlbWFpbCI6InRlc0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzkwMTY3MjE2LCJleHAiOjE3OTI3NTkyMTZ9.A5Ew2l0yqMpI_OnH6O5x5PL3WmcKnd1zpJaYVZzghi4\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful.\",\n  \"data\": {\n    \"token\": \"\",\n    \"user\": {\n      \"id\": \"qKBFcKsy1qgGSe31vkWNXRhQnt23\",\n      \"nama\": \"tes\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"user\",\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T12:39:33.140Z\",\n      \"updatedAt\": \"2026-09-23T12:39:33.140Z\"\n    }\n  }\n}"
             }
           ]
         },
@@ -709,7 +709,135 @@
           ]
         },
         {
-          "name": "5. Delete User (Admin Only)",
+          "name": "5. Update User Role (Admin Only)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"spg\" // \"unassigned\" (default), \"produksi\", \"pengirim\", \"spg\", \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id",
+                "role"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "p7IbqAsvTwYTFtuBCTPDJGNkVbG3",
+                  "description": "User ID to update role"
+                }
+              ]
+            },
+            "description": "Updates a user role. Strictly restricted to Admin. Allowed roles: admin, produksi, pengirim, spg, unassigned."
+          },
+          "response": [
+            {
+              "name": "5. Update User Role (Admin Only)",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"role\": \"spg\" // \"unassigned\" (default), \"produksi\", \"pengirim\", \"spg\", \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id/role",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id",
+                    "role"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "p7IbqAsvTwYTFtuBCTPDJGNkVbG3",
+                      "description": "User ID to update role"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "327"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"147-+HnF3tSHVN6Vbnp4OJmjCB2icEo\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 23 Sep 2026 14:04:57 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"User role has been successfully updated to 'spg'.\",\n  \"data\": {\n    \"id\": \"p7IbqAsvTwYTFtuBCTPDJGNkVbG3\",\n    \"nama\": \"update tes\",\n    \"email\": \"tes@example.com\",\n    \"role\": \"spg\",\n    \"no_hp\": \"081399887766\",\n    \"status\": \"active\",\n    \"authProvider\": \"password\",\n    \"createdAt\": \"2026-09-23T14:02:20.799Z\",\n    \"updatedAt\": \"2026-09-23T14:04:57.490Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "6. Delete User (Admin Only)",
           "request": {
             "method": "DELETE",
             "header": [

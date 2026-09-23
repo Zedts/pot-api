@@ -1,10 +1,13 @@
 /**
  * User Roles Enum
- * Strictly restricted to ADMIN and USER.
+ * Strictly restricted to 5 roles: ADMIN, PRODUKSI, PENGIRIM, SPG, and UNASSIGNED.
  */
 const ROLES = Object.freeze({
   ADMIN: 'admin',
-  USER: 'user',
+  PRODUKSI: 'produksi',
+  PENGIRIM: 'pengirim',
+  SPG: 'spg',
+  UNASSIGNED: 'unassigned',
 });
 
 const VALID_ROLES = Object.freeze(Object.values(ROLES));

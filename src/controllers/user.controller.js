@@ -49,6 +49,21 @@ class UserController {
   }
 
   /**
+   * PATCH /api/v1/users/:id/role
+   * Update a user's role (Admin only)
+   */
+  async updateUserRole(req, res) {
+    const { id } = req.params;
+    const { role } = req.body;
+    const updatedUser = await userService.updateUserRole(id, role);
+    return res.status(200).json({
+      success: true,
+      message: `User role has been successfully updated to '${role}'.`,
+      data: updatedUser.toJSON(),
+    });
+  }
+
+  /**
    * DELETE /api/v1/users/:id
    * Delete a user (Admin only)
    */

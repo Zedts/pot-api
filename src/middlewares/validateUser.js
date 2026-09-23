@@ -31,6 +31,8 @@ function validateUpdateUser(req, res, next) {
   if (role !== undefined) {
     if (typeof role !== 'string' || !VALID_ROLES.includes(role.toLowerCase().trim())) {
       errors.push(`Invalid role "${role}". Allowed roles are strictly: ${VALID_ROLES.join(', ')}.`);
+    } else {
+      req.body.role = role.toLowerCase().trim();
     }
   }
 
@@ -45,6 +47,8 @@ function validateUpdateUser(req, res, next) {
   if (status !== undefined) {
     if (typeof status !== 'string' || !VALID_USER_STATUSES.includes(status.toLowerCase().trim())) {
       errors.push(`Invalid status "${status}". Allowed values: ${VALID_USER_STATUSES.join(', ')}.`);
+    } else {
+      req.body.status = status.toLowerCase().trim();
     }
   }
 
@@ -55,6 +59,30 @@ function validateUpdateUser(req, res, next) {
   next();
 }
 
+/**
+ * Middleware: Validate user role update payload (Admin dedicated endpoint)
+ */
+function validateUpdateRole(req, res, next) {
+  const { role } = req.body;
+
+  if (!role || typeof role !== 'string') {
+    return next(new BadRequestError('Field "role" is required and must be a string.'));
+  }
+
+  const normalizedRole = role.toLowerCase().trim();
+  if (!VALID_ROLES.includes(normalizedRole)) {
+    return next(
+      new BadRequestError(
+        `Invalid role "${role}". Allowed roles are strictly: ${VALID_ROLES.join(', ')}.`
+      )
+    );
+  }
+
+  req.body.role = normalizedRole;
+  next();
+}
+
 module.exports = {
   validateUpdateUser,
+  validateUpdateRole,
 };

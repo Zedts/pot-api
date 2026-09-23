@@ -3,7 +3,7 @@ const userController = require('../controllers/user.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const authorize = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
-const { validateUpdateUser } = require('../middlewares/validateUser');
+const { validateUpdateUser, validateUpdateRole } = require('../middlewares/validateUser');
 const { ROLES } = require('../constants/roles');
 
 const router = Router();
@@ -34,6 +34,15 @@ router.put(
   authenticate,
   validateUpdateUser,
   asyncWrapper((req, res) => userController.updateUser(req, res))
+);
+
+// Protected: Update user role (Admin only)
+router.patch(
+  '/:id/role',
+  authenticate,
+  authorize(ROLES.ADMIN),
+  validateUpdateRole,
+  asyncWrapper((req, res) => userController.updateUserRole(req, res))
 );
 
 // Protected: Delete user (Admin only)

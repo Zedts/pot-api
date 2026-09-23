@@ -120,6 +120,34 @@ class UserService {
   }
 
   /**
+   * Update user role specifically (Admin dedicated operation)
+   * @param {string} id
+   * @param {string} role
+   * @returns {Promise<User>}
+   */
+  async updateUserRole(id, role) {
+    if (!id || typeof id !== 'string') {
+      throw new BadRequestError('User ID is required.');
+    }
+
+    if (!role || typeof role !== 'string') {
+      throw new BadRequestError('Role is required.');
+    }
+
+    const lowerRole = role.toLowerCase().trim();
+    if (!VALID_ROLES.includes(lowerRole)) {
+      throw new BadRequestError(
+        `Invalid role '${role}'. Allowed roles are strictly: ${VALID_ROLES.join(', ')}.`
+      );
+    }
+
+    // Verify user exists before updating
+    await this.getUserById(id);
+
+    return await userRepository.update(id, { role: lowerRole });
+  }
+
+  /**
    * Delete a user by ID
    * @param {string} id
    * @returns {Promise<boolean>}

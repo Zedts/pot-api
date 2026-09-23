@@ -10,7 +10,7 @@ class User {
     id = null,
     nama,
     email = '',
-    role = ROLES.USER,
+    role = ROLES.UNASSIGNED,
     no_hp = '',
     password = null,
     status = USER_STATUS.ACTIVE,
@@ -21,7 +21,7 @@ class User {
     this.id = id;
     this.nama = nama ? nama.trim() : '';
     this.email = email ? email.toLowerCase().trim() : '';
-    this.role = role;
+    this.role = role || ROLES.UNASSIGNED;
     this.no_hp = no_hp ? no_hp.trim() : '';
     this.password = password;
     this.status = status;
@@ -42,6 +42,34 @@ class User {
    */
   isAdmin() {
     return this.role === ROLES.ADMIN;
+  }
+
+  /**
+   * Check if user has produksi role
+   */
+  isProduksi() {
+    return this.role === ROLES.PRODUKSI;
+  }
+
+  /**
+   * Check if user has pengirim role
+   */
+  isPengirim() {
+    return this.role === ROLES.PENGIRIM;
+  }
+
+  /**
+   * Check if user has spg role
+   */
+  isSpg() {
+    return this.role === ROLES.SPG;
+  }
+
+  /**
+   * Check if user has unassigned role
+   */
+  isUnassigned() {
+    return this.role === ROLES.UNASSIGNED;
   }
 
   /**
@@ -96,7 +124,7 @@ class User {
       id: doc.id,
       nama: data.nama,
       email: data.email || '',
-      role: data.role,
+      role: data.role || ROLES.UNASSIGNED,
       no_hp: data.no_hp || '',
       password: data.password || null,
       status: data.status,

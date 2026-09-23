@@ -85,7 +85,7 @@ class AuthService {
       {
         nama: cleanName,
         email: cleanEmail,
-        role: ROLES.USER, // Default role is always 'user'
+        role: ROLES.UNASSIGNED, // Default role for newly registered users is 'unassigned'
         no_hp: cleanPhone,
         password: hashedPassword,
         status: USER_STATUS.ACTIVE,
@@ -215,7 +215,7 @@ class AuthService {
         {
           nama: name || 'Google User',
           email: cleanEmail,
-          role: ROLES.USER,
+          role: ROLES.UNASSIGNED,
           no_hp: '',
           password: null,
           status: USER_STATUS.ACTIVE,
