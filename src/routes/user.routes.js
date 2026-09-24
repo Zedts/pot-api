@@ -1,10 +1,9 @@
 const { Router } = require('express');
 const userController = require('../controllers/user.controller');
 const authenticate = require('../middlewares/auth.middleware');
-const authorize = require('../middlewares/rbac.middleware');
+const { authorizePermission } = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
 const { validateUpdateUser, validateUpdateRole } = require('../middlewares/validateUser');
-const { ROLES } = require('../constants/roles');
 
 const router = Router();
 
@@ -17,7 +16,7 @@ const router = Router();
 router.get(
   '/',
   authenticate,
-  authorize(ROLES.ADMIN),
+  authorizePermission('USER', 'READ'),
   asyncWrapper((req, res) => userController.getAllUsers(req, res))
 );
 
@@ -40,7 +39,7 @@ router.put(
 router.patch(
   '/:id/role',
   authenticate,
-  authorize(ROLES.ADMIN),
+  authorizePermission('USER', 'UPDATE_ROLE'),
   validateUpdateRole,
   asyncWrapper((req, res) => userController.updateUserRole(req, res))
 );
@@ -49,7 +48,7 @@ router.patch(
 router.delete(
   '/:id',
   authenticate,
-  authorize(ROLES.ADMIN),
+  authorizePermission('USER', 'DELETE'),
   asyncWrapper((req, res) => userController.deleteUser(req, res))
 );
 

@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "edbab175-8036-43a0-837a-c18c50a5059e",
+    "_postman_id": "73f10265-98ba-4ca9-bf4d-b6da99c52bda",
     "name": "POT Serverless API V1",
     "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -933,6 +933,1609 @@
               ],
               "cookie": [],
               "body": "{\n  \"success\": true,\n  \"message\": \"User with ID 'qKBFcKsy1qgGSe31vkWNXRhQnt23' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lapak (CRUD - Protected)",
+      "item": [
+        {
+          "name": "1. Create Lapak",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Lapak Sukses 01\",\n  \"lokasi\": \"Pasar Baru Blok A No. 12\",\n  \"keterangan\": \"Cabang utama pagi hari\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lapak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lapak"
+              ]
+            },
+            "description": "Creates a new lapak (stall/booth). Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "1. Create Lapak",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama\": \"Lapak Sukses 01\",\n  \"lokasi\": \"Pasar Baru Blok A No. 12\",\n  \"keterangan\": \"Cabang utama pagi hari\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/lapak",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lapak"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "270"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"10e-h1PoL5CmCE02nn/ISvTS1E0EIm4\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:35:53 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Lapak created successfully.\",\n  \"data\": {\n    \"id\": \"Rs5SUnWHYUb0vXu4Lpjb\",\n    \"nama\": \"Lapak Sukses 01\",\n    \"lokasi\": \"Pasar Baru Blok A No. 12\",\n    \"keterangan\": \"Cabang utama pagi hari\",\n    \"createdAt\": \"2026-09-24T08:35:53.009Z\",\n    \"updatedAt\": \"2026-09-24T08:35:53.009Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Lapak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lapak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lapak"
+              ]
+            },
+            "description": "Retrieves all lapak records."
+          },
+          "response": [
+            {
+              "name": "2. Get All Lapak",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/lapak",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lapak"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "496"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"1f0-VX33tcP5qzEfGkMJNABlouSlOwU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:36:07 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Lapak list retrieved successfully.\",\n  \"count\": 2,\n  \"data\": [\n    {\n      \"id\": \"Rs5SUnWHYUb0vXu4Lpjb\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T08:35:53.009Z\",\n      \"updatedAt\": \"2026-09-24T08:35:53.009Z\"\n    },\n    {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Lapak by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lapak/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lapak",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_LAPAK_ID",
+                  "description": "Lapak ID to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves a single lapak by its ID."
+          },
+          "response": [
+            {
+              "name": "3. Get Lapak by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/lapak/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lapak",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Rs5SUnWHYUb0vXu4Lpjb",
+                      "description": "Lapak ID to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "272"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"110-udD/uAORxAQe73/UoJKEvpPftmo\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:36:29 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Lapak retrieved successfully.\",\n  \"data\": {\n    \"id\": \"Rs5SUnWHYUb0vXu4Lpjb\",\n    \"nama\": \"Lapak Sukses 01\",\n    \"lokasi\": \"Pasar Baru Blok A No. 12\",\n    \"keterangan\": \"Cabang utama pagi hari\",\n    \"createdAt\": \"2026-09-24T08:35:53.009Z\",\n    \"updatedAt\": \"2026-09-24T08:35:53.009Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Lapak",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Lapak Sukses 01 (Updated)\",\n  \"lokasi\": \"Pasar Baru Blok A No. 15\",\n  \"keterangan\": \"Pindah ke unit nomor 15\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lapak/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lapak",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_LAPAK_ID",
+                  "description": "Lapak ID to update"
+                }
+              ]
+            },
+            "description": "Updates lapak information (nama, lokasi, keterangan)."
+          },
+          "response": [
+            {
+              "name": "4. Update Lapak",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama\": \"Lapak Sukses 01 (Updated)\",\n  \"lokasi\": \"Pasar Baru Blok A No. 15\",\n  \"keterangan\": \"Pindah ke unit nomor 15\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/lapak/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lapak",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Rs5SUnWHYUb0vXu4Lpjb",
+                      "description": "Lapak ID to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "281"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"119-4lOe1dC+cosaT5eBhyRhmEMeFqg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:36:39 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Lapak updated successfully.\",\n  \"data\": {\n    \"id\": \"Rs5SUnWHYUb0vXu4Lpjb\",\n    \"nama\": \"Lapak Sukses 01 (Updated)\",\n    \"lokasi\": \"Pasar Baru Blok A No. 15\",\n    \"keterangan\": \"Pindah ke unit nomor 15\",\n    \"createdAt\": \"2026-09-24T08:35:53.009Z\",\n    \"updatedAt\": \"2026-09-24T08:36:39.108Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Lapak",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lapak/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "lapak",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_LAPAK_ID",
+                  "description": "Lapak ID to delete"
+                }
+              ]
+            },
+            "description": "Permanently deletes a lapak document."
+          },
+          "response": [
+            {
+              "name": "5. Delete Lapak",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/lapak/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "lapak",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Rs5SUnWHYUb0vXu4Lpjb",
+                      "description": "Lapak ID to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "96"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"60-vKO49A+vKP5ugKKwL4im48iAqUc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:36:49 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Lapak with ID 'Rs5SUnWHYUb0vXu4Lpjb' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Kategori (CRUD - Protected)",
+      "item": [
+        {
+          "name": "1. Create Kategori",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_kategori\": \"Roti Manis\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/kategori",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kategori"
+              ]
+            },
+            "description": "Creates a new category. Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "1. Create Kategori",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama_kategori\": \"Roti Manis\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/kategori",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "kategori"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "203"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"cb-BwfIqWhZNjP5sVmrQU4BPKNpeDM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:37:26 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori created successfully.\",\n  \"data\": {\n    \"id\": \"rbk613VTfn5zy4kRJejL\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"createdAt\": \"2026-09-24T08:37:26.642Z\",\n    \"updatedAt\": \"2026-09-24T08:37:26.642Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Kategori",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kategori",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kategori"
+              ]
+            },
+            "description": "Retrieves all categories sorted newest first. Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "2. Get All Kategori",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/kategori",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "kategori"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "222"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"de-bW131He/FxxtfVhDrM942tM4vj0\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:37:34 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori list retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"rbk613VTfn5zy4kRJejL\",\n      \"nama_kategori\": \"Roti Manis\",\n      \"createdAt\": \"2026-09-24T08:37:26.642Z\",\n      \"updatedAt\": \"2026-09-24T08:37:26.642Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Kategori by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kategori/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kategori",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_KATEGORI_ID",
+                  "description": "Kategori ID to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves a single category by its ID. Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "3. Get Kategori by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/kategori/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "kategori",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "rbk613VTfn5zy4kRJejL",
+                      "description": "Kategori ID to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "205"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"cd-p/wCZhRK2NcX7mstJpr19Fdh6J4\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:37:43 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori retrieved successfully.\",\n  \"data\": {\n    \"id\": \"rbk613VTfn5zy4kRJejL\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"createdAt\": \"2026-09-24T08:37:26.642Z\",\n    \"updatedAt\": \"2026-09-24T08:37:26.642Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Kategori",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_kategori\": \"Roti & Pastry\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/kategori/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kategori",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_KATEGORI_ID",
+                  "description": "Kategori ID to update"
+                }
+              ]
+            },
+            "description": "Updates category name. Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "4. Update Kategori",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama_kategori\": \"Roti & Pastry\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/kategori/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "kategori",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "rbk613VTfn5zy4kRJejL",
+                      "description": "Kategori ID to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "206"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"ce-Cl5dt6ObUDV3tQZWB3lzc5Nmg6I\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:38:09 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori updated successfully.\",\n  \"data\": {\n    \"id\": \"rbk613VTfn5zy4kRJejL\",\n    \"nama_kategori\": \"Roti & Pastry\",\n    \"createdAt\": \"2026-09-24T08:37:26.642Z\",\n    \"updatedAt\": \"2026-09-24T08:38:09.179Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/kategori/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "kategori",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_KATEGORI_ID",
+                  "description": "Kategori ID to delete"
+                }
+              ]
+            },
+            "description": "Deletes a category if not currently referenced by any products. If referenced, returns 409 Conflict."
+          },
+          "response": [
+            {
+              "name": "5. Delete Kategori",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/kategori/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "kategori",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "rbk613VTfn5zy4kRJejL",
+                      "description": "Kategori ID to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "99"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"63-rj2kgOciICYsPDVWSU4QDRzeGWs\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:38:26 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Kategori with ID 'rbk613VTfn5zy4kRJejL' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Produk (CRUD - Protected)",
+      "item": [
+        {
+          "name": "1. Create Produk",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Roti Coklat Spesial\",\n  \"harga\": 15000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\",\n  \"satuan\": \"pcs\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/produk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk"
+              ]
+            },
+            "description": "Creates a new produk with foreign reference to kategori (kategori_id). Response contains both kategori_id and resolved readable nama_kategori from kategori table. Access restricted by RBAC (Admin only)."
+          },
+          "response": [
+            {
+              "name": "1. Create Produk",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nama\": \"Roti Coklat Spesial\",\n  \"harga\": 15000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n  \"satuan\": \"pcs\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/produk",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "produk"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "296"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"128-O6FzBXchk1yFsNTWuN+HSVv/pjc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:39:16 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk created successfully.\",\n  \"data\": {\n    \"id\": \"n33WQYltfIhycONoyadT\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 15000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n    \"updatedAt\": \"2026-09-24T08:39:16.446Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Produk",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk"
+              ],
+              "query": [
+                {
+                  "key": "kategori_id",
+                  "value": "TARGET_KATEGORI_ID",
+                  "description": "Filter by category ID (optional)",
+                  "disabled": true
+                },
+                {
+                  "key": "satuan",
+                  "value": "pcs",
+                  "description": "Filter by unit (optional)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieves all products with optional query filtering. Response populates both kategori_id and readable nama_kategori for each item."
+          },
+          "response": [
+            {
+              "name": "2. Get All Produk",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/produk",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "produk"
+                  ],
+                  "query": [
+                    {
+                      "key": "kategori_id",
+                      "value": "TARGET_KATEGORI_ID",
+                      "description": "Filter by category ID (optional)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "satuan",
+                      "value": "pcs",
+                      "description": "Filter by unit (optional)",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "315"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"13b-dP1u7aMbUhQ1OA/fAJIO1axS4o4\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:39:44 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk list retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"n33WQYltfIhycONoyadT\",\n      \"nama\": \"Roti Coklat Spesial\",\n      \"harga\": 15000,\n      \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n      \"nama_kategori\": \"Roti Manis\",\n      \"satuan\": \"pcs\",\n      \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n      \"updatedAt\": \"2026-09-24T08:39:16.446Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Produk by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produk/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PRODUK_ID",
+                  "description": "Produk ID to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves a single produk by its ID with both kategori_id and resolved nama_kategori."
+          },
+          "response": [
+            {
+              "name": "3. Get Produk by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/produk/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "produk",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "n33WQYltfIhycONoyadT",
+                      "description": "Produk ID to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "298"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"12a-olVMnsG0uEf1ZLiiS+Qx+PsVi64\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:40:06 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk retrieved successfully.\",\n  \"data\": {\n    \"id\": \"n33WQYltfIhycONoyadT\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 15000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n    \"updatedAt\": \"2026-09-24T08:39:16.446Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Produk",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/produk/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PRODUK_ID",
+                  "description": "Produk ID to update"
+                }
+              ]
+            },
+            "description": "Updates product fields (nama, harga, kategori_id, satuan). Response includes both updated kategori_id and readable nama_kategori."
+          },
+          "response": [
+            {
+              "name": "4. Update Produk",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/produk/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "produk",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "n33WQYltfIhycONoyadT",
+                      "description": "Produk ID to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "296"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"128-B1ZOHV8S3L1G6Gc3W81n36vUSW0\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:41:28 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk updated successfully.\",\n  \"data\": {\n    \"id\": \"n33WQYltfIhycONoyadT\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 16000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n    \"updatedAt\": \"2026-09-24T08:41:28.555Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Produk",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produk/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produk",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PRODUK_ID",
+                  "description": "Produk ID to delete"
+                }
+              ]
+            },
+            "description": "Permanently deletes a produk document."
+          },
+          "response": [
+            {
+              "name": "5. Delete Produk",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/produk/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "produk",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "n33WQYltfIhycONoyadT",
+                      "description": "Produk ID to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "97"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"61-WEgfyTruYPV5cTF39+eqtsTI21A\""
+                },
+                {
+                  "key": "date",
+                  "value": "Thu, 24 Sep 2026 08:41:45 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk with ID 'n33WQYltfIhycONoyadT' has been successfully deleted.\"\n}"
             }
           ]
         }
