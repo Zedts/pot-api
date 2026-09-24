@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
 const { VALID_ROLES } = require('../constants/roles');
 const { VALID_USER_STATUSES } = require('../constants/userStatus');
@@ -6,6 +7,7 @@ const {
   BadRequestError,
   NotFoundError,
   ConflictError,
+  InternalServerError,
 } = require('../errors/AppError');
 
 /**
@@ -116,6 +118,21 @@ class UserService {
       return existingUser;
     }
 
+    // Synchronize displayName or password updates to Firebase Auth if applicable
+    const authUpdates = {};
+    if (payload.nama) authUpdates.displayName = payload.nama;
+    if (updateData.password) authUpdates.password = updateData.password;
+
+    if (Object.keys(authUpdates).length > 0) {
+      try {
+        await auth.updateUser(id, authUpdates);
+      } catch (fbErr) {
+        if (fbErr.code !== 'auth/user-not-found') {
+          console.warn(`[AUTH_UPDATE_WARN] Could not sync user updates to Firebase Auth for UID '${id}':`, fbErr.message);
+        }
+      }
+    }
+
     return await userRepository.update(id, payload);
   }
 
@@ -148,13 +165,44 @@ class UserService {
   }
 
   /**
-   * Delete a user by ID
+   * Delete a user by ID from both Firebase Authentication and Firestore
    * @param {string} id
    * @returns {Promise<boolean>}
    */
   async deleteUser(id) {
-    // Ensure user exists before deleting
-    await this.getUserById(id);
+    // 1. Ensure user exists in Firestore
+    const user = await this.getUserById(id);
+
+    // 2. Delete user from Firebase Authentication
+    let authDeleted = false;
+
+    // Primary attempt: delete by Firestore doc ID (which matches Firebase Auth UID)
+    try {
+      await auth.deleteUser(id);
+      authDeleted = true;
+    } catch (fbErr) {
+      if (fbErr.code !== 'auth/user-not-found') {
+        console.error(`[AUTH_DELETE_ERROR] Failed to delete auth user with UID '${id}':`, fbErr.message);
+        throw new InternalServerError(`Failed to delete Firebase Authentication account: ${fbErr.message}`);
+      }
+    }
+
+    // Fallback attempt: if not found by UID but user has an email, find by email and delete
+    if (!authDeleted && user.email) {
+      try {
+        const fbUser = await auth.getUserByEmail(user.email);
+        if (fbUser && fbUser.uid) {
+          await auth.deleteUser(fbUser.uid);
+        }
+      } catch (fbErr) {
+        if (fbErr.code !== 'auth/user-not-found') {
+          console.error(`[AUTH_DELETE_ERROR] Failed to delete auth user with email '${user.email}':`, fbErr.message);
+          throw new InternalServerError(`Failed to delete Firebase Authentication account: ${fbErr.message}`);
+        }
+      }
+    }
+
+    // 3. Delete from Firestore database
     return await userRepository.delete(id);
   }
 }
