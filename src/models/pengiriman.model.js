@@ -3,7 +3,7 @@
  */
 const PENGIRIMAN_STATUS = Object.freeze({
   SIAP_KIRIM: 'siap_kirim',
-  DIANTAR: 'diantar',
+  DIKIRIM: 'dikirim',
   SAMPAI: 'sampai',
   SELESAI: 'selesai',
 });

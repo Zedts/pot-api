@@ -858,7 +858,7 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "qKBFcKsy1qgGSe31vkWNXRhQnt23",
+                  "value": "USER_ID",
                   "description": "User ID to delete"
                 }
               ]
@@ -3201,7 +3201,7 @@
                 {
                   "key": "status",
                   "value": "siap_kirim",
-                  "description": "Filter by status (siap_kirim, diantar, sampai, selesai)",
+                  "description": "Filter by status (siap_kirim, dikirim, sampai, selesai)",
                   "disabled": true
                 },
                 {
@@ -3237,7 +3237,7 @@
                     {
                       "key": "status",
                       "value": "siap_kirim",
-                      "description": "Filter by status (siap_kirim, diantar, sampai, selesai)",
+                      "description": "Filter by status (siap_kirim, dikirim, sampai, selesai)",
                       "disabled": true
                     },
                     {
@@ -3533,7 +3533,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"diantar\" // only supported \"siap_kirim\", \"diantar\", \"sampai\", \"selesai\"\n}",
+              "raw": "{\n  \"status\": \"dikirim\" // only supported \"siap_kirim\", \"dikirim\", \"sampai\", \"selesai\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3558,7 +3558,7 @@
                 }
               ]
             },
-            "description": "Updates shipment lifecycle status (siap_kirim -> diantar -> sampai -> selesai). Admin only."
+            "description": "Updates shipment lifecycle status (siap_kirim -> dikirim -> sampai -> selesai). Admin only."
           },
           "response": [
             {
@@ -3577,7 +3577,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"status\": \"diantar\" // only supported \"siap_kirim\", \"diantar\", \"sampai\", \"selesai\"\n}",
+                  "raw": "{\n  \"status\": \"dikriim\" // only supported \"siap_kirim\", \"dikirim\", \"sampai\", \"selesai\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3641,7 +3641,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment status updated successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-10-01T00:00:00.000Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"diantar\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:09:04.455Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment status updated successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-10-01T00:00:00.000Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"dikirim\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:09:04.455Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
             }
           ]
         },

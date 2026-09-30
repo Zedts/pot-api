@@ -52,7 +52,7 @@ router.put(
   asyncWrapper((req, res) => pengirimanController.update(req, res))
 );
 
-// Update shipment status lifecycle (siap_kirim -> diantar -> sampai -> selesai)
+// Update shipment status lifecycle (siap_kirim -> dikirim -> sampai -> selesai)
 router.patch(
   '/:id/status',
   authenticate,
