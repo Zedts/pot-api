@@ -4,7 +4,7 @@ const { BadRequestError } = require('../errors/AppError');
  * Middleware: Validate produk creation payload
  */
 function validateCreateProduk(req, res, next) {
-  const { nama, harga, kategori_id, satuan } = req.body;
+  const { nama, harga, kategori_id, satuan_id } = req.body;
   const errors = [];
 
   if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
@@ -19,8 +19,8 @@ function validateCreateProduk(req, res, next) {
     errors.push('Field "kategori_id" is required and cannot be empty.');
   }
 
-  if (!satuan || typeof satuan !== 'string' || !satuan.trim()) {
-    errors.push('Field "satuan" is required and cannot be empty.');
+  if (!satuan_id || typeof satuan_id !== 'string' || !satuan_id.trim()) {
+    errors.push('Field "satuan_id" is required and cannot be empty.');
   }
 
   if (errors.length > 0) {
@@ -34,12 +34,12 @@ function validateCreateProduk(req, res, next) {
  * Middleware: Validate produk update payload
  */
 function validateUpdateProduk(req, res, next) {
-  const { nama, harga, kategori_id, satuan } = req.body;
+  const { nama, harga, kategori_id, satuan_id } = req.body;
   const errors = [];
 
-  if (nama === undefined && harga === undefined && kategori_id === undefined && satuan === undefined) {
+  if (nama === undefined && harga === undefined && kategori_id === undefined && satuan_id === undefined) {
     return next(
-      new BadRequestError('At least one field (nama, harga, kategori_id, satuan) must be provided for update.')
+      new BadRequestError('At least one field (nama, harga, kategori_id, satuan_id) must be provided for update.')
     );
   }
 
@@ -55,8 +55,8 @@ function validateUpdateProduk(req, res, next) {
     errors.push('Field "kategori_id" cannot be empty.');
   }
 
-  if (satuan !== undefined && (typeof satuan !== 'string' || !satuan.trim())) {
-    errors.push('Field "satuan" cannot be empty.');
+  if (satuan_id !== undefined && (typeof satuan_id !== 'string' || !satuan_id.trim())) {
+    errors.push('Field "satuan_id" cannot be empty.');
   }
 
   if (errors.length > 0) {

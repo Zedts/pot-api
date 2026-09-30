@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "73f10265-98ba-4ca9-bf4d-b6da99c52bda",
+    "_postman_id": "436681d8-c07c-4a3d-b9cb-165ddefc1ad4",
     "name": "POT Serverless API V1",
     "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -310,7 +310,7 @@
       ]
     },
     {
-      "name": "Users (Protected - Bearer Token)",
+      "name": "Users (Bearer Token - Protected)",
       "item": [
         {
           "name": "1. Get My Profile",
@@ -1989,6 +1989,531 @@
       ]
     },
     {
+      "name": "Satuan (CRUD - Protected)",
+      "item": [
+        {
+          "name": "1. Create Satuan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jenis_satuan\": \"lusin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/satuan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "satuan"
+              ]
+            },
+            "description": "Creates a new measurement unit. Restricted to Admin."
+          },
+          "response": [
+            {
+              "name": "1. Create Satuan",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jenis_satuan\": \"lusin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/satuan",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "satuan"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "195"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"c3-j4scM+65fNrX7jmRFfDfnqkzvDA\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 05:47:32 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Satuan created successfully.\",\n  \"data\": {\n    \"id\": \"CAEL57gNj06f6pyeiiU5\",\n    \"jenis_satuan\": \"lusin\",\n    \"createdAt\": \"2026-09-30T05:47:32.086Z\",\n    \"updatedAt\": \"2026-09-30T05:47:32.086Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Satuan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/satuan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "satuan"
+              ]
+            },
+            "description": "Retrieves all measurement units. Accessible by Admin and Produksi."
+          },
+          "response": [
+            {
+              "name": "2. Get All Satuan",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/satuan",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "satuan"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "730"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"2da-gZdJmo8q+lDOV3bJJE9cDMePlc8\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 05:47:53 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Satuan list retrieved successfully.\",\n  \"count\": 5,\n  \"data\": [\n    {\n      \"id\": \"CAEL57gNj06f6pyeiiU5\",\n      \"jenis_satuan\": \"lusin\",\n      \"createdAt\": \"2026-09-30T05:47:32.086Z\",\n      \"updatedAt\": \"2026-09-30T05:47:32.086Z\"\n    },\n    {\n      \"id\": \"GJcAFvmZVYqr58R4v7Mm\",\n      \"jenis_satuan\": \"pack\",\n      \"createdAt\": \"2026-09-29T14:26:49.627Z\",\n      \"updatedAt\": \"2026-09-29T14:26:49.627Z\"\n    },\n    {\n      \"id\": \"1PLYC6H4q4hDp62Eldlx\",\n      \"jenis_satuan\": \"kg\",\n      \"createdAt\": \"2026-09-29T14:26:49.533Z\",\n      \"updatedAt\": \"2026-09-29T14:26:49.533Z\"\n    },\n    {\n      \"id\": \"lKFwWJ4eQv7RpegWXP8Q\",\n      \"jenis_satuan\": \"box\",\n      \"createdAt\": \"2026-09-29T14:26:49.386Z\",\n      \"updatedAt\": \"2026-09-29T14:26:49.386Z\"\n    },\n    {\n      \"id\": \"IqdRfSX0WFuaL8Mt6vRP\",\n      \"jenis_satuan\": \"pcs\",\n      \"createdAt\": \"2026-09-29T14:26:49.189Z\",\n      \"updatedAt\": \"2026-09-29T14:26:49.189Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Satuan by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/satuan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "satuan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_SATUAN_ID",
+                  "description": "ID of the Satuan to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves single measurement unit by ID."
+          },
+          "response": [
+            {
+              "name": "3. Get Satuan by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/satuan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "satuan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "CAEL57gNj06f6pyeiiU5",
+                      "description": "ID of the Satuan to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "197"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"c5-iVfcJVsYAxfqmzSIOF/20lzUkcI\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 05:48:12 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Satuan retrieved successfully.\",\n  \"data\": {\n    \"id\": \"CAEL57gNj06f6pyeiiU5\",\n    \"jenis_satuan\": \"lusin\",\n    \"createdAt\": \"2026-09-30T05:47:32.086Z\",\n    \"updatedAt\": \"2026-09-30T05:47:32.086Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Satuan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jenis_satuan\": \"lusin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/satuan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "satuan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_SATUAN_ID",
+                  "description": "ID of the Satuan to update"
+                }
+              ]
+            },
+            "description": "Updates a measurement unit. Automatically syncs referenced products in the database."
+          },
+          "response": [
+            {
+              "name": "4. Update Satuan",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"jenis_satuan\": \"lusin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/satuan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "satuan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "CAEL57gNj06f6pyeiiU5",
+                      "description": "ID of the Satuan to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "195"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"c3-z/Xq7kuixnxINxEdDtYSImkJ0OE\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 05:48:47 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Satuan updated successfully.\",\n  \"data\": {\n    \"id\": \"CAEL57gNj06f6pyeiiU5\",\n    \"jenis_satuan\": \"lusin\",\n    \"createdAt\": \"2026-09-30T05:47:32.086Z\",\n    \"updatedAt\": \"2026-09-30T05:48:47.627Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Satuan",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/satuan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "satuan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_SATUAN_ID",
+                  "description": "ID of the Satuan to delete"
+                }
+              ]
+            },
+            "description": "Deletes a measurement unit. Enforces referential integrity (blocks deletion if referenced by products)."
+          },
+          "response": [
+            {
+              "name": "5. Delete Satuan",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/satuan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "satuan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "CAEL57gNj06f6pyeiiU5",
+                      "description": "ID of the Satuan to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "97"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"61-mMDgPXEF9UoxbUWr/cnrnUqmAUM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 05:49:15 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Satuan with ID 'CAEL57gNj06f6pyeiiU5' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Produk (CRUD - Protected)",
       "item": [
         {
@@ -2007,7 +2532,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"nama\": \"Roti Coklat Spesial\",\n  \"harga\": 15000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\",\n  \"satuan\": \"pcs\"\n}",
+              "raw": "{\n  \"nama\": \"Roti Coklat Spesial\",\n  \"harga\": 15000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\",\n  \"satuan_id\": \"TARGET_SATUAN_ID\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2042,7 +2567,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nama\": \"Roti Coklat Spesial\",\n  \"harga\": 15000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n  \"satuan\": \"pcs\"\n}",
+                  "raw": "{\n  \"nama\": \"Roti Gandum\",\n  \"harga\": 15000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n  \"satuan_id\": \"IqdRfSX0WFuaL8Mt6vRP\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2077,15 +2602,15 @@
                 },
                 {
                   "key": "content-length",
-                  "value": "296"
+                  "value": "329"
                 },
                 {
                   "key": "etag",
-                  "value": "W/\"128-O6FzBXchk1yFsNTWuN+HSVv/pjc\""
+                  "value": "W/\"149-jtuOPeEnbenxafRWcWlgviJYiAw\""
                 },
                 {
                   "key": "date",
-                  "value": "Thu, 24 Sep 2026 08:39:16 GMT"
+                  "value": "Wed, 30 Sep 2026 06:14:19 GMT"
                 },
                 {
                   "key": "connection",
@@ -2097,7 +2622,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Produk created successfully.\",\n  \"data\": {\n    \"id\": \"n33WQYltfIhycONoyadT\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 15000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n    \"updatedAt\": \"2026-09-24T08:39:16.446Z\"\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk created successfully.\",\n  \"data\": {\n    \"id\": \"AwP6SrvLJ8hkQXFizlqU\",\n    \"nama\": \"Roti Gandum\",\n    \"harga\": 15000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan_id\": \"IqdRfSX0WFuaL8Mt6vRP\",\n    \"jenis_satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-30T06:14:19.181Z\",\n    \"updatedAt\": \"2026-09-30T06:14:19.181Z\"\n  }\n}"
             }
           ]
         },
@@ -2329,7 +2854,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\"\n}",
+              "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"TARGET_KATEGORI_ID\",\n  \"satuan_id\": \"TARGET_SATUAN_ID\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2372,7 +2897,7 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\"\n}",
+                  "raw": "{\n  \"harga\": 16000,\n  \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n  \"satuan_id\": \"IqdRfSX0WFuaL8Mt6vRP\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2391,7 +2916,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "n33WQYltfIhycONoyadT",
+                      "value": "TwcmUwtcX7RzP178kYIk",
                       "description": "Produk ID to update"
                     }
                   ]
@@ -2415,15 +2940,15 @@
                 },
                 {
                   "key": "content-length",
-                  "value": "296"
+                  "value": "337"
                 },
                 {
                   "key": "etag",
-                  "value": "W/\"128-B1ZOHV8S3L1G6Gc3W81n36vUSW0\""
+                  "value": "W/\"151-H/35YolSeqZ6R5q4v/Yl7SgkpUQ\""
                 },
                 {
                   "key": "date",
-                  "value": "Thu, 24 Sep 2026 08:41:28 GMT"
+                  "value": "Wed, 30 Sep 2026 05:51:19 GMT"
                 },
                 {
                   "key": "connection",
@@ -2435,7 +2960,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Produk updated successfully.\",\n  \"data\": {\n    \"id\": \"n33WQYltfIhycONoyadT\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 16000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:39:16.446Z\",\n    \"updatedAt\": \"2026-09-24T08:41:28.555Z\"\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Produk updated successfully.\",\n  \"data\": {\n    \"id\": \"TwcmUwtcX7RzP178kYIk\",\n    \"nama\": \"Roti Coklat Spesial\",\n    \"harga\": 16000,\n    \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"satuan_id\": \"IqdRfSX0WFuaL8Mt6vRP\",\n    \"jenis_satuan\": \"pcs\",\n    \"createdAt\": \"2026-09-24T08:47:08.323Z\",\n    \"updatedAt\": \"2026-09-30T05:51:19.334Z\"\n  }\n}"
             }
           ]
         },
@@ -2536,6 +3061,902 @@
               ],
               "cookie": [],
               "body": "{\n  \"success\": true,\n  \"message\": \"Produk with ID 'n33WQYltfIhycONoyadT' has been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pengiriman (CRUD - Protected)",
+      "item": [
+        {
+          "name": "1. Create Pengiriman (Bulk Items)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lapak_id\": \"TARGET_LAPAK_ID\",\n  \"tanggal\": \"2026-09-29T08:00:00.000Z\", // e.g., \"2026-09-30\" or \"2026-09-29T08:00:00.000Z\" or don't sent \"tanggal\" on the json for default (new Date())\n  \"items\": [\n    {\n      \"produk_id\": \"TARGET_PRODUK_ID_1\",\n      \"qty\": 20\n    },\n    {\n      \"produk_id\": \"TARGET_PRODUK_ID_2\",\n      \"qty\": 15\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman"
+              ]
+            },
+            "description": "Creates a new shipment and its item details atomically via Firestore WriteBatch. Captures item product snapshots. Admin only."
+          },
+          "response": [
+            {
+              "name": "1. Create Pengiriman (Bulk Items)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n//   \"tanggal\": \"2026-09-29T08:00:00.000Z\", // e.g., \"2026-09-30\" or \"2026-09-29T08:00:00.000Z\" or don't sent \"tanggal\" on the json for default (new Date())\n  \"items\": [\n    {\n      \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n      \"qty\": 20\n    },\n    {\n      \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n      \"qty\": 15\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1011"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3f3-EktlLWylMcK/4xpKD0xxqGnglgQ\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:01:43 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment created successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-09-30T06:01:43.829Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"siap_kirim\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:01:43.880Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Pengiriman",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "siap_kirim",
+                  "description": "Filter by status (siap_kirim, diantar, sampai, selesai)",
+                  "disabled": true
+                },
+                {
+                  "key": "lapak_id",
+                  "value": "TARGET_LAPAK_ID",
+                  "description": "Filter by destination lapak ID",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieves all shipments with optional status and lapak filtering. Accessible by Admin, Produksi, Pengirim, SPG."
+          },
+          "response": [
+            {
+              "name": "2. Get All Pengiriman",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "siap_kirim",
+                      "description": "Filter by status (siap_kirim, diantar, sampai, selesai)",
+                      "disabled": true
+                    },
+                    {
+                      "key": "lapak_id",
+                      "value": "TARGET_LAPAK_ID",
+                      "description": "Filter by destination lapak ID",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "572"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"23c-x3rENWmIOroOFEJAzYDfeWZ0TsU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:03:37 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipments retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"Q4OFhorVYdw3NF57gngD\",\n      \"tanggal\": \"2026-09-30T06:01:43.829Z\",\n      \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n      \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"status\": \"siap_kirim\",\n      \"total_items\": 1,\n      \"total_qty\": 35,\n      \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n      \"updatedAt\": \"2026-09-30T06:01:43.880Z\",\n      \"lapak\": {\n        \"id\": \"25u3fPsqMDThhh4d3elF\",\n        \"nama\": \"Lapak Sukses 01\",\n        \"lokasi\": \"Pasar Baru Blok A No. 12\",\n        \"keterangan\": \"Cabang utama pagi hari\",\n        \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n        \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n      }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Pengiriman by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PENGIRIMAN_ID",
+                  "description": "ID of the Pengiriman to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves shipment details by ID, populated with lapak, creator, and line items."
+          },
+          "response": [
+            {
+              "name": "3. Get Pengiriman by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Q4OFhorVYdw3NF57gngD",
+                      "description": "ID of the Pengiriman to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1013"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3f5-uzTB6w8elxsDthnUTDIhcfO23Ag\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:04:08 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment retrieved successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-09-30T06:01:43.829Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"siap_kirim\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:01:43.880Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Pengiriman",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lapak_id\": \"TARGET_LAPAK_ID\",\n  \"tanggal\": \"2026-09-29T10:00:00.000Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PENGIRIMAN_ID",
+                  "description": "ID of the Pengiriman to update"
+                }
+              ]
+            },
+            "description": "Updates shipment metadata (lapak_id, tanggal). Admin only."
+          },
+          "response": [
+            {
+              "name": "4. Update Pengiriman",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n  \"tanggal\": \"2026-10-01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Q4OFhorVYdw3NF57gngD",
+                      "description": "ID of the Pengiriman to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1011"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3f3-syDgNBhknAi5Y/XFnFzhdVxAJtc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:06:18 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment updated successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-10-01T00:00:00.000Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"siap_kirim\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:06:17.845Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Update Status Pengiriman",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"diantar\" // only supported \"siap_kirim\", \"diantar\", \"sampai\", \"selesai\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman/:id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PENGIRIMAN_ID",
+                  "description": "ID of the Pengiriman status to update"
+                }
+              ]
+            },
+            "description": "Updates shipment lifecycle status (siap_kirim -> diantar -> sampai -> selesai). Admin only."
+          },
+          "response": [
+            {
+              "name": "5. Update Status Pengiriman",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"diantar\" // only supported \"siap_kirim\", \"diantar\", \"sampai\", \"selesai\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman/:id/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Q4OFhorVYdw3NF57gngD",
+                      "description": "ID of the Pengiriman status to update"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1015"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3f7-/GAnopqDZNrFZE5H7TW70GifK+M\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:09:04 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment status updated successfully.\",\n  \"data\": {\n    \"id\": \"Q4OFhorVYdw3NF57gngD\",\n    \"tanggal\": \"2026-10-01T00:00:00.000Z\",\n    \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n    \"created_by\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n    \"status\": \"diantar\",\n    \"total_items\": 1,\n    \"total_qty\": 35,\n    \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n    \"updatedAt\": \"2026-09-30T06:09:04.455Z\",\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-09-24T07:42:11.873Z\"\n    },\n    \"creator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"items\": [\n      {\n        \"id\": \"X63U8RMu5bRRtAYs2avH\",\n        \"pengiriman_id\": \"Q4OFhorVYdw3NF57gngD\",\n        \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n        \"qty\": 35,\n        \"nama_produk\": \"Roti Coklat Spesial\",\n        \"harga_produk\": 16000,\n        \"jenis_satuan\": \"pcs\",\n        \"kategori_id\": \"hnjoSyDFw6Pej61t3FwX\",\n        \"nama_kategori\": \"Roti Manis\",\n        \"createdAt\": \"2026-09-30T06:01:43.880Z\",\n        \"updatedAt\": \"2026-09-30T06:01:43.880Z\"\n      }\n    ]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "6. Delete Pengiriman",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_PENGIRIMAN_ID",
+                  "description": "ID of the Pengiriman to delete"
+                }
+              ]
+            },
+            "description": "Deletes a shipment and cascade-deletes all associated line items in pengiriman_detail. Admin only."
+          },
+          "response": [
+            {
+              "name": "6. Delete Pengiriman",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "Q4OFhorVYdw3NF57gngD",
+                      "description": "ID of the Pengiriman to delete"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "121"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"79-GKEe/YWXrfGgs18G0xqcysqd10I\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 06:10:36 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment with ID 'Q4OFhorVYdw3NF57gngD' and its detail items have been successfully deleted.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pengiriman Detail (Protected)",
+      "item": [
+        {
+          "name": "1. Get All Pengiriman Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman-detail"
+              ],
+              "query": [
+                {
+                  "key": "pengiriman_id",
+                  "value": "TARGET_PENGIRIMAN_ID",
+                  "description": "Filter by parent pengiriman ID",
+                  "disabled": true
+                },
+                {
+                  "key": "produk_id",
+                  "value": "TARGET_PRODUK_ID",
+                  "description": "Filter by product ID",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "1. Get All Pengiriman Detail",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman-detail",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman-detail"
+                  ],
+                  "query": [
+                    {
+                      "key": "pengiriman_id",
+                      "value": "TARGET_PENGIRIMAN_ID",
+                      "description": "Filter by parent pengiriman ID",
+                      "disabled": true
+                    },
+                    {
+                      "key": "produk_id",
+                      "value": "TARGET_PRODUK_ID",
+                      "description": "Filter by product ID",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "845"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"34d-FQ1fz4hWwbW7AF+kNRdnWnZz6BM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 07:01:05 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment details retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"pengiriman_id\": \"39287DVo3yfsT3Rt9Zil\",\n      \"tanggal\": \"2026-09-30T06:15:59.807Z\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"created_by\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"email\": \"admin@pot.com\"\n      },\n      \"status\": \"siap_kirim\",\n      \"total_qty\": 35,\n      \"items\": [\n        {\n          \"id\": \"GF4BXF1bqj5F24QR9B2m\",\n          \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n          \"qty\": 15,\n          \"nama_produk\": \"Roti Coklat Spesial\",\n          \"harga_produk\": 16000,\n          \"jenis_satuan\": \"pcs\",\n          \"nama_kategori\": \"Roti Manis\",\n          \"createdAt\": \"2026-09-30T06:15:59.884Z\",\n          \"updatedAt\": \"2026-09-30T06:15:59.884Z\"\n        },\n        {\n          \"id\": \"VHdj9zb2XuL8R1cthxxJ\",\n          \"produk_id\": \"AwP6SrvLJ8hkQXFizlqU\",\n          \"qty\": 20,\n          \"nama_produk\": \"Roti Gandum\",\n          \"harga_produk\": 15000,\n          \"jenis_satuan\": \"pcs\",\n          \"nama_kategori\": \"Roti Manis\",\n          \"createdAt\": \"2026-09-30T06:15:59.884Z\",\n          \"updatedAt\": \"2026-09-30T06:15:59.884Z\"\n        }\n      ]\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get Pengiriman Detail by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pengiriman-detail/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pengiriman-detail",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TARGET_DETAIL_ID (items.id)",
+                  "description": "ID of the Pengiriman Detail to retrieve"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "2. Get Pengiriman Detail by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pengiriman-detail/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pengiriman-detail",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "GF4BXF1bqj5F24QR9B2m",
+                      "description": "ID of the Pengiriman Detail to retrieve"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "373"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"175-t+zLBPzHRZaATQPUMsHZJCRm5pU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 30 Sep 2026 07:03:04 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Shipment detail retrieved successfully.\",\n  \"data\": {\n    \"id\": \"GF4BXF1bqj5F24QR9B2m\",\n    \"produk_id\": \"TwcmUwtcX7RzP178kYIk\",\n    \"qty\": 15,\n    \"nama_produk\": \"Roti Coklat Spesial\",\n    \"harga_produk\": 16000,\n    \"jenis_satuan\": \"pcs\",\n    \"nama_kategori\": \"Roti Manis\",\n    \"createdAt\": \"2026-09-30T06:15:59.884Z\",\n    \"updatedAt\": \"2026-09-30T06:15:59.884Z\",\n    \"pengiriman_id\": \"39287DVo3yfsT3Rt9Zil\"\n  }\n}"
             }
           ]
         }

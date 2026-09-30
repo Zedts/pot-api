@@ -1,20 +1,22 @@
 const produkRepository = require('../repositories/produk.repository');
 const kategoriRepository = require('../repositories/kategori.repository');
-const { BadRequestError, NotFoundError } = require('../errors/AppError');
+const satuanRepository = require('../repositories/satuan.repository');
+const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
 /**
  * Produk Service
  * Encapsulates core business rules, validation, foreign reference verification,
- * and category population for Produk.
+ * and category/unit population for Produk.
  */
 class ProdukService {
   /**
    * Create a new produk
-   * Validates foreign reference and persists both kategori_id and nama_kategori to the database
-   * @param {Object} data { nama, harga, kategori_id, satuan }
+   * Validates foreign references (kategori_id, satuan_id) and persists both IDs and readable names to the database
+   * @param {Object} data { nama, harga, kategori_id, satuan_id }
    * @returns {Promise<Produk>}
    */
-  async createProduk({ nama, harga, kategori_id, satuan }) {
+  async createProduk({ nama, harga, kategori_id, satuan_id }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
     }
@@ -27,11 +29,12 @@ class ProdukService {
       throw new BadRequestError('Field "kategori_id" is required.');
     }
 
-    if (!satuan || typeof satuan !== 'string' || !satuan.trim()) {
-      throw new BadRequestError('Field "satuan" is required.');
+    if (!satuan_id || typeof satuan_id !== 'string' || !satuan_id.trim()) {
+      throw new BadRequestError('Field "satuan_id" is required.');
     }
 
     const trimmedKategoriId = kategori_id.trim();
+    const trimmedSatuanId = satuan_id.trim();
 
     // Verify foreign reference: validate kategori_id exists in 'kategori' collection
     const kategori = await kategoriRepository.findById(trimmedKategoriId);
@@ -39,19 +42,26 @@ class ProdukService {
       throw new NotFoundError(`Category with ID '${trimmedKategoriId}' does not exist.`);
     }
 
-    // Persist both kategori_id and nama_kategori directly to the database
+    // Verify foreign reference: validate satuan_id exists in 'satuan' collection
+    const satuan = await satuanRepository.findById(trimmedSatuanId);
+    if (!satuan) {
+      throw new NotFoundError(`Unit with ID '${trimmedSatuanId}' does not exist.`);
+    }
+
+    // Persist foreign keys and human-readable names directly to the database
     return await produkRepository.create({
       nama: nama.trim(),
       harga: Number(harga),
       kategori_id: trimmedKategoriId,
       nama_kategori: kategori.nama_kategori,
-      satuan: satuan.trim(),
+      satuan_id: trimmedSatuanId,
+      jenis_satuan: satuan.jenis_satuan,
     });
   }
 
   /**
    * Retrieve all produk with optional filters
-   * Reads stored nama_kategori from database directly, with auto-healing fallback if missing
+   * Reads stored nama_kategori and jenis_satuan directly, with auto-healing fallback if missing
    * @param {Object} filters
    * @returns {Promise<Array<Produk>>}
    */
@@ -62,12 +72,11 @@ class ProdukService {
     }
 
     // Auto-healing fallback: populate nama_kategori if any legacy record is missing it
-    const unpopulatedIds = [
+    const unpopulatedCatIds = [
       ...new Set(list.filter((p) => !p.nama_kategori && p.kategori_id).map((p) => p.kategori_id)),
     ];
-
-    if (unpopulatedIds.length > 0) {
-      const kategoriMap = await kategoriRepository.findByIds(unpopulatedIds);
+    if (unpopulatedCatIds.length > 0) {
+      const kategoriMap = await kategoriRepository.findByIds(unpopulatedCatIds);
       list.forEach((p) => {
         if (!p.nama_kategori && p.kategori_id) {
           const cat = kategoriMap.get(p.kategori_id);
@@ -76,11 +85,25 @@ class ProdukService {
       });
     }
 
+    // Auto-healing fallback: populate jenis_satuan if any legacy record is missing it
+    const unpopulatedSatuanIds = [
+      ...new Set(list.filter((p) => !p.jenis_satuan && p.satuan_id).map((p) => p.satuan_id)),
+    ];
+    if (unpopulatedSatuanIds.length > 0) {
+      const satuanMap = await satuanRepository.findByIds(unpopulatedSatuanIds);
+      list.forEach((p) => {
+        if (!p.jenis_satuan && p.satuan_id) {
+          const sat = satuanMap.get(p.satuan_id);
+          p.jenis_satuan = sat ? sat.jenis_satuan : null;
+        }
+      });
+    }
+
     return list;
   }
 
   /**
-   * Retrieve single produk by ID with nama_kategori
+   * Retrieve single produk by ID with nama_kategori and jenis_satuan
    * @param {string} id
    * @returns {Promise<Produk>}
    */
@@ -94,10 +117,16 @@ class ProdukService {
       throw new NotFoundError(`Produk with ID '${id}' was not found.`);
     }
 
-    // If doc already has nama_kategori stored, return directly; otherwise fallback lookup
+    // Fallback lookup if nama_kategori is unpopulated
     if (!produk.nama_kategori && produk.kategori_id) {
       const kategori = await kategoriRepository.findById(produk.kategori_id);
       produk.nama_kategori = kategori ? kategori.nama_kategori : null;
+    }
+
+    // Fallback lookup if jenis_satuan is unpopulated
+    if (!produk.jenis_satuan && produk.satuan_id) {
+      const satuan = await satuanRepository.findById(produk.satuan_id);
+      produk.jenis_satuan = satuan ? satuan.jenis_satuan : null;
     }
 
     return produk;
@@ -105,7 +134,7 @@ class ProdukService {
 
   /**
    * Update produk details
-   * Validates foreign reference if updated and persists updated nama_kategori directly to the database
+   * Validates foreign references if updated and persists updated readable names directly
    * @param {string} id
    * @param {Object} updateData
    * @returns {Promise<Produk>}
@@ -135,8 +164,6 @@ class ProdukService {
       }
 
       const trimmedKategoriId = updateData.kategori_id.trim();
-
-      // Verify foreign reference: validate kategori_id exists in 'kategori' collection
       const kategori = await kategoriRepository.findById(trimmedKategoriId);
       if (!kategori) {
         throw new NotFoundError(`Category with ID '${trimmedKategoriId}' does not exist.`);
@@ -146,11 +173,19 @@ class ProdukService {
       payload.nama_kategori = kategori.nama_kategori;
     }
 
-    if (updateData.satuan !== undefined) {
-      if (!updateData.satuan || typeof updateData.satuan !== 'string' || !updateData.satuan.trim()) {
-        throw new BadRequestError('Field "satuan" cannot be empty.');
+    if (updateData.satuan_id !== undefined) {
+      if (!updateData.satuan_id || typeof updateData.satuan_id !== 'string' || !updateData.satuan_id.trim()) {
+        throw new BadRequestError('Field "satuan_id" cannot be empty.');
       }
-      payload.satuan = updateData.satuan.trim();
+
+      const trimmedSatuanId = updateData.satuan_id.trim();
+      const satuan = await satuanRepository.findById(trimmedSatuanId);
+      if (!satuan) {
+        throw new NotFoundError(`Unit with ID '${trimmedSatuanId}' does not exist.`);
+      }
+
+      payload.satuan_id = trimmedSatuanId;
+      payload.jenis_satuan = satuan.jenis_satuan;
     }
 
     if (Object.keys(payload).length === 0) {
@@ -162,11 +197,21 @@ class ProdukService {
 
   /**
    * Delete produk by ID
+   * Enforces referential integrity: blocks deletion if referenced by shipment items
    * @param {string} id
    * @returns {Promise<boolean>}
    */
   async deleteProduk(id) {
     await this.getProdukById(id);
+
+    // Enforce referential integrity: block deletion if product is referenced by shipment items
+    const referencingCount = await pengirimanDetailRepository.countByProdukId(id);
+    if (referencingCount > 0) {
+      throw new ConflictError(
+        `Cannot delete product: it is currently referenced by ${referencingCount} shipment item(s).`
+      );
+    }
+
     return await produkRepository.delete(id);
   }
 }

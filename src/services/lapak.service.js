@@ -1,5 +1,6 @@
 const lapakRepository = require('../repositories/lapak.repository');
-const { BadRequestError, NotFoundError } = require('../errors/AppError');
+const pengirimanRepository = require('../repositories/pengiriman.repository');
+const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
 /**
  * Lapak Service
@@ -94,11 +95,21 @@ class LapakService {
 
   /**
    * Delete lapak by ID
+   * Prevents orphaned shipments by blocking deletion if lapak is referenced by any shipment
    * @param {string} id
    * @returns {Promise<boolean>}
    */
   async deleteLapak(id) {
     await this.getLapakById(id);
+
+    // Referential integrity check: ensure no shipment references this lapak
+    const shipmentCount = await pengirimanRepository.countByLapakId(id);
+    if (shipmentCount > 0) {
+      throw new ConflictError(
+        `Cannot delete lapak: it is currently referenced by ${shipmentCount} shipment(s). Please reassign or delete the associated shipments first.`
+      );
+    }
+
     return await lapakRepository.delete(id);
   }
 }

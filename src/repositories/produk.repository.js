@@ -12,7 +12,7 @@ class ProdukRepository {
 
   /**
    * Create a new produk document in Firestore
-   * Stores both foreign reference (kategori_id) and category name (nama_kategori)
+   * Stores foreign references (kategori_id, satuan_id) and denormalized names (nama_kategori, jenis_satuan)
    * @param {Object} data
    * @param {string|null} customId
    * @returns {Promise<Produk>}
@@ -26,7 +26,8 @@ class ProdukRepository {
       harga: Number(data.harga),
       kategori_id: data.kategori_id.trim(),
       nama_kategori: data.nama_kategori ? data.nama_kategori.trim() : '',
-      satuan: data.satuan.trim(),
+      satuan_id: data.satuan_id.trim(),
+      jenis_satuan: data.jenis_satuan ? data.jenis_satuan.trim() : '',
       createdAt: now,
       updatedAt: now,
     };
@@ -48,6 +49,36 @@ class ProdukRepository {
     if (!id) return null;
     const doc = await this.collection.doc(id).get();
     return Produk.fromFirestore(doc);
+  }
+
+  /**
+   * Find multiple products by an array of document IDs
+   * Efficiently batches requests via db.getAll() with chunking
+   * @param {Array<string>} ids
+   * @returns {Promise<Map<string, Produk>>}
+   */
+  async findByIds(ids) {
+    const map = new Map();
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return map;
+
+    const uniqueIds = [...new Set(ids.filter(Boolean))];
+    if (uniqueIds.length === 0) return map;
+
+    const chunkSize = 100;
+    for (let i = 0; i < uniqueIds.length; i += chunkSize) {
+      const chunk = uniqueIds.slice(i, i + chunkSize);
+      const refs = chunk.map((id) => this.collection.doc(id));
+      const snapshots = await db.getAll(...refs);
+
+      snapshots.forEach((doc) => {
+        const produk = Produk.fromFirestore(doc);
+        if (produk) {
+          map.set(doc.id, produk);
+        }
+      });
+    }
+
+    return map;
   }
 
   /**
@@ -117,8 +148,72 @@ class ProdukRepository {
   }
 
   /**
+   * Count how many produk documents reference a specific satuan_id
+   * @param {string} satuanId
+   * @returns {Promise<number>}
+   */
+  async countBySatuanId(satuanId) {
+    if (!satuanId) return 0;
+    const snapshot = await this.collection.where('satuan_id', '==', satuanId.trim()).get();
+    return snapshot.size;
+  }
+
+  /**
+   * Find all produk referencing a specific satuan_id
+   * @param {string} satuanId
+   * @returns {Promise<Array<Produk>>}
+   */
+  async findBySatuanId(satuanId) {
+    if (!satuanId) return [];
+    const snapshot = await this.collection.where('satuan_id', '==', satuanId.trim()).get();
+    const list = [];
+    snapshot.forEach((doc) => {
+      const produk = Produk.fromFirestore(doc);
+      if (produk) {
+        list.push(produk);
+      }
+    });
+    return list;
+  }
+
+  /**
+   * Synchronize jenis_satuan across all produk documents referencing a satuan_id
+   * Uses Firestore batched writes for maximum atomicity and efficiency
+   * @param {string} satuanId
+   * @param {string} newJenisSatuan
+   * @returns {Promise<number>} Number of updated products
+   */
+  async updateJenisSatuanBySatuanId(satuanId, newJenisSatuan) {
+    if (!satuanId || !newJenisSatuan) return 0;
+
+    const snapshot = await this.collection.where('satuan_id', '==', satuanId.trim()).get();
+    if (snapshot.empty) return 0;
+
+    const now = new Date();
+    const cleanJenis = newJenisSatuan.trim();
+    const batchSize = 400;
+    const docs = snapshot.docs;
+
+    for (let i = 0; i < docs.length; i += batchSize) {
+      const batch = db.batch();
+      const chunk = docs.slice(i, i + batchSize);
+
+      chunk.forEach((doc) => {
+        batch.update(doc.ref, {
+          jenis_satuan: cleanJenis,
+          updatedAt: now,
+        });
+      });
+
+      await batch.commit();
+    }
+
+    return docs.length;
+  }
+
+  /**
    * Retrieve all produk documents with optional filtering
-   * @param {Object} filters { kategori_id, satuan }
+   * @param {Object} filters { kategori_id, satuan_id }
    * @returns {Promise<Array<Produk>>}
    */
   async findAll(filters = {}) {
@@ -129,8 +224,11 @@ class ProdukRepository {
       query = query.where('kategori_id', '==', kategoriId.trim());
     }
 
-    if (filters.satuan) {
-      query = query.where('satuan', '==', filters.satuan.trim());
+    const satuanId = filters.satuan_id || filters.satuanId;
+    if (satuanId) {
+      query = query.where('satuan_id', '==', satuanId.trim());
+    } else if (filters.satuan) {
+      query = query.where('jenis_satuan', '==', filters.satuan.trim());
     }
 
     const snapshot = await query.get();
@@ -176,6 +274,14 @@ class ProdukRepository {
 
     if (dataToUpdate.nama_kategori !== undefined) {
       dataToUpdate.nama_kategori = dataToUpdate.nama_kategori ? dataToUpdate.nama_kategori.trim() : '';
+    }
+
+    if (dataToUpdate.satuan_id !== undefined) {
+      dataToUpdate.satuan_id = dataToUpdate.satuan_id.trim();
+    }
+
+    if (dataToUpdate.jenis_satuan !== undefined) {
+      dataToUpdate.jenis_satuan = dataToUpdate.jenis_satuan ? dataToUpdate.jenis_satuan.trim() : '';
     }
 
     await docRef.update(dataToUpdate);

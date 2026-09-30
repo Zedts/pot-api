@@ -1,12 +1,14 @@
 const bcrypt = require('bcryptjs');
 const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
+const pengirimanRepository = require('../repositories/pengiriman.repository');
 const { VALID_ROLES } = require('../constants/roles');
 const { VALID_USER_STATUSES } = require('../constants/userStatus');
 const {
   BadRequestError,
   NotFoundError,
   ConflictError,
+  ForbiddenError,
   InternalServerError,
 } = require('../errors/AppError');
 
@@ -65,9 +67,23 @@ class UserService {
    * Update user details
    * @param {string} id
    * @param {Object} updateData
+   * @param {Object} [currentUser] Optional authenticated user context
    * @returns {Promise<User>}
    */
-  async updateUser(id, updateData) {
+  async updateUser(id, updateData, currentUser) {
+    if (currentUser) {
+      const isSelf = currentUser.id === id || currentUser.uid === id;
+      const isAdmin = currentUser.role === 'admin';
+
+      if (!isAdmin && !isSelf) {
+        throw new ForbiddenError('Forbidden: You can only update your own user profile.');
+      }
+
+      if (!isAdmin && (updateData.role !== undefined || updateData.status !== undefined)) {
+        throw new ForbiddenError('Forbidden: Only administrators can modify user role or account status.');
+      }
+    }
+
     const existingUser = await this.getUserById(id);
 
     const payload = {};
@@ -173,7 +189,15 @@ class UserService {
     // 1. Ensure user exists in Firestore
     const user = await this.getUserById(id);
 
-    // 2. Delete user from Firebase Authentication
+    // 2. Referential integrity check: prevent deleting user if they have created shipments
+    const referencingShipmentsCount = await pengirimanRepository.countByCreatedBy(id);
+    if (referencingShipmentsCount > 0) {
+      throw new ConflictError(
+        `Cannot delete user: this user is associated with ${referencingShipmentsCount} shipment record(s). Please reassign or delete the associated shipments first.`
+      );
+    }
+
+    // 3. Delete user from Firebase Authentication
     let authDeleted = false;
 
     // Primary attempt: delete by Firestore doc ID (which matches Firebase Auth UID)

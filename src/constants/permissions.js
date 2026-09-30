@@ -29,6 +29,22 @@ const PERMISSIONS = Object.freeze({
     UPDATE: Object.freeze([ROLES.ADMIN]),
     DELETE: Object.freeze([ROLES.ADMIN]),
   },
+  SATUAN: {
+    CREATE: Object.freeze([ROLES.ADMIN]),
+    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI]),
+    UPDATE: Object.freeze([ROLES.ADMIN]),
+    DELETE: Object.freeze([ROLES.ADMIN]),
+  },
+  PENGIRIMAN: {
+    CREATE: Object.freeze([ROLES.ADMIN]),
+    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI, ROLES.PENGIRIM, ROLES.SPG]),
+    UPDATE: Object.freeze([ROLES.ADMIN]),
+    UPDATE_STATUS: Object.freeze([ROLES.ADMIN]),
+    DELETE: Object.freeze([ROLES.ADMIN]),
+  },
+  PENGIRIMAN_DETAIL: {
+    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI, ROLES.PENGIRIM, ROLES.SPG]),
+  },
 });
 
 module.exports = {

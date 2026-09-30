@@ -53,6 +53,36 @@ class UserRepository {
   }
 
   /**
+   * Find multiple users by an array of document IDs
+   * Efficiently batches requests via db.getAll() with chunking
+   * @param {Array<string>} ids
+   * @returns {Promise<Map<string, User>>}
+   */
+  async findByIds(ids) {
+    const map = new Map();
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return map;
+
+    const uniqueIds = [...new Set(ids.filter(Boolean))];
+    if (uniqueIds.length === 0) return map;
+
+    const chunkSize = 100;
+    for (let i = 0; i < uniqueIds.length; i += chunkSize) {
+      const chunk = uniqueIds.slice(i, i + chunkSize);
+      const refs = chunk.map((id) => this.collection.doc(id));
+      const snapshots = await db.getAll(...refs);
+
+      snapshots.forEach((doc) => {
+        const user = User.fromFirestore(doc);
+        if (user) {
+          map.set(doc.id, user);
+        }
+      });
+    }
+
+    return map;
+  }
+
+  /**
    * Find a user by email
    * @param {string} email
    * @returns {Promise<User|null>}

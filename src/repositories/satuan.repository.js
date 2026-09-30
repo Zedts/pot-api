@@ -1,57 +1,55 @@
 const { db } = require('../firebase');
-const Lapak = require('../models/lapak.model');
+const Satuan = require('../models/satuan.model');
 
 /**
- * Lapak Repository
- * Data Access Layer encapsulating Firestore operations for 'lapak'.
+ * Satuan Repository
+ * Data Access Layer encapsulating Firestore operations for 'satuan'.
  */
-class LapakRepository {
+class SatuanRepository {
   constructor() {
-    this.collection = db.collection('lapak');
+    this.collection = db.collection('satuan');
   }
 
   /**
-   * Create a new lapak document in Firestore
+   * Create a new satuan document in Firestore
    * @param {Object} data
    * @param {string|null} customId
-   * @returns {Promise<Lapak>}
+   * @returns {Promise<Satuan>}
    */
   async create(data, customId = null) {
     const docRef = customId ? this.collection.doc(customId) : this.collection.doc();
     const now = new Date();
 
     const dataToSave = {
-      nama: data.nama.trim(),
-      lokasi: data.lokasi.trim(),
-      keterangan: data.keterangan ? data.keterangan.trim() : '',
+      jenis_satuan: data.jenis_satuan.trim(),
       createdAt: now,
       updatedAt: now,
     };
 
     await docRef.set(dataToSave);
 
-    return new Lapak({
+    return new Satuan({
       id: docRef.id,
       ...dataToSave,
     });
   }
 
   /**
-   * Find lapak by Document ID
+   * Find satuan by Document ID
    * @param {string} id
-   * @returns {Promise<Lapak|null>}
+   * @returns {Promise<Satuan|null>}
    */
   async findById(id) {
     if (!id) return null;
     const doc = await this.collection.doc(id).get();
-    return Lapak.fromFirestore(doc);
+    return Satuan.fromFirestore(doc);
   }
 
   /**
-   * Find multiple lapak by an array of document IDs
+   * Find multiple satuan records by an array of document IDs
    * Efficiently batches requests via db.getAll() with chunking
    * @param {Array<string>} ids
-   * @returns {Promise<Map<string, Lapak>>}
+   * @returns {Promise<Map<string, Satuan>>}
    */
   async findByIds(ids) {
     const map = new Map();
@@ -67,9 +65,9 @@ class LapakRepository {
       const snapshots = await db.getAll(...refs);
 
       snapshots.forEach((doc) => {
-        const lapak = Lapak.fromFirestore(doc);
-        if (lapak) {
-          map.set(doc.id, lapak);
+        const satuan = Satuan.fromFirestore(doc);
+        if (satuan) {
+          map.set(doc.id, satuan);
         }
       });
     }
@@ -78,17 +76,36 @@ class LapakRepository {
   }
 
   /**
-   * Retrieve all lapak documents
-   * @returns {Promise<Array<Lapak>>}
+   * Find satuan by exact jenis_satuan (case-sensitive as per Firestore)
+   * @param {string} jenisSatuan
+   * @returns {Promise<Satuan|null>}
+   */
+  async findByJenis(jenisSatuan) {
+    if (!jenisSatuan || typeof jenisSatuan !== 'string') return null;
+    const snapshot = await this.collection
+      .where('jenis_satuan', '==', jenisSatuan.trim())
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return null;
+    }
+
+    return Satuan.fromFirestore(snapshot.docs[0]);
+  }
+
+  /**
+   * Retrieve all satuan documents
+   * @returns {Promise<Array<Satuan>>}
    */
   async findAll() {
     const snapshot = await this.collection.get();
     const list = [];
 
     snapshot.forEach((doc) => {
-      const lapak = Lapak.fromFirestore(doc);
-      if (lapak) {
-        list.push(lapak);
+      const satuan = Satuan.fromFirestore(doc);
+      if (satuan) {
+        list.push(satuan);
       }
     });
 
@@ -102,10 +119,10 @@ class LapakRepository {
   }
 
   /**
-   * Update an existing lapak document
+   * Update an existing satuan document
    * @param {string} id
    * @param {Object} updateData
-   * @returns {Promise<Lapak>}
+   * @returns {Promise<Satuan>}
    */
   async update(id, updateData) {
     const docRef = this.collection.doc(id);
@@ -116,11 +133,11 @@ class LapakRepository {
 
     await docRef.update(dataToUpdate);
     const updatedDoc = await docRef.get();
-    return Lapak.fromFirestore(updatedDoc);
+    return Satuan.fromFirestore(updatedDoc);
   }
 
   /**
-   * Delete a lapak document
+   * Delete a satuan document
    * @param {string} id
    * @returns {Promise<boolean>}
    */
@@ -130,4 +147,4 @@ class LapakRepository {
   }
 }
 
-module.exports = new LapakRepository();
+module.exports = new SatuanRepository();
