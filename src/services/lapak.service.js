@@ -1,6 +1,8 @@
+const Lapak = require('../models/lapak.model');
 const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
+const stokLapakRepository = require('../repositories/stokLapak.repository');
 const { ROLES } = require('../constants/roles');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -9,6 +11,24 @@ const { BadRequestError, NotFoundError, ConflictError } = require('../errors/App
  * Encapsulates core business rules, validation, and operations for Lapak.
  */
 class LapakService {
+  /**
+   * Batch enrich a list of Lapak entities with their related SPG user info
+   * @param {Array<Lapak>} lapakList
+   * @returns {Promise<Array<Lapak>>}
+   */
+  async enrichLapakList(lapakList) {
+    if (!lapakList || lapakList.length === 0) return [];
+
+    const spgIds = [...new Set(lapakList.map((l) => l.spg_id).filter(Boolean))];
+    const usersMap = await userRepository.findByIds(spgIds);
+
+    return lapakList.map((lapak) => {
+      const user = lapak.spg_id ? usersMap.get(lapak.spg_id) : null;
+      lapak.spg = user ? Lapak.formatSpg(user) : null;
+      return lapak;
+    });
+  }
+
   /**
    * Create a new lapak
    * @param {Object} data { nama, lokasi, keterangan, spg_id }
@@ -24,9 +44,10 @@ class LapakService {
     }
 
     const cleanSpgId = spg_id ? spg_id.trim() : null;
+    let spgUser = null;
 
     if (cleanSpgId) {
-      const spgUser = await userRepository.findById(cleanSpgId);
+      spgUser = await userRepository.findById(cleanSpgId);
       if (!spgUser) {
         throw new NotFoundError(`User with ID '${cleanSpgId}' was not found.`);
       }
@@ -44,7 +65,6 @@ class LapakService {
 
     // Bidirectional sync: assign lapak_id on target user
     if (cleanSpgId) {
-      const spgUser = await userRepository.findById(cleanSpgId);
       if (spgUser.lapak_id && spgUser.lapak_id !== newLapak.id) {
         const oldLapak = await lapakRepository.findById(spgUser.lapak_id);
         if (oldLapak && oldLapak.spg_id === cleanSpgId) {
@@ -54,6 +74,7 @@ class LapakService {
       await userRepository.update(cleanSpgId, { lapak_id: newLapak.id });
     }
 
+    newLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
     return newLapak;
   }
 
@@ -62,7 +83,8 @@ class LapakService {
    * @returns {Promise<Array<Lapak>>}
    */
   async getAllLapak() {
-    return await lapakRepository.findAll();
+    const list = await lapakRepository.findAll();
+    return await this.enrichLapakList(list);
   }
 
   /**
@@ -78,6 +100,11 @@ class LapakService {
     const lapak = await lapakRepository.findById(id);
     if (!lapak) {
       throw new NotFoundError(`Lapak with ID '${id}' was not found.`);
+    }
+
+    if (lapak.spg_id) {
+      const spgUser = await userRepository.findById(lapak.spg_id);
+      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
     }
 
     return lapak;
@@ -167,6 +194,11 @@ class LapakService {
       }
     }
 
+    if (updatedLapak.spg_id) {
+      const spgUser = await userRepository.findById(updatedLapak.spg_id);
+      updatedLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+    }
+
     return updatedLapak;
   }
 
@@ -179,11 +211,18 @@ class LapakService {
   async deleteLapak(id) {
     const existing = await this.getLapakById(id);
 
-    // Referential integrity check: ensure no shipment references this lapak
+    // Referential integrity checks: ensure no shipment or inventory references this lapak
     const shipmentCount = await pengirimanRepository.countByLapakId(id);
     if (shipmentCount > 0) {
       throw new ConflictError(
         `Cannot delete lapak: it is currently referenced by ${shipmentCount} shipment(s). Please reassign or delete the associated shipments first.`
+      );
+    }
+
+    const stockCount = await stokLapakRepository.countByLapakId(id);
+    if (stockCount > 0) {
+      throw new ConflictError(
+        `Cannot delete lapak: it is currently referenced by ${stockCount} inventory record(s). Please clear or archive associated stock records first.`
       );
     }
 

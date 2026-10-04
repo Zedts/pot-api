@@ -3,7 +3,11 @@ const produkController = require('../controllers/produk.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const { authorizePermission } = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
-const { validateCreateProduk, validateUpdateProduk } = require('../middlewares/validateProduk');
+const {
+  validateCreateProduk,
+  validateUpdateProduk,
+  validateUpdateStatus,
+} = require('../middlewares/validateProduk');
 
 const router = Router();
 
@@ -44,6 +48,15 @@ router.put(
   authorizePermission('PRODUK', 'UPDATE'),
   validateUpdateProduk,
   asyncWrapper((req, res) => produkController.update(req, res))
+);
+
+// Update produk status (Admin only)
+router.patch(
+  '/:id/status',
+  authenticate,
+  authorizePermission('PRODUK', 'UPDATE_STATUS'),
+  validateUpdateStatus,
+  asyncWrapper((req, res) => produkController.updateStatus(req, res))
 );
 
 // Delete produk by ID

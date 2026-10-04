@@ -1,10 +1,12 @@
 const pengirimanRepository = require('../repositories/pengiriman.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const penerimaanRepository = require('../repositories/penerimaan.repository');
 const lapakRepository = require('../repositories/lapak.repository');
 const produkRepository = require('../repositories/produk.repository');
 const userRepository = require('../repositories/user.repository');
 const { VALID_PENGIRIMAN_STATUSES, PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
-const { BadRequestError, NotFoundError } = require('../errors/AppError');
+const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
+const { parseDateOrDefault } = require('../utils/validators');
 
 /**
  * Pengiriman Service
@@ -36,17 +38,7 @@ class PengirimanService {
     }
 
     // 2. Validate and parse tanggal (defaults to now if omitted or empty)
-    let parsedTanggal = new Date();
-    if (tanggal !== undefined && tanggal !== null) {
-      if (typeof tanggal === 'string' && tanggal.trim() !== '') {
-        parsedTanggal = new Date(tanggal);
-        if (isNaN(parsedTanggal.getTime())) {
-          throw new BadRequestError('Field "tanggal" must be a valid date or timestamp string.');
-        }
-      } else if (tanggal instanceof Date) {
-        parsedTanggal = tanggal;
-      }
-    }
+    const parsedTanggal = parseDateOrDefault(tanggal);
 
     // 3. Merge duplicate items by produk_id and validate quantities
     const mergedItemsMap = new Map();
@@ -106,6 +98,10 @@ class PengirimanService {
       snapshotItems
     );
 
+    if (lapak && lapak.spg_id) {
+      lapak.spg = await userRepository.findById(lapak.spg_id);
+    }
+
     return {
       ...pengiriman.toJSON(),
       lapak: lapak.toJSON(),
@@ -135,6 +131,13 @@ class PengirimanService {
     // Populate lapak details efficiently in single batch
     const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
     const lapakMap = await lapakRepository.findByIds(uniqueLapakIds);
+    const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
+    const lapakSpgMap = await userRepository.findByIds(lapakSpgIds);
+    for (const lapak of lapakMap.values()) {
+      if (lapak.spg_id) {
+        lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
+      }
+    }
 
     return shipments.map((s) => {
       const json = s.toJSON();
@@ -164,6 +167,10 @@ class PengirimanService {
       lapakRepository.findById(shipment.lapak_id),
       shipment.created_by ? userRepository.findById(shipment.created_by) : null,
     ]);
+
+    if (lapak && lapak.spg_id) {
+      lapak.spg = await userRepository.findById(lapak.spg_id);
+    }
 
     return {
       ...shipment.toJSON(),
@@ -206,11 +213,7 @@ class PengirimanService {
     }
 
     if (updateData.tanggal !== undefined) {
-      const parsed = new Date(updateData.tanggal);
-      if (isNaN(parsed.getTime())) {
-        throw new BadRequestError('Field "tanggal" must be a valid date or timestamp string.');
-      }
-      payload.tanggal = parsed;
+      payload.tanggal = parseDateOrDefault(updateData.tanggal, false);
     }
 
     if (Object.keys(payload).length === 0) {
@@ -260,10 +263,18 @@ class PengirimanService {
       throw new NotFoundError(`Shipment with ID '${id}' was not found.`);
     }
 
-    // 2. Cascade delete all child items in 'pengiriman_detail'
+    // 2. Referential integrity check: ensure no receipt (penerimaan) references this shipment
+    const receiptCount = await penerimaanRepository.countByPengirimanId(id);
+    if (receiptCount > 0) {
+      throw new ConflictError(
+        `Cannot delete shipment '${existing.unique_id || id}': it is currently referenced by ${receiptCount} receipt record(s) (penerimaan). Please delete the associated receipt first.`
+      );
+    }
+
+    // 3. Cascade delete all child items in 'pengiriman_detail'
     await pengirimanDetailRepository.deleteByPengirimanId(id);
 
-    // 3. Delete parent 'pengiriman' document
+    // 4. Delete parent 'pengiriman' document
     return await pengirimanRepository.delete(id);
   }
 }

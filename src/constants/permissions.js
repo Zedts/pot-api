@@ -23,6 +23,7 @@ const PERMISSIONS = Object.freeze({
     CREATE: ADMIN_ROLES,
     READ: ADMIN_ROLES,
     UPDATE: ADMIN_ROLES,
+    UPDATE_STATUS: ADMIN_ROLES,
     DELETE: ADMIN_ROLES,
   },
   KATEGORI: {
@@ -46,6 +47,22 @@ const PERMISSIONS = Object.freeze({
   },
   PENGIRIMAN_DETAIL: {
     READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI, ROLES.VIAR, ROLES.SPG]),
+  },
+  PENERIMAAN: {
+    CREATE: Object.freeze([...ADMIN_ROLES, ROLES.SPG]),
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI, ROLES.VIAR, ROLES.SPG]),
+    UPDATE: Object.freeze([...ADMIN_ROLES, ROLES.SPG]),
+    DELETE: ADMIN_ROLES,
+  },
+  STOK_LAPAK: {
+    CREATE: ADMIN_ROLES,
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI, ROLES.SPG]),
+    UPDATE: Object.freeze([...ADMIN_ROLES, ROLES.SPG]),
+    DELETE: ADMIN_ROLES,
+  },
+  COUNTERS: {
+    READ: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
 });
 

@@ -7,6 +7,9 @@ const satuanRoutes = require('./satuan.routes');
 const produkRoutes = require('./produk.routes');
 const pengirimanRoutes = require('./pengiriman.routes');
 const pengirimanDetailRoutes = require('./pengirimanDetail.routes');
+const penerimaanRoutes = require('./penerimaan.routes');
+const stokLapakRoutes = require('./stokLapak.routes');
+const counterRoutes = require('./counter.routes');
 
 const router = Router();
 
@@ -43,5 +46,15 @@ router.use('/pengiriman', pengirimanRoutes);
 // Pengiriman Detail module routes (Protected with 30-day Bearer token & RBAC)
 router.use('/pengiriman-detail', pengirimanDetailRoutes);
 
+// Penerimaan module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/penerimaan', penerimaanRoutes);
+
+// Stok Lapak module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/stok-lapak', stokLapakRoutes);
+
+// Counters module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/counters', counterRoutes);
+
 module.exports = router;
+
 

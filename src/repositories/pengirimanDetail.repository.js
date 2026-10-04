@@ -24,6 +24,7 @@ class PengirimanDetailRepository {
       const docRef = this.collection.doc();
       const dataToSave = {
         pengiriman_id: item.pengiriman_id.trim(),
+        pengiriman_unique_id: item.pengiriman_unique_id ? item.pengiriman_unique_id.trim() : null,
         produk_id: item.produk_id.trim(),
         qty: Number(item.qty),
         nama_produk: item.nama_produk ? item.nama_produk.trim() : '',
@@ -49,22 +50,37 @@ class PengirimanDetailRepository {
   }
 
   /**
-   * Find all shipment details for a specific shipment ID
+   * Find all shipment details for a specific shipment ID or unique_id (#PG-...)
    * @param {string} pengirimanId
    * @returns {Promise<Array<PengirimanDetail>>}
    */
   async findByPengirimanId(pengirimanId) {
     if (!pengirimanId) return [];
 
-    const snapshot = await this.collection.where('pengiriman_id', '==', pengirimanId.trim()).get();
-    const list = [];
-
-    snapshot.forEach((doc) => {
-      const detail = PengirimanDetail.fromFirestore(doc);
-      if (detail) {
-        list.push(detail);
+    const cleanId = pengirimanId.trim();
+    let snapshot;
+    if (cleanId.startsWith('#PG-')) {
+      snapshot = await this.collection.where('pengiriman_unique_id', '==', cleanId).get();
+      // Fallback: if details didn't have pengiriman_unique_id saved, find shipment first
+      if (snapshot.empty) {
+        const shipmentDoc = await db.collection('pengiriman').where('unique_id', '==', cleanId).limit(1).get();
+        if (!shipmentDoc.empty) {
+          snapshot = await this.collection.where('pengiriman_id', '==', shipmentDoc.docs[0].id).get();
+        }
       }
-    });
+    } else {
+      snapshot = await this.collection.where('pengiriman_id', '==', cleanId).get();
+    }
+
+    const list = [];
+    if (snapshot && !snapshot.empty) {
+      snapshot.forEach((doc) => {
+        const detail = PengirimanDetail.fromFirestore(doc);
+        if (detail) {
+          list.push(detail);
+        }
+      });
+    }
 
     list.sort((a, b) => {
       const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
@@ -137,7 +153,12 @@ class PengirimanDetailRepository {
 
     const pengirimanId = filters.pengiriman_id || filters.pengirimanId;
     if (pengirimanId) {
-      query = query.where('pengiriman_id', '==', pengirimanId.trim());
+      const cleanId = pengirimanId.trim();
+      if (cleanId.startsWith('#PG-')) {
+        query = query.where('pengiriman_unique_id', '==', cleanId);
+      } else {
+        query = query.where('pengiriman_id', '==', cleanId);
+      }
     }
 
     const produkId = filters.produk_id || filters.produkId;
@@ -158,7 +179,7 @@ class PengirimanDetailRepository {
     list.sort((a, b) => {
       const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-      return timeB - timeA;
+      return timeA - timeB;
     });
 
     return list;

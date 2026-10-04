@@ -2,6 +2,7 @@ const produkRepository = require('../repositories/produk.repository');
 const kategoriRepository = require('../repositories/kategori.repository');
 const satuanRepository = require('../repositories/satuan.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const stokLapakRepository = require('../repositories/stokLapak.repository');
 const { STATUS, VALID_STATUSES } = require('../constants/status');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -214,6 +215,35 @@ class ProdukService {
   }
 
   /**
+   * Update produk status specifically (Admin dedicated operation)
+   * Prevents other product fields from being modified through this endpoint.
+   * @param {string} id
+   * @param {string} status
+   * @returns {Promise<Produk>}
+   */
+  async updateProdukStatus(id, status) {
+    if (!id || typeof id !== 'string') {
+      throw new BadRequestError('Produk ID is required.');
+    }
+
+    if (!status || typeof status !== 'string') {
+      throw new BadRequestError('Status is required.');
+    }
+
+    const lowerStatus = status.toLowerCase().trim();
+    if (!VALID_STATUSES.includes(lowerStatus)) {
+      throw new BadRequestError(
+        `Invalid status '${status}'. Allowed statuses are strictly: ${VALID_STATUSES.join(', ')}.`
+      );
+    }
+
+    // Verify produk exists before updating
+    await this.getProdukById(id);
+
+    return await produkRepository.update(id, { is_active: lowerStatus });
+  }
+
+  /**
    * Delete produk by ID
    * Enforces referential integrity: blocks deletion if referenced by shipment items
    * @param {string} id
@@ -222,11 +252,18 @@ class ProdukService {
   async deleteProduk(id) {
     await this.getProdukById(id);
 
-    // Enforce referential integrity: block deletion if product is referenced by shipment items
+    // Enforce referential integrity: block deletion if product is referenced by shipment items or inventory
     const referencingCount = await pengirimanDetailRepository.countByProdukId(id);
     if (referencingCount > 0) {
       throw new ConflictError(
         `Cannot delete product: it is currently referenced by ${referencingCount} shipment item(s).`
+      );
+    }
+
+    const stockCount = await stokLapakRepository.countByProdukId(id);
+    if (stockCount > 0) {
+      throw new ConflictError(
+        `Cannot delete product: it is currently referenced by ${stockCount} inventory record(s).`
       );
     }
 

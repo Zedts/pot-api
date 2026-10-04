@@ -66,6 +66,22 @@ class ProdukController {
   }
 
   /**
+   * PATCH /api/v1/produk/:id/status
+   * Update a produk's status (Admin only)
+   */
+  async updateStatus(req, res) {
+    const { id } = req.params;
+    const { status, is_active } = req.body;
+    const targetStatus = status || is_active;
+    const updatedProduk = await produkService.updateProdukStatus(id, targetStatus);
+    return res.status(200).json({
+      success: true,
+      message: `Produk status has been successfully updated to '${targetStatus}'.`,
+      data: updatedProduk.toJSON(),
+    });
+  }
+
+  /**
    * DELETE /api/v1/produk/:id
    * Delete produk
    */

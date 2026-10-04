@@ -3,4 +3,3 @@ node_modules/
 .env
 graphify-out/*
 !graphify-out/graph.json
-scripts

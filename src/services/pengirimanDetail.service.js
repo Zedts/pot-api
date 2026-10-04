@@ -12,7 +12,7 @@ const { BadRequestError, NotFoundError } = require('../errors/AppError');
 class PengirimanDetailService {
   /**
    * Process flat detail items by grouping all detail items with the same pengiriman_id
-   * into a single shipment entry enriched with shipment metadata (tanggal, nama lapak, created_by user object, status, total_qty).
+   * into a single shipment entry enriched with shipment metadata (unique_id, tanggal, nama lapak, created_by user object, status, qty_kirim).
    *
    * @param {Array<PengirimanDetail>} details Flat list of shipment detail records
    * @returns {Promise<Array<Object>>} Grouped shipment objects
@@ -68,13 +68,15 @@ class PengirimanDetailService {
 
         groupedMap.set(pengirimanId, {
           pengiriman_id: pengirimanId,
+          unique_id: shipment ? (shipment.unique_id || null) : (detail.pengiriman_unique_id || null),
           tanggal: shipment && shipment.tanggal
             ? (shipment.tanggal.toISOString ? shipment.tanggal.toISOString() : shipment.tanggal)
             : null,
           nama: lapak ? lapak.nama : null,
           created_by: creatorObject,
           status: shipment ? shipment.status : null,
-          total_qty: 0,
+          qty_kirim: 0,
+          total_qty: 0, // Fallback alias
           items: [],
         });
       }
@@ -105,12 +107,14 @@ class PengirimanDetailService {
       groupedMap.get(pengirimanId).items.push(itemData);
     }
 
-    // 5. Compute total_qty by aggregating qty across all items for each shipment
+    // 5. Compute qty_kirim by aggregating qty across all items for each shipment
     for (const shipmentEntry of groupedMap.values()) {
-      shipmentEntry.total_qty = shipmentEntry.items.reduce(
+      const total = shipmentEntry.items.reduce(
         (sum, item) => sum + Number(item.qty || 0),
         0
       );
+      shipmentEntry.qty_kirim = total;
+      shipmentEntry.total_qty = total;
     }
 
     return Array.from(groupedMap.values());

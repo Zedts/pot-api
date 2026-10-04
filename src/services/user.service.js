@@ -3,6 +3,7 @@ const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
 const lapakRepository = require('../repositories/lapak.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
+const penerimaanRepository = require('../repositories/penerimaan.repository');
 const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
 const { VALID_STATUSES } = require('../constants/status');
 const { PERMISSIONS } = require('../constants/permissions');
@@ -284,11 +285,18 @@ class UserService {
     // 1. Ensure user exists in Firestore
     const user = await this.getUserById(id);
 
-    // 2. Referential integrity check: prevent deleting user if they have created shipments
+    // 2. Referential integrity check: prevent deleting user if they have created shipments or recorded receipts
     const referencingShipmentsCount = await pengirimanRepository.countByCreatedBy(id);
     if (referencingShipmentsCount > 0) {
       throw new ConflictError(
         `Cannot delete user: this user is associated with ${referencingShipmentsCount} shipment record(s). Please reassign or delete the associated shipments first.`
+      );
+    }
+
+    const referencingReceiptsCount = await penerimaanRepository.countBySpgId(id);
+    if (referencingReceiptsCount > 0) {
+      throw new ConflictError(
+        `Cannot delete user: this user is associated with ${referencingReceiptsCount} receipt record(s). Please reassign or delete the associated receipts first.`
       );
     }
 

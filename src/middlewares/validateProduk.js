@@ -91,7 +91,38 @@ function validateUpdateProduk(req, res, next) {
   next();
 }
 
+/**
+ * Middleware: Validate produk status update payload (Admin dedicated endpoint)
+ * Ensures only the status/is_active field is present and accepted, preventing other product fields from being modified.
+ */
+function validateUpdateStatus(req, res, next) {
+  const status = req.body.status !== undefined ? req.body.status : req.body.is_active;
+
+  if (status === undefined || status === null || typeof status !== 'string' || !status.trim()) {
+    return next(new BadRequestError('Field "status" is required and must be a string.'));
+  }
+
+  const normalizedStatus = status.toLowerCase().trim();
+  if (!VALID_STATUSES.includes(normalizedStatus)) {
+    return next(
+      new BadRequestError(
+        `Invalid status "${status}". Allowed statuses are strictly: ${VALID_STATUSES.join(', ')}.`
+      )
+    );
+  }
+
+  // Ensure req.body only contains normalized status/is_active to strictly prevent other fields from being modified
+  req.body = {
+    status: normalizedStatus,
+    is_active: normalizedStatus,
+  };
+
+  next();
+}
+
 module.exports = {
   validateCreateProduk,
   validateUpdateProduk,
+  validateUpdateStatus,
 };
+

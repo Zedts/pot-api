@@ -13,6 +13,150 @@ class PengirimanRepository {
   }
 
   /**
+   * Atomically generate a sequential unique ID for a given date in format: #PG-YYYYMMDD-COUNTER
+   * @param {Date|string} date
+   * @returns {Promise<string>}
+   */
+  async generateUniqueId(date = new Date()) {
+    const d = date instanceof Date ? date : new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const dateStr = `${year}${month}${day}`;
+    const counterRef = db.collection('counters').doc(`pengiriman_${dateStr}`);
+
+    const nextCounter = await db.runTransaction(async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+      let count = 1;
+
+      if (counterDoc.exists) {
+        const data = counterDoc.data();
+        count = (data.last_counter || 0) + 1;
+      } else {
+        // Self-healing: only query if counter document was manually deleted
+        // Uses targeted indexed prefix range query instead of full collection scan
+        const prefix = `#PG-${dateStr}-`;
+        const existingDocs = await this.collection
+          .where('unique_id', '>=', prefix)
+          .where('unique_id', '<=', prefix + '\uf8ff')
+          .get();
+
+        let maxExistingCounter = 0;
+        existingDocs.forEach((doc) => {
+          const data = doc.data();
+          if (data.unique_id) {
+            const parts = data.unique_id.split('-');
+            const num = parseInt(parts[2], 10);
+            if (!isNaN(num) && num > maxExistingCounter) {
+              maxExistingCounter = num;
+            }
+          }
+        });
+        count = maxExistingCounter + 1;
+      }
+
+      transaction.set(
+        counterRef,
+        {
+          last_counter: count,
+          date: dateStr,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+      return count;
+    });
+
+    const paddedCounter = String(nextCounter).padStart(3, '0');
+    return `#PG-${dateStr}-${paddedCounter}`;
+  }
+
+  /**
+   * Validate whether a string conforms to the unique_id format #PG-YYYYMMDD-COUNTER
+   * @param {string} uniqueId
+   * @returns {boolean}
+   */
+  validateUniqueIdFormat(uniqueId) {
+    if (!uniqueId || typeof uniqueId !== 'string') return false;
+    return /^#PG-\d{8}-\d{3,}$/.test(uniqueId.trim());
+  }
+
+  /**
+   * Verify a given unique_id against the counters collection
+   * @param {string} uniqueId
+   * @returns {Promise<{ valid: boolean, counterId?: string, dateStr?: string, counter?: number, lastCounter?: number, counterDocExists: boolean, reason?: string }>}
+   */
+  async verifyUniqueIdAgainstCounter(uniqueId) {
+    if (!this.validateUniqueIdFormat(uniqueId)) {
+      return { valid: false, counterDocExists: false, reason: 'Invalid format. Must match #PG-YYYYMMDD-COUNTER' };
+    }
+
+    const clean = uniqueId.trim();
+    const parts = clean.split('-');
+    const dateStr = parts[1];
+    const counterNum = parseInt(parts[2], 10);
+    const counterId = `pengiriman_${dateStr}`;
+
+    const counterDoc = await db.collection('counters').doc(counterId).get();
+    if (!counterDoc.exists) {
+      return {
+        valid: false,
+        counterId,
+        dateStr,
+        counter: counterNum,
+        counterDocExists: false,
+        reason: `No counter document found for date ${dateStr} (ID: ${counterId})`,
+      };
+    }
+
+    const lastCounter = counterDoc.data().last_counter || 0;
+    const isValid = counterNum <= lastCounter;
+
+    return {
+      valid: isValid,
+      counterId,
+      dateStr,
+      counter: counterNum,
+      lastCounter,
+      counterDocExists: true,
+      reason: isValid ? 'Counter verified' : `Counter ${counterNum} exceeds latest recorded counter ${lastCounter}`,
+    };
+  }
+
+  /**
+   * Ensure a shipment has a unique_id, generating one via counters if missing
+   * @param {Pengiriman} shipment
+   * @returns {Promise<string>}
+   */
+  async ensureUniqueId(shipment) {
+    if (shipment.unique_id && this.validateUniqueIdFormat(shipment.unique_id)) {
+      if (!shipment.counters_id) {
+        const dateStr = shipment.unique_id.split('-')[1];
+        const countersId = `pengiriman_${dateStr}`;
+        await this.collection.doc(shipment.id).update({
+          counters_id: countersId,
+          updatedAt: new Date(),
+        });
+        shipment.counters_id = countersId;
+      }
+      return shipment.unique_id;
+    }
+
+    const generatedId = await this.generateUniqueId(shipment.tanggal || new Date());
+    const dateStr = generatedId.split('-')[1];
+    const countersId = `pengiriman_${dateStr}`;
+
+    await this.collection.doc(shipment.id).update({
+      unique_id: generatedId,
+      counters_id: countersId,
+      updatedAt: new Date(),
+    });
+    shipment.unique_id = generatedId;
+    shipment.counters_id = countersId;
+    return generatedId;
+  }
+
+  /**
    * Atomically create a shipment and all its detail items using a Firestore WriteBatch
    * @param {Object} pengirimanData
    * @param {Array<Object>} itemsData
@@ -22,24 +166,33 @@ class PengirimanRepository {
     const batch = db.batch();
     const docRef = this.collection.doc();
     const now = new Date();
+    const uniqueId = await this.generateUniqueId(pengirimanData.tanggal || now);
+    const dateStr = uniqueId.split('-')[1];
+    const countersId = `pengiriman_${dateStr}`;
+
+    const calculatedQtyKirim = itemsData.reduce((sum, item) => sum + Number(item.qty || 0), 0);
 
     const dataToSave = {
+      unique_id: uniqueId,
+      counters_id: countersId,
       tanggal: pengirimanData.tanggal || now,
       lapak_id: pengirimanData.lapak_id.trim(),
       created_by: pengirimanData.created_by.trim(),
       status: pengirimanData.status || PENGIRIMAN_STATUS.DRAFT,
       total_items: itemsData.length,
-      total_qty: itemsData.reduce((sum, item) => sum + Number(item.qty), 0),
+      qty_kirim: calculatedQtyKirim,
+      total_qty: calculatedQtyKirim,
       createdAt: now,
       updatedAt: now,
     };
 
     batch.set(docRef, dataToSave);
 
-    // Attach generated shipment ID to all detail records
+    // Attach generated shipment ID and unique_id to all detail records
     const itemsWithPengirimanId = itemsData.map((item) => ({
       ...item,
       pengiriman_id: docRef.id,
+      pengiriman_unique_id: uniqueId,
     }));
 
     const detailEntities = pengirimanDetailRepository.prepareBatchCreate(itemsWithPengirimanId, batch);
@@ -59,18 +212,35 @@ class PengirimanRepository {
   }
 
   /**
-   * Find shipment by Document ID
+   * Find shipment by unique_id (#PG-YYYYMMDD-COUNTER)
+   * @param {string} uniqueId
+   * @returns {Promise<Pengiriman|null>}
+   */
+  async findByUniqueId(uniqueId) {
+    if (!uniqueId) return null;
+    const snapshot = await this.collection.where('unique_id', '==', uniqueId.trim()).limit(1).get();
+    if (snapshot.empty) return null;
+    return Pengiriman.fromFirestore(snapshot.docs[0]);
+  }
+
+  /**
+   * Find shipment by Document ID or unique_id (#PG-...)
+   * Dual lookup compatibility
    * @param {string} id
    * @returns {Promise<Pengiriman|null>}
    */
   async findById(id) {
     if (!id) return null;
-    const doc = await this.collection.doc(id).get();
+    const cleanId = typeof id === 'string' ? id.trim() : id;
+    if (typeof cleanId === 'string' && cleanId.startsWith('#PG-')) {
+      return this.findByUniqueId(cleanId);
+    }
+    const doc = await this.collection.doc(cleanId).get();
     return Pengiriman.fromFirestore(doc);
   }
 
   /**
-   * Find multiple shipments by an array of document IDs
+   * Find multiple shipments by an array of document IDs or unique IDs
    * Efficiently batches requests via db.getAll() with chunking
    * @param {Array<string>} ids
    * @returns {Promise<Map<string, Pengiriman>>}
@@ -82,18 +252,49 @@ class PengirimanRepository {
     const uniqueIds = [...new Set(ids.filter(Boolean))];
     if (uniqueIds.length === 0) return map;
 
-    const chunkSize = 100;
-    for (let i = 0; i < uniqueIds.length; i += chunkSize) {
-      const chunk = uniqueIds.slice(i, i + chunkSize);
-      const refs = chunk.map((id) => this.collection.doc(id));
-      const snapshots = await db.getAll(...refs);
+    const standardDocIds = [];
+    const customUniqueIds = [];
 
-      snapshots.forEach((doc) => {
-        const pengiriman = Pengiriman.fromFirestore(doc);
-        if (pengiriman) {
-          map.set(doc.id, pengiriman);
+    uniqueIds.forEach((id) => {
+      const clean = id.trim();
+      if (clean.startsWith('#PG-')) {
+        customUniqueIds.push(clean);
+      } else {
+        standardDocIds.push(clean);
+      }
+    });
+
+    // 1. Process standard document IDs via getAll
+    if (standardDocIds.length > 0) {
+      const chunkSize = 100;
+      for (let i = 0; i < standardDocIds.length; i += chunkSize) {
+        const chunk = standardDocIds.slice(i, i + chunkSize);
+        const refs = chunk.map((id) => this.collection.doc(id));
+        const snapshots = await db.getAll(...refs);
+
+        snapshots.forEach((doc) => {
+          const pengiriman = Pengiriman.fromFirestore(doc);
+          if (pengiriman) {
+            map.set(doc.id, pengiriman);
+            if (pengiriman.unique_id) {
+              map.set(pengiriman.unique_id, pengiriman);
+            }
+          }
+        });
+      }
+    }
+
+    // 2. Process custom unique IDs via query
+    if (customUniqueIds.length > 0) {
+      for (const customId of customUniqueIds) {
+        if (!map.has(customId)) {
+          const p = await this.findByUniqueId(customId);
+          if (p) {
+            map.set(p.id, p);
+            map.set(customId, p);
+          }
         }
-      });
+      }
     }
 
     return map;
@@ -121,6 +322,50 @@ class PengirimanRepository {
     if (!userId) return 0;
     const snapshot = await this.collection.where('created_by', '==', userId.trim()).get();
     return snapshot.size;
+  }
+
+  /**
+   * Count how many shipments reference a specific counter document
+   * Used for referential integrity enforcement on counter deletion
+   * @param {string} countersId e.g. 'pengiriman_20261004'
+   * @returns {Promise<number>}
+   */
+  async countByCountersId(countersId) {
+    if (!countersId) return 0;
+    const cleanId = countersId.trim();
+
+    // 1. Direct match on counters_id
+    const snapshot = await this.collection.where('counters_id', '==', cleanId).get();
+    if (!snapshot.empty) {
+      return snapshot.size;
+    }
+
+    // 2. Direct match on legacy counter_id for backwards compatibility
+    const legacySnapshot = await this.collection.where('counter_id', '==', cleanId).get();
+    if (!legacySnapshot.empty) {
+      return legacySnapshot.size;
+    }
+
+    // 3. Fallback check by date in unique_id if older documents don't have counters_id explicitly
+    const parts = cleanId.split('_');
+    if (parts.length >= 2 && /^\d{8}$/.test(parts[1])) {
+      const dateStr = parts[1];
+      const prefix = `#PG-${dateStr}-`;
+      const prefixSnap = await this.collection
+        .where('unique_id', '>=', prefix)
+        .where('unique_id', '<=', prefix + '\uf8ff')
+        .get();
+      return prefixSnap.size;
+    }
+
+    return 0;
+  }
+
+  /**
+   * Alias for backwards compatibility
+   */
+  async countByCounterId(countersId) {
+    return await this.countByCountersId(countersId);
   }
 
   /**
@@ -173,7 +418,10 @@ class PengirimanRepository {
    * @returns {Promise<Pengiriman>}
    */
   async update(id, updateData) {
-    const docRef = this.collection.doc(id);
+    const existing = await this.findById(id);
+    if (!existing) return null;
+
+    const docRef = this.collection.doc(existing.id);
     const dataToUpdate = {
       ...updateData,
       updatedAt: new Date(),
@@ -199,7 +447,10 @@ class PengirimanRepository {
    * @returns {Promise<Pengiriman>}
    */
   async updateStatus(id, newStatus) {
-    const docRef = this.collection.doc(id);
+    const existing = await this.findById(id);
+    if (!existing) return null;
+
+    const docRef = this.collection.doc(existing.id);
     const dataToUpdate = {
       status: newStatus.trim(),
       updatedAt: new Date(),
@@ -216,7 +467,9 @@ class PengirimanRepository {
    * @returns {Promise<boolean>}
    */
   async delete(id) {
-    await this.collection.doc(id).delete();
+    const existing = await this.findById(id);
+    if (!existing) return false;
+    await this.collection.doc(existing.id).delete();
     return true;
   }
 }

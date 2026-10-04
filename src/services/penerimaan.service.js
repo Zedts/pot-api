@@ -1,0 +1,300 @@
+const penerimaanRepository = require('../repositories/penerimaan.repository');
+const pengirimanRepository = require('../repositories/pengiriman.repository');
+const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const stokLapakRepository = require('../repositories/stokLapak.repository');
+const userRepository = require('../repositories/user.repository');
+const lapakRepository = require('../repositories/lapak.repository');
+const { PENERIMAAN_STATUS } = require('../constants/penerimaanStatus');
+const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
+const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
+const { uploadPdfBuffer } = require('../utils/cloudinary');
+const { parseDateOrDefault } = require('../utils/validators');
+
+/**
+ * Penerimaan Service
+ * Encapsulates receipt recording, quantity comparison (qty_terima vs qty_kirim),
+ * shipment lifecycle transitions, automatic stock inflow to stok_lapak, and Cloudinary PDF storage.
+ * - pengiriman_id strictly references the pengiriman document ID.
+ * - unique_id strictly references the #PG-YYYYMMDD-COUNTER unique identifier.
+ * - counters_id strictly references the counters collection document ID (pengiriman_YYYYMMDD).
+ */
+class PenerimaanService {
+  /**
+   * Enrich receipt records with user (SPG), shipment, lapak, and counter details
+   * @param {Array<Penerimaan>} receipts
+   * @returns {Promise<Array<Object>>}
+   */
+  async enrichReceipts(receipts) {
+    if (!receipts || receipts.length === 0) return [];
+
+    const spgIds = [...new Set(receipts.map((r) => r.spg_id).filter(Boolean))];
+    const shipmentDocIds = [...new Set(receipts.map((r) => r.pengiriman_id).filter(Boolean))];
+    const [usersMap, shipmentsMap] = await Promise.all([
+      userRepository.findByIds(spgIds),
+      pengirimanRepository.findByIds(shipmentDocIds),
+    ]);
+
+    const lapakIds = [
+      ...new Set(Array.from(shipmentsMap.values()).map((s) => s.lapak_id).filter(Boolean)),
+    ];
+    const lapakMap = await lapakRepository.findByIds(lapakIds);
+    const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
+    const lapakSpgMap = await userRepository.findByIds(lapakSpgIds);
+    for (const lapak of lapakMap.values()) {
+      if (lapak.spg_id) {
+        lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
+      }
+    }
+
+    return receipts.map((r) => {
+      const json = r.toJSON();
+      const spgUser = usersMap.get(r.spg_id);
+      const shipment = shipmentsMap.get(r.pengiriman_id);
+      const lapak = shipment ? lapakMap.get(shipment.lapak_id) : null;
+
+      json.spg = spgUser
+        ? {
+            id: spgUser.id,
+            nama: spgUser.nama,
+            email: spgUser.email,
+            role: spgUser.role,
+          }
+        : null;
+
+      json.pengiriman = shipment
+        ? {
+            id: shipment.id,
+            unique_id: shipment.unique_id,
+            counters_id: shipment.counters_id,
+            status: shipment.status,
+            qty_kirim: shipment.qty_kirim,
+            total_items: shipment.total_items,
+          }
+        : null;
+
+      json.lapak = lapak ? lapak.toJSON() : null;
+
+      return json;
+    });
+  }
+
+  /**
+   * Record new receipt for a shipment at a stall
+   * @param {Object} data { pengiriman_id, unique_id, tanggal, qty_terima, nota_url, catatan }
+   * @param {Object} currentUser Authenticated user
+   * @returns {Promise<Object>}
+   */
+  async createPenerimaan(data, currentUser) {
+    const { pengiriman_id, unique_id, tanggal, qty_terima, nota_url, catatan } = data;
+
+    const identifier = (pengiriman_id || unique_id || '').trim();
+    if (!identifier) {
+      throw new BadRequestError('Field "pengiriman_id" or "unique_id" is required.');
+    }
+
+    // 1. Look up shipment (supports both document ID and #PG-... unique ID)
+    const shipment = await pengirimanRepository.findById(identifier);
+    if (!shipment) {
+      throw new NotFoundError(`Shipment '${identifier}' was not found.`);
+    }
+
+    // 2. Ensure shipment has a valid unique_id and validate against counters collection
+    const shipmentUniqueId = await pengirimanRepository.ensureUniqueId(shipment);
+
+    if (unique_id && unique_id.trim() !== shipmentUniqueId) {
+      throw new BadRequestError(
+        `Provided unique_id '${unique_id}' does not match shipment unique_id '${shipmentUniqueId}'.`
+      );
+    }
+
+    const counterVerification = await pengirimanRepository.verifyUniqueIdAgainstCounter(shipmentUniqueId);
+    if (!counterVerification.valid) {
+      if (!counterVerification.counterDocExists) {
+        throw new ConflictError(
+          `Referential integrity conflict: The counter record '${counterVerification.counterId}' for shipment '${shipmentUniqueId}' was not found in the counters collection. It may have been deleted.`
+        );
+      }
+      throw new BadRequestError(
+        `Shipment unique_id '${shipmentUniqueId}' failed counters validation: ${counterVerification.reason}`
+      );
+    }
+
+    // 3. Prevent duplicate receipts for the same shipment
+    const existingReceipt = await penerimaanRepository.findByPengirimanId(shipment.id);
+    if (existingReceipt) {
+      throw new ConflictError(
+        `Penerimaan for shipment '${shipmentUniqueId}' (ID: ${shipment.id}) has already been recorded.`
+      );
+    }
+
+    // 4. Validate qty_terima
+    if (qty_terima === undefined || qty_terima === null || qty_terima === '') {
+      throw new BadRequestError('Field "qty_terima" is required.');
+    }
+
+    const parsedQtyTerima = Number(qty_terima);
+    if (isNaN(parsedQtyTerima) || !Number.isInteger(parsedQtyTerima) || parsedQtyTerima < 0) {
+      throw new BadRequestError('Field "qty_terima" must be a non-negative integer.');
+    }
+
+    // 5. Validate or default tanggal (defaults to now if omitted or empty)
+    const parsedTanggal = parseDateOrDefault(tanggal);
+
+    // 6. Determine status via comparison: qty_terima vs pengiriman.qty_kirim
+    const calculatedStatus = (parsedQtyTerima === Number(shipment.qty_kirim))
+      ? PENERIMAAN_STATUS.SESUAI
+      : PENERIMAAN_STATUS.SELISIH;
+
+    const spgId = currentUser ? (currentUser.id || currentUser.uid) : (data.spg_id || '');
+
+    const dateStr = shipmentUniqueId.split('-')[1];
+    const counterId = `pengiriman_${dateStr}`;
+
+    // 7. Save receipt entity: pengiriman_id is shipment doc ID, unique_id is #PG-..., counters_id is pengiriman_YYYYMMDD
+    const receipt = await penerimaanRepository.create({
+      pengiriman_id: shipment.id,
+      unique_id: shipmentUniqueId,
+      counters_id: shipment.counters_id || counterId,
+      spg_id: spgId,
+      tanggal: parsedTanggal,
+      qty_terima: parsedQtyTerima,
+      nota_url: nota_url ? nota_url.trim() : null,
+      catatan: catatan ? catatan.trim() : '',
+      status: calculatedStatus,
+    });
+
+    // 8. Transition shipment status based on receipt outcome
+    const targetShipmentStatus = (calculatedStatus === PENERIMAAN_STATUS.SESUAI)
+      ? PENGIRIMAN_STATUS.SELESAI
+      : PENGIRIMAN_STATUS.DITERIMA_SPG;
+
+    await pengirimanRepository.updateStatus(shipment.id, targetShipmentStatus);
+
+    // 9. Automatic stock inflow: for each item in pengiriman_detail, increment stok_masuk in stok_lapak
+    const details = await pengirimanDetailRepository.findByPengirimanId(shipment.id);
+    for (const detail of details) {
+      if (detail.produk_id && detail.qty > 0) {
+        await stokLapakRepository.incrementStokMasuk(shipment.lapak_id, detail.produk_id, detail.qty);
+      }
+    }
+
+    return await this.getPenerimaanById(receipt.id);
+  }
+
+  /**
+   * Retrieve all receipts with optional filters
+   * @param {Object} filters
+   * @returns {Promise<Array<Object>>}
+   */
+  async getAllPenerimaan(filters = {}) {
+    const receipts = await penerimaanRepository.findAll(filters);
+    return await this.enrichReceipts(receipts);
+  }
+
+  /**
+   * Retrieve single receipt by ID with relations
+   * @param {string} id
+   * @returns {Promise<Object>}
+   */
+  async getPenerimaanById(id) {
+    if (!id || typeof id !== 'string') {
+      throw new BadRequestError('Penerimaan ID is required.');
+    }
+
+    const receipt = await penerimaanRepository.findById(id);
+    if (!receipt) {
+      throw new NotFoundError(`Penerimaan with ID '${id}' was not found.`);
+    }
+
+    const enrichedList = await this.enrichReceipts([receipt]);
+    return enrichedList[0];
+  }
+
+  /**
+   * Update receipt metadata (e.g. catatan or nota_url)
+   * @param {string} id
+   * @param {Object} updateData
+   * @returns {Promise<Object>}
+   */
+  async updatePenerimaan(id, updateData) {
+    const existing = await this.getPenerimaanById(id);
+
+    const payload = {};
+    if (updateData.catatan !== undefined) {
+      payload.catatan = typeof updateData.catatan === 'string' ? updateData.catatan.trim() : '';
+    }
+    if (updateData.nota_url !== undefined) {
+      payload.nota_url = updateData.nota_url ? updateData.nota_url.trim() : null;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      return existing;
+    }
+
+    await penerimaanRepository.update(id, payload);
+    return await this.getPenerimaanById(id);
+  }
+
+  /**
+   * Upload PDF nota for a specific penerimaan record and store to Cloudinary
+   * @param {string} id
+   * @param {Buffer} fileBuffer
+   * @returns {Promise<Object>}
+   */
+  async uploadNota(id, fileBuffer) {
+    const existing = await this.getPenerimaanById(id);
+
+    if (!fileBuffer || !Buffer.isBuffer(fileBuffer)) {
+      throw new BadRequestError('Valid PDF file buffer is required.');
+    }
+
+    const uniqueIdentifier = existing.unique_id || (existing.pengiriman && existing.pengiriman.unique_id) || id;
+    const cleanIdentifier = uniqueIdentifier.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const publicId = `nota_${cleanIdentifier}_${Date.now()}`;
+
+    const uploadResult = await uploadPdfBuffer(fileBuffer, {
+      folder: 'pot_nota_penerimaan',
+      public_id: publicId,
+    });
+
+    const secureUrl = uploadResult.secure_url || uploadResult.url;
+
+    await penerimaanRepository.update(id, { nota_url: secureUrl });
+    return await this.getPenerimaanById(id);
+  }
+
+  /**
+   * Delete a receipt record
+   * Rolls back inventory stock inflow in stok_lapak and reverts shipment status to dikirim_viar
+   * @param {string} id
+   * @returns {Promise<boolean>}
+   */
+  async deletePenerimaan(id) {
+    if (!id || typeof id !== 'string') {
+      throw new BadRequestError('Penerimaan ID is required.');
+    }
+
+    const existing = await penerimaanRepository.findById(id);
+    if (!existing) {
+      throw new NotFoundError(`Penerimaan with ID '${id}' was not found.`);
+    }
+
+    // Rollback stock inflow and reset shipment status if shipment exists
+    if (existing.pengiriman_id) {
+      const shipment = await pengirimanRepository.findById(existing.pengiriman_id);
+      if (shipment) {
+        const details = await pengirimanDetailRepository.findByPengirimanId(shipment.id);
+        for (const detail of details) {
+          if (detail.produk_id && detail.qty > 0) {
+            await stokLapakRepository.decrementStokMasuk(shipment.lapak_id, detail.produk_id, detail.qty);
+          }
+        }
+        await pengirimanRepository.updateStatus(shipment.id, PENGIRIMAN_STATUS.DIKIRIM_VIAR);
+      }
+    }
+
+    return await penerimaanRepository.delete(id);
+  }
+}
+
+module.exports = new PenerimaanService();

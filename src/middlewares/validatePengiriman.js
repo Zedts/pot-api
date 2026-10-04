@@ -1,5 +1,6 @@
 const { BadRequestError } = require('../errors/AppError');
 const { VALID_PENGIRIMAN_STATUSES } = require('../constants/pengirimanStatus');
+const { validateDateField } = require('../utils/validators');
 
 /**
  * Middleware: Validate shipment creation payload
@@ -16,9 +17,9 @@ function validateCreatePengiriman(req, res, next) {
     if (typeof tanggal === 'string' && tanggal.trim() === '') {
       delete req.body.tanggal;
     } else {
-      const parsedDate = new Date(tanggal);
-      if (isNaN(parsedDate.getTime())) {
-        errors.push('Field "tanggal" must be a valid date or timestamp string.');
+      const dateErr = validateDateField(tanggal);
+      if (dateErr) {
+        errors.push(dateErr);
       }
     }
   }
@@ -66,9 +67,9 @@ function validateUpdatePengiriman(req, res, next) {
   }
 
   if (tanggal !== undefined && tanggal !== null) {
-    const parsedDate = new Date(tanggal);
-    if (isNaN(parsedDate.getTime())) {
-      errors.push('Field "tanggal" must be a valid date or timestamp string.');
+    const dateErr = validateDateField(tanggal);
+    if (dateErr) {
+      errors.push(dateErr);
     }
   }
 
