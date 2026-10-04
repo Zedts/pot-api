@@ -24,6 +24,7 @@ class LapakRepository {
       nama: data.nama.trim(),
       lokasi: data.lokasi.trim(),
       keterangan: data.keterangan ? data.keterangan.trim() : '',
+      spg_id: data.spg_id || null,
       createdAt: now,
       updatedAt: now,
     };
@@ -45,6 +46,19 @@ class LapakRepository {
     if (!id) return null;
     const doc = await this.collection.doc(id).get();
     return Lapak.fromFirestore(doc);
+  }
+
+  /**
+   * Find a lapak by assigned SPG User ID
+   * @param {string} spgId
+   * @returns {Promise<Lapak|null>}
+   */
+  async findBySpgId(spgId) {
+    if (!spgId) return null;
+    const cleanId = spgId.trim();
+    const snapshot = await this.collection.where('spg_id', '==', cleanId).limit(1).get();
+    if (snapshot.empty) return null;
+    return Lapak.fromFirestore(snapshot.docs[0]);
   }
 
   /**
@@ -78,11 +92,18 @@ class LapakRepository {
   }
 
   /**
-   * Retrieve all lapak documents
+   * Retrieve all lapak documents with optional filtering
+   * @param {Object} [filters]
    * @returns {Promise<Array<Lapak>>}
    */
-  async findAll() {
-    const snapshot = await this.collection.get();
+  async findAll(filters = {}) {
+    let query = this.collection;
+
+    if (filters.spg_id) {
+      query = query.where('spg_id', '==', filters.spg_id);
+    }
+
+    const snapshot = await query.get();
     const list = [];
 
     snapshot.forEach((doc) => {

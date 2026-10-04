@@ -23,10 +23,11 @@ class ProdukController {
    * Retrieve all produk with optional filtering (?kategori_id=...&satuan=...)
    */
   async getAll(req, res) {
-    const { kategori_id, kategori, satuan } = req.query;
+    const { kategori_id, kategori, satuan, is_active } = req.query;
     const list = await produkService.getAllProduk({
       kategori_id: kategori_id || kategori,
       satuan,
+      is_active,
     });
     return res.status(200).json({
       success: true,

@@ -2,6 +2,7 @@ const produkRepository = require('../repositories/produk.repository');
 const kategoriRepository = require('../repositories/kategori.repository');
 const satuanRepository = require('../repositories/satuan.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const { STATUS, VALID_STATUSES } = require('../constants/status');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
 /**
@@ -13,10 +14,10 @@ class ProdukService {
   /**
    * Create a new produk
    * Validates foreign references (kategori_id, satuan_id) and persists both IDs and readable names to the database
-   * @param {Object} data { nama, harga, kategori_id, satuan_id }
+   * @param {Object} data { nama, harga, kategori_id, satuan_id, is_active }
    * @returns {Promise<Produk>}
    */
-  async createProduk({ nama, harga, kategori_id, satuan_id }) {
+  async createProduk({ nama, harga, kategori_id, satuan_id, is_active = STATUS.ACTIVE }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
     }
@@ -31,6 +32,13 @@ class ProdukService {
 
     if (!satuan_id || typeof satuan_id !== 'string' || !satuan_id.trim()) {
       throw new BadRequestError('Field "satuan_id" is required.');
+    }
+
+    const cleanIsActive = is_active ? is_active.toLowerCase().trim() : STATUS.ACTIVE;
+    if (!VALID_STATUSES.includes(cleanIsActive)) {
+      throw new BadRequestError(
+        `Field "is_active" must be one of the allowed values: ${VALID_STATUSES.join(', ')}.`
+      );
     }
 
     const trimmedKategoriId = kategori_id.trim();
@@ -56,6 +64,7 @@ class ProdukService {
       nama_kategori: kategori.nama_kategori,
       satuan_id: trimmedSatuanId,
       jenis_satuan: satuan.jenis_satuan,
+      is_active: cleanIsActive,
     });
   }
 
@@ -141,7 +150,6 @@ class ProdukService {
    */
   async updateProduk(id, updateData) {
     const existing = await this.getProdukById(id);
-
     const payload = {};
 
     if (updateData.nama !== undefined) {
@@ -186,6 +194,16 @@ class ProdukService {
 
       payload.satuan_id = trimmedSatuanId;
       payload.jenis_satuan = satuan.jenis_satuan;
+    }
+
+    if (updateData.is_active !== undefined) {
+      const cleanIsActive = updateData.is_active.toLowerCase().trim();
+      if (!VALID_STATUSES.includes(cleanIsActive)) {
+        throw new BadRequestError(
+          `Field "is_active" must be one of the allowed values: ${VALID_STATUSES.join(', ')}.`
+        );
+      }
+      payload.is_active = cleanIsActive;
     }
 
     if (Object.keys(payload).length === 0) {

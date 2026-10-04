@@ -10,6 +10,7 @@ const PERMISSIONS = Object.freeze({
   USER: {
     READ: ADMIN_ROLES,
     UPDATE_ROLE: ADMIN_ROLES,
+    UPDATE_LAPAK: ADMIN_ROLES,
     DELETE: ADMIN_ROLES,
   },
   LAPAK: {

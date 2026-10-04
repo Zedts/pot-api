@@ -1,10 +1,11 @@
 const { BadRequestError } = require('../errors/AppError');
+const { VALID_STATUSES } = require('../constants/status');
 
 /**
  * Middleware: Validate produk creation payload
  */
 function validateCreateProduk(req, res, next) {
-  const { nama, harga, kategori_id, satuan_id } = req.body;
+  const { nama, harga, kategori_id, satuan_id, is_active } = req.body;
   const errors = [];
 
   if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
@@ -23,6 +24,14 @@ function validateCreateProduk(req, res, next) {
     errors.push('Field "satuan_id" is required and cannot be empty.');
   }
 
+  if (is_active !== undefined) {
+    if (typeof is_active !== 'string' || !VALID_STATUSES.includes(is_active.toLowerCase().trim())) {
+      errors.push(`Field "is_active" must be one of: ${VALID_STATUSES.join(', ')}.`);
+    } else {
+      req.body.is_active = is_active.toLowerCase().trim();
+    }
+  }
+
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for create produk request.', errors));
   }
@@ -34,12 +43,20 @@ function validateCreateProduk(req, res, next) {
  * Middleware: Validate produk update payload
  */
 function validateUpdateProduk(req, res, next) {
-  const { nama, harga, kategori_id, satuan_id } = req.body;
+  const { nama, harga, kategori_id, satuan_id, is_active } = req.body;
   const errors = [];
 
-  if (nama === undefined && harga === undefined && kategori_id === undefined && satuan_id === undefined) {
+  if (
+    nama === undefined &&
+    harga === undefined &&
+    kategori_id === undefined &&
+    satuan_id === undefined &&
+    is_active === undefined
+  ) {
     return next(
-      new BadRequestError('At least one field (nama, harga, kategori_id, satuan_id) must be provided for update.')
+      new BadRequestError(
+        'At least one field (nama, harga, kategori_id, satuan_id, is_active) must be provided for update.'
+      )
     );
   }
 
@@ -57,6 +74,14 @@ function validateUpdateProduk(req, res, next) {
 
   if (satuan_id !== undefined && (typeof satuan_id !== 'string' || !satuan_id.trim())) {
     errors.push('Field "satuan_id" cannot be empty.');
+  }
+
+  if (is_active !== undefined) {
+    if (typeof is_active !== 'string' || !VALID_STATUSES.includes(is_active.toLowerCase().trim())) {
+      errors.push(`Field "is_active" must be one of: ${VALID_STATUSES.join(', ')}.`);
+    } else {
+      req.body.is_active = is_active.toLowerCase().trim();
+    }
   }
 
   if (errors.length > 0) {

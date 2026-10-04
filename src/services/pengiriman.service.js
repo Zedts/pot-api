@@ -3,7 +3,7 @@ const pengirimanDetailRepository = require('../repositories/pengirimanDetail.rep
 const lapakRepository = require('../repositories/lapak.repository');
 const produkRepository = require('../repositories/produk.repository');
 const userRepository = require('../repositories/user.repository');
-const { VALID_PENGIRIMAN_STATUSES, PENGIRIMAN_STATUS } = require('../models/pengiriman.model');
+const { VALID_PENGIRIMAN_STATUSES, PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const { BadRequestError, NotFoundError } = require('../errors/AppError');
 
 /**
@@ -101,7 +101,7 @@ class PengirimanService {
         tanggal: parsedTanggal,
         lapak_id: trimmedLapakId,
         created_by: createdBy,
-        status: PENGIRIMAN_STATUS.SIAP_KIRIM,
+        status: PENGIRIMAN_STATUS.DRAFT,
       },
       snapshotItems
     );

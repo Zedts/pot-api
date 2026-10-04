@@ -3,7 +3,11 @@ const userController = require('../controllers/user.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const { authorizePermission } = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
-const { validateUpdateUser, validateUpdateRole } = require('../middlewares/validateUser');
+const {
+  validateUpdateUser,
+  validateUpdateRole,
+  validateUpdateUserLapak,
+} = require('../middlewares/validateUser');
 
 const router = Router();
 
@@ -42,6 +46,15 @@ router.patch(
   authorizePermission('USER', 'UPDATE_ROLE'),
   validateUpdateRole,
   asyncWrapper((req, res) => userController.updateUserRole(req, res))
+);
+
+// Protected: Update user lapak assignment (Admin / Owner only)
+router.patch(
+  '/:id/lapak',
+  authenticate,
+  authorizePermission('USER', 'UPDATE_LAPAK'),
+  validateUpdateUserLapak,
+  asyncWrapper((req, res) => userController.updateUserLapak(req, res))
 );
 
 // Protected: Delete user (Admin only)

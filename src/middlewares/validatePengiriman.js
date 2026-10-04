@@ -1,5 +1,5 @@
 const { BadRequestError } = require('../errors/AppError');
-const { VALID_PENGIRIMAN_STATUSES } = require('../models/pengiriman.model');
+const { VALID_PENGIRIMAN_STATUSES } = require('../constants/pengirimanStatus');
 
 /**
  * Middleware: Validate shipment creation payload

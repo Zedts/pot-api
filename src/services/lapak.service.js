@@ -1,5 +1,7 @@
 const lapakRepository = require('../repositories/lapak.repository');
+const userRepository = require('../repositories/user.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
+const { ROLES } = require('../constants/roles');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
 /**
@@ -9,10 +11,10 @@ const { BadRequestError, NotFoundError, ConflictError } = require('../errors/App
 class LapakService {
   /**
    * Create a new lapak
-   * @param {Object} data { nama, lokasi, keterangan }
+   * @param {Object} data { nama, lokasi, keterangan, spg_id }
    * @returns {Promise<Lapak>}
    */
-  async createLapak({ nama, lokasi, keterangan = '' }) {
+  async createLapak({ nama, lokasi, keterangan = '', spg_id = null }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
     }
@@ -21,11 +23,38 @@ class LapakService {
       throw new BadRequestError('Field "lokasi" is required.');
     }
 
-    return await lapakRepository.create({
+    const cleanSpgId = spg_id ? spg_id.trim() : null;
+
+    if (cleanSpgId) {
+      const spgUser = await userRepository.findById(cleanSpgId);
+      if (!spgUser) {
+        throw new NotFoundError(`User with ID '${cleanSpgId}' was not found.`);
+      }
+      if (spgUser.role !== ROLES.SPG) {
+        throw new BadRequestError(`Assigned user must have the 'spg' role. User '${spgUser.nama}' has role '${spgUser.role}'.`);
+      }
+    }
+
+    const newLapak = await lapakRepository.create({
       nama: nama.trim(),
       lokasi: lokasi.trim(),
       keterangan: keterangan ? keterangan.trim() : '',
+      spg_id: cleanSpgId,
     });
+
+    // Bidirectional sync: assign lapak_id on target user
+    if (cleanSpgId) {
+      const spgUser = await userRepository.findById(cleanSpgId);
+      if (spgUser.lapak_id && spgUser.lapak_id !== newLapak.id) {
+        const oldLapak = await lapakRepository.findById(spgUser.lapak_id);
+        if (oldLapak && oldLapak.spg_id === cleanSpgId) {
+          await lapakRepository.update(oldLapak.id, { spg_id: null });
+        }
+      }
+      await userRepository.update(cleanSpgId, { lapak_id: newLapak.id });
+    }
+
+    return newLapak;
   }
 
   /**
@@ -62,7 +91,6 @@ class LapakService {
    */
   async updateLapak(id, updateData) {
     const existing = await this.getLapakById(id);
-
     const payload = {};
 
     if (updateData.nama !== undefined) {
@@ -86,11 +114,60 @@ class LapakService {
       payload.keterangan = updateData.keterangan.trim();
     }
 
+    if (updateData.spg_id !== undefined) {
+      const cleanSpgId = updateData.spg_id ? updateData.spg_id.trim() : null;
+      if (cleanSpgId !== existing.spg_id) {
+        if (cleanSpgId) {
+          const spgUser = await userRepository.findById(cleanSpgId);
+          if (!spgUser) {
+            throw new NotFoundError(`User with ID '${cleanSpgId}' was not found.`);
+          }
+          if (spgUser.role !== ROLES.SPG) {
+            throw new BadRequestError(
+              `Assigned user must have the 'spg' role. User '${spgUser.nama}' has role '${spgUser.role}'.`
+            );
+          }
+        }
+        payload.spg_id = cleanSpgId;
+      }
+    }
+
     if (Object.keys(payload).length === 0) {
       return existing;
     }
 
-    return await lapakRepository.update(id, payload);
+    const updatedLapak = await lapakRepository.update(id, payload);
+
+    // Bidirectional sync: update user.lapak_id
+    if (payload.spg_id !== undefined) {
+      const oldSpgId = existing.spg_id;
+      const newSpgId = payload.spg_id;
+
+      // 1. Unassign previous SPG
+      if (oldSpgId && oldSpgId !== newSpgId) {
+        const prevUser = await userRepository.findById(oldSpgId);
+        if (prevUser && prevUser.lapak_id === id) {
+          await userRepository.update(oldSpgId, { lapak_id: null });
+        }
+      }
+
+      // 2. Assign new SPG
+      if (newSpgId) {
+        const targetUser = await userRepository.findById(newSpgId);
+        if (targetUser) {
+          // If new SPG was assigned to another lapak, clear old lapak's spg_id
+          if (targetUser.lapak_id && targetUser.lapak_id !== id) {
+            const oldLapak = await lapakRepository.findById(targetUser.lapak_id);
+            if (oldLapak && oldLapak.spg_id === newSpgId) {
+              await lapakRepository.update(oldLapak.id, { spg_id: null });
+            }
+          }
+          await userRepository.update(newSpgId, { lapak_id: id });
+        }
+      }
+    }
+
+    return updatedLapak;
   }
 
   /**
@@ -100,7 +177,7 @@ class LapakService {
    * @returns {Promise<boolean>}
    */
   async deleteLapak(id) {
-    await this.getLapakById(id);
+    const existing = await this.getLapakById(id);
 
     // Referential integrity check: ensure no shipment references this lapak
     const shipmentCount = await pengirimanRepository.countByLapakId(id);
@@ -108,6 +185,22 @@ class LapakService {
       throw new ConflictError(
         `Cannot delete lapak: it is currently referenced by ${shipmentCount} shipment(s). Please reassign or delete the associated shipments first.`
       );
+    }
+
+    // Bidirectional sync: clear lapak_id for assigned SPG
+    if (existing.spg_id) {
+      const user = await userRepository.findById(existing.spg_id);
+      if (user && user.lapak_id === id) {
+        await userRepository.update(existing.spg_id, { lapak_id: null });
+      }
+    }
+
+    // Also clear any other user referencing this lapak_id
+    const assignedUsers = await userRepository.findByLapakId(id);
+    for (const u of assignedUsers) {
+      if (u.id !== existing.spg_id) {
+        await userRepository.update(u.id, { lapak_id: null });
+      }
     }
 
     return await lapakRepository.delete(id);

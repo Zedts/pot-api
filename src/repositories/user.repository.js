@@ -1,6 +1,7 @@
 const { db } = require('../firebase');
 const User = require('../models/user.model');
 const { ROLES } = require('../constants/roles');
+const { STATUS } = require('../constants/status');
 
 /**
  * User Repository
@@ -23,11 +24,13 @@ class UserRepository {
 
     const dataToSave = {
       nama: userData.nama,
+      username: userData.username ? userData.username.trim() : '',
       email: userData.email ? userData.email.toLowerCase().trim() : '',
       role: userData.role || ROLES.UNASSIGNED,
+      lapak_id: userData.lapak_id || null,
       no_hp: userData.no_hp || '',
       password: userData.password || null,
-      status: userData.status || 'active',
+      status: userData.status || STATUS.ACTIVE,
       authProvider: userData.authProvider || 'password',
       createdAt: now,
       updatedAt: now,
@@ -83,6 +86,22 @@ class UserRepository {
   }
 
   /**
+   * Find a user by username
+   * @param {string} username
+   * @returns {Promise<User|null>}
+   */
+  async findByUsername(username) {
+    if (!username) return null;
+    const cleanUsername = username.trim();
+    const snapshot = await this.collection.where('username', '==', cleanUsername).limit(1).get();
+    if (snapshot.empty) {
+      return null;
+    }
+    const doc = snapshot.docs[0];
+    return User.fromFirestore(doc);
+  }
+
+  /**
    * Find a user by email
    * @param {string} email
    * @returns {Promise<User|null>}
@@ -115,8 +134,24 @@ class UserRepository {
   }
 
   /**
+   * Find all users assigned to a specific lapak_id
+   * @param {string} lapakId
+   * @returns {Promise<Array<User>>}
+   */
+  async findByLapakId(lapakId) {
+    if (!lapakId) return [];
+    const snapshot = await this.collection.where('lapak_id', '==', lapakId).get();
+    const users = [];
+    snapshot.forEach((doc) => {
+      const user = User.fromFirestore(doc);
+      if (user) users.push(user);
+    });
+    return users;
+  }
+
+  /**
    * Retrieve all users with optional filtering
-   * @param {Object} filters { role, status }
+   * @param {Object} filters { role, status, lapak_id }
    * @returns {Promise<Array<User>>}
    */
   async findAll(filters = {}) {
@@ -128,6 +163,10 @@ class UserRepository {
 
     if (filters.status) {
       query = query.where('status', '==', filters.status);
+    }
+
+    if (filters.lapak_id) {
+      query = query.where('lapak_id', '==', filters.lapak_id);
     }
 
     const snapshot = await query.get();
@@ -158,6 +197,10 @@ class UserRepository {
 
     if (dataToUpdate.email) {
       dataToUpdate.email = dataToUpdate.email.toLowerCase().trim();
+    }
+
+    if (dataToUpdate.username) {
+      dataToUpdate.username = dataToUpdate.username.trim();
     }
 
     await docRef.update(dataToUpdate);

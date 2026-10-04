@@ -1,9 +1,12 @@
 const bcrypt = require('bcryptjs');
 const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
+const lapakRepository = require('../repositories/lapak.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
-const { VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
-const { VALID_USER_STATUSES } = require('../constants/userStatus');
+const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
+const { VALID_STATUSES } = require('../constants/status');
+const { PERMISSIONS } = require('../constants/permissions');
+const { isValidEmail } = require('../utils/validators');
 const {
   BadRequestError,
   NotFoundError,
@@ -23,7 +26,7 @@ class UserService {
    * @returns {Promise<Array<User>>}
    */
   async getAllUsers(filters = {}) {
-    const { role, status } = filters;
+    const { role, status, lapak_id } = filters;
     const queryFilters = {};
 
     if (role) {
@@ -36,10 +39,14 @@ class UserService {
 
     if (status) {
       const lowerStatus = status.toLowerCase().trim();
-      if (!VALID_USER_STATUSES.includes(lowerStatus)) {
-        throw new BadRequestError(`Invalid status filter. Allowed statuses: ${VALID_USER_STATUSES.join(', ')}.`);
+      if (!VALID_STATUSES.includes(lowerStatus)) {
+        throw new BadRequestError(`Invalid status filter. Allowed statuses: ${VALID_STATUSES.join(', ')}.`);
       }
       queryFilters.status = lowerStatus;
+    }
+
+    if (lapak_id) {
+      queryFilters.lapak_id = lapak_id.trim();
     }
 
     return await userRepository.findAll(queryFilters);
@@ -74,6 +81,7 @@ class UserService {
     if (currentUser) {
       const isSelf = currentUser.id === id || currentUser.uid === id;
       const isPrivileged = ADMIN_ROLES.includes(currentUser.role) || (currentUser.isAdmin && currentUser.isAdmin());
+      const canUpdateLapak = PERMISSIONS.USER?.UPDATE_LAPAK?.includes(currentUser.role);
 
       if (!isPrivileged && !isSelf) {
         throw new ForbiddenError('Forbidden: You can only update your own user profile.');
@@ -82,10 +90,13 @@ class UserService {
       if (!isPrivileged && (updateData.role !== undefined || updateData.status !== undefined)) {
         throw new ForbiddenError('Forbidden: Only administrators or owners can modify user role or account status.');
       }
+
+      if (updateData.lapak_id !== undefined && !canUpdateLapak) {
+        throw new ForbiddenError('Forbidden: Only administrators or owners can modify user lapak assignment.');
+      }
     }
 
     const existingUser = await this.getUserById(id);
-
     const payload = {};
 
     if (updateData.nama !== undefined) {
@@ -93,6 +104,34 @@ class UserService {
         throw new BadRequestError('Nama must be at least 2 characters.');
       }
       payload.nama = updateData.nama.trim();
+    }
+
+    if (updateData.username !== undefined) {
+      const cleanUsername = updateData.username.trim();
+      if (!/^[a-zA-Z0-9_]{3,30}$/.test(cleanUsername)) {
+        throw new BadRequestError('Username must be 3-30 characters containing only letters, numbers, and underscores.');
+      }
+      if (cleanUsername !== existingUser.username) {
+        const holder = await userRepository.findByUsername(cleanUsername);
+        if (holder && holder.id !== id) {
+          throw new ConflictError(`The username '${cleanUsername}' is already in use by another account.`);
+        }
+        payload.username = cleanUsername;
+      }
+    }
+
+    if (updateData.email !== undefined) {
+      const cleanEmail = updateData.email.toLowerCase().trim();
+      if (!isValidEmail(cleanEmail)) {
+        throw new BadRequestError('Email must be a valid email address.');
+      }
+      if (cleanEmail !== existingUser.email) {
+        const holder = await userRepository.findByEmail(cleanEmail);
+        if (holder && holder.id !== id) {
+          throw new ConflictError(`The email '${cleanEmail}' is already in use by another account.`);
+        }
+        payload.email = cleanEmail;
+      }
     }
 
     if (updateData.role !== undefined) {
@@ -105,10 +144,23 @@ class UserService {
 
     if (updateData.status !== undefined) {
       const lowerStatus = updateData.status.toLowerCase().trim();
-      if (!VALID_USER_STATUSES.includes(lowerStatus)) {
-        throw new BadRequestError(`Invalid status '${updateData.status}'. Allowed statuses are: ${VALID_USER_STATUSES.join(', ')}.`);
+      if (!VALID_STATUSES.includes(lowerStatus)) {
+        throw new BadRequestError(`Invalid status '${updateData.status}'. Allowed statuses are: ${VALID_STATUSES.join(', ')}.`);
       }
       payload.status = lowerStatus;
+    }
+
+    if (updateData.lapak_id !== undefined) {
+      const cleanLapakId = updateData.lapak_id ? updateData.lapak_id.trim() : null;
+      if (cleanLapakId !== existingUser.lapak_id) {
+        if (cleanLapakId) {
+          const targetLapak = await lapakRepository.findById(cleanLapakId);
+          if (!targetLapak) {
+            throw new NotFoundError(`Lapak with ID '${cleanLapakId}' was not found.`);
+          }
+        }
+        payload.lapak_id = cleanLapakId;
+      }
     }
 
     if (updateData.no_hp !== undefined) {
@@ -134,9 +186,10 @@ class UserService {
       return existingUser;
     }
 
-    // Synchronize displayName or password updates to Firebase Auth if applicable
+    // Synchronize displayName, email, or password updates to Firebase Auth if applicable
     const authUpdates = {};
     if (payload.nama) authUpdates.displayName = payload.nama;
+    if (payload.email) authUpdates.email = payload.email;
     if (updateData.password) authUpdates.password = updateData.password;
 
     if (Object.keys(authUpdates).length > 0) {
@@ -149,7 +202,49 @@ class UserService {
       }
     }
 
-    return await userRepository.update(id, payload);
+    const updatedUser = await userRepository.update(id, payload);
+
+    // Bidirectional sync: if lapak_id was modified and user is an SPG, keep lapak.spg_id consistent
+    if (payload.lapak_id !== undefined) {
+      const oldLapakId = existingUser.lapak_id;
+      const newLapakId = payload.lapak_id;
+
+      // 1. If user previously had a lapak, clear old lapak's spg_id if it referenced this user
+      if (oldLapakId && oldLapakId !== newLapakId) {
+        const oldLapak = await lapakRepository.findById(oldLapakId);
+        if (oldLapak && oldLapak.spg_id === id) {
+          await lapakRepository.update(oldLapakId, { spg_id: null });
+        }
+      }
+
+      // 2. If new lapak assigned and user is SPG, point target lapak.spg_id to this user
+      if (newLapakId) {
+        const targetLapak = await lapakRepository.findById(newLapakId);
+        if (targetLapak && targetLapak.spg_id !== id) {
+          // If target lapak had another SPG, unassign that previous SPG's lapak_id
+          if (targetLapak.spg_id) {
+            const previousSpg = await userRepository.findById(targetLapak.spg_id);
+            if (previousSpg && previousSpg.id !== id) {
+              await userRepository.update(previousSpg.id, { lapak_id: null });
+            }
+          }
+          await lapakRepository.update(newLapakId, { spg_id: id });
+        }
+      }
+    }
+
+    return updatedUser;
+  }
+
+  /**
+   * Update user lapak assignment specifically (Admin/Owner operation)
+   * @param {string} id Target user ID
+   * @param {string|null} lapakId New lapak ID or null
+   * @param {Object} currentUser Authenticated caller context
+   * @returns {Promise<User>}
+   */
+  async updateUserLapak(id, lapakId, currentUser) {
+    return await this.updateUser(id, { lapak_id: lapakId }, currentUser);
   }
 
   /**
@@ -197,10 +292,15 @@ class UserService {
       );
     }
 
-    // 3. Delete user from Firebase Authentication
+    // 3. Clear any lapak assignment where this user is the assigned SPG
+    const assignedLapak = await lapakRepository.findBySpgId(id);
+    if (assignedLapak) {
+      await lapakRepository.update(assignedLapak.id, { spg_id: null });
+    }
+
+    // 4. Delete user from Firebase Authentication
     let authDeleted = false;
 
-    // Primary attempt: delete by Firestore doc ID (which matches Firebase Auth UID)
     try {
       await auth.deleteUser(id);
       authDeleted = true;
@@ -211,7 +311,6 @@ class UserService {
       }
     }
 
-    // Fallback attempt: if not found by UID but user has an email, find by email and delete
     if (!authDeleted && user.email) {
       try {
         const fbUser = await auth.getUserByEmail(user.email);
@@ -226,7 +325,7 @@ class UserService {
       }
     }
 
-    // 3. Delete from Firestore database
+    // 5. Delete from Firestore database
     return await userRepository.delete(id);
   }
 }

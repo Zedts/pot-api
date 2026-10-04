@@ -1,3 +1,5 @@
+const { STATUS } = require('../constants/status');
+
 /**
  * OOP Produk Entity
  * Encapsulates Produk (product/item) domain properties, serialization, and business rules.
@@ -11,6 +13,7 @@ class Produk {
     nama_kategori = null,
     satuan_id,
     jenis_satuan = null,
+    is_active = STATUS.ACTIVE,
     createdAt = null,
     updatedAt = null,
   }) {
@@ -21,8 +24,16 @@ class Produk {
     this.nama_kategori = nama_kategori ? nama_kategori.trim() : null;
     this.satuan_id = satuan_id ? satuan_id.trim() : '';
     this.jenis_satuan = jenis_satuan ? jenis_satuan.trim() : null;
+    this.is_active = is_active || STATUS.ACTIVE;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  /**
+   * Check if product is active
+   */
+  isActive() {
+    return this.is_active === STATUS.ACTIVE;
   }
 
   /**
@@ -37,6 +48,7 @@ class Produk {
       nama_kategori: this.nama_kategori,
       satuan_id: this.satuan_id,
       jenis_satuan: this.jenis_satuan,
+      is_active: this.is_active,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -60,6 +72,7 @@ class Produk {
       nama_kategori: this.nama_kategori,
       satuan_id: this.satuan_id,
       jenis_satuan: this.jenis_satuan,
+      is_active: this.is_active,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
       updatedAt: this.updatedAt ? (this.updatedAt.toISOString ? this.updatedAt.toISOString() : this.updatedAt) : null,
     };
@@ -82,6 +95,7 @@ class Produk {
       nama_kategori: data.nama_kategori || null,
       satuan_id: data.satuan_id || '',
       jenis_satuan: data.jenis_satuan || data.satuan || null,
+      is_active: data.is_active || STATUS.ACTIVE,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
       updatedAt: data.updatedAt ? (data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt)) : null,
     });

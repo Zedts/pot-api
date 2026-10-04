@@ -8,6 +8,7 @@ class Lapak {
     nama,
     lokasi,
     keterangan = '',
+    spg_id = null,
     createdAt = null,
     updatedAt = null,
   }) {
@@ -15,6 +16,7 @@ class Lapak {
     this.nama = nama ? nama.trim() : '';
     this.lokasi = lokasi ? lokasi.trim() : '';
     this.keterangan = keterangan ? keterangan.trim() : '';
+    this.spg_id = spg_id || null;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -27,6 +29,7 @@ class Lapak {
       nama: this.nama,
       lokasi: this.lokasi,
       keterangan: this.keterangan,
+      spg_id: this.spg_id,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -46,6 +49,7 @@ class Lapak {
       nama: this.nama,
       lokasi: this.lokasi,
       keterangan: this.keterangan,
+      spg_id: this.spg_id,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
       updatedAt: this.updatedAt ? (this.updatedAt.toISOString ? this.updatedAt.toISOString() : this.updatedAt) : null,
     };
@@ -65,6 +69,7 @@ class Lapak {
       nama: data.nama,
       lokasi: data.lokasi,
       keterangan: data.keterangan || '',
+      spg_id: data.spg_id || null,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
       updatedAt: data.updatedAt ? (data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt)) : null,
     });

@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
 const { ROLES } = require('../constants/roles');
-const { USER_STATUS } = require('../constants/userStatus');
+const { STATUS } = require('../constants/status');
 const {
   BadRequestError,
   NotFoundError,
@@ -40,20 +40,49 @@ class AuthService {
   }
 
   /**
-   * Register a new user with Email and Password
+   * Helper: Generate unique sanitized username from a base string
+   * @param {string} base
+   * @returns {Promise<string>}
    */
-  async register({ nama, email, password, no_hp = '' }) {
+  async generateUniqueUsername(base) {
+    let clean = (base || 'user').toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 20);
+    if (clean.length < 3) {
+      clean = `${clean}_user`;
+    }
+
+    let candidate = clean;
+    let counter = 1;
+
+    while (await userRepository.findByUsername(candidate)) {
+      candidate = `${clean}_${counter}`;
+      counter += 1;
+    }
+
+    return candidate;
+  }
+
+  /**
+   * Register a new user with Email, Username, and Password
+   */
+  async register({ nama, username, email, password, no_hp = '' }) {
     const cleanEmail = email.toLowerCase().trim();
+    const cleanUsername = username ? username.trim() : '';
     const cleanName = nama.trim();
     const cleanPhone = no_hp ? no_hp.trim() : '';
 
-    // 1. Check if user already exists in Firestore by email
+    // 1. Check if username is already taken
+    const existingUsername = await userRepository.findByUsername(cleanUsername);
+    if (existingUsername) {
+      throw new ConflictError(`The username '${cleanUsername}' is already taken.`);
+    }
+
+    // 2. Check if user already exists in Firestore by email
     const existingUser = await userRepository.findByEmail(cleanEmail);
     if (existingUser) {
       throw new ConflictError(`An account with email '${cleanEmail}' is already registered.`);
     }
 
-    // 2. Check if phone is already registered (if provided)
+    // 3. Check if phone is already registered (if provided)
     if (cleanPhone) {
       const existingPhone = await userRepository.findByPhone(cleanPhone);
       if (existingPhone) {
@@ -61,7 +90,7 @@ class AuthService {
       }
     }
 
-    // 3. Create user in Firebase Authentication
+    // 4. Create user in Firebase Authentication
     let firebaseUser;
     try {
       firebaseUser = await auth.createUser({
@@ -76,25 +105,27 @@ class AuthService {
       throw new BadRequestError(`Firebase Auth error: ${fbErr.message}`);
     }
 
-    // 4. Hash password with bcrypt for secondary storage
+    // 5. Hash password with bcrypt for secondary storage
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 5. Store user document in Firestore with Doc ID = Firebase Auth UID
+    // 6. Store user document in Firestore with Doc ID = Firebase Auth UID
     const newUser = await userRepository.create(
       {
         nama: cleanName,
+        username: cleanUsername,
         email: cleanEmail,
         role: ROLES.UNASSIGNED, // Default role for newly registered users is 'unassigned'
+        lapak_id: null,
         no_hp: cleanPhone,
         password: hashedPassword,
-        status: USER_STATUS.ACTIVE,
+        status: STATUS.ACTIVE,
         authProvider: 'password',
       },
       firebaseUser.uid
     );
 
-    // 6. Generate 30-day JWT authentication token
+    // 7. Generate 30-day JWT authentication token
     const token = this.generateToken(newUser);
 
     return {
@@ -104,9 +135,9 @@ class AuthService {
   }
 
   /**
-   * Log in with Email or Phone and Password
+   * Log in with Email, Username, or Phone and Password
    */
-  async login({ email, no_hp, password }) {
+  async login({ email, username, no_hp, password }) {
     if (!password) {
       throw new BadRequestError('Password is required.');
     }
@@ -160,6 +191,17 @@ class AuthService {
           throw new NotFoundError('User profile not found in database.');
         }
       }
+    } else if (username) {
+      // Authenticate via username
+      const cleanUsername = username.trim();
+      user = await userRepository.findByUsername(cleanUsername);
+      if (!user || !user.password) {
+        throw new UnauthorizedError('Invalid username or password.');
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        throw new UnauthorizedError('Invalid username or password.');
+      }
     } else if (no_hp) {
       // Authenticate via phone number
       const cleanPhone = no_hp.trim();
@@ -172,7 +214,7 @@ class AuthService {
         throw new UnauthorizedError('Invalid phone number or password.');
       }
     } else {
-      throw new BadRequestError('Either email or phone number (no_hp) is required for login.');
+      throw new BadRequestError('Either email, username, or phone number (no_hp) is required for login.');
     }
 
     // Check if user is active
@@ -211,14 +253,20 @@ class AuthService {
 
     // If first time Google sign-in, create user in Firestore
     if (!user) {
+      const generatedUsername = await this.generateUniqueUsername(
+        cleanEmail ? cleanEmail.split('@')[0] : (name || 'google_user')
+      );
+
       user = await userRepository.create(
         {
           nama: name || 'Google User',
+          username: generatedUsername,
           email: cleanEmail,
           role: ROLES.UNASSIGNED,
+          lapak_id: null,
           no_hp: '',
           password: null,
-          status: USER_STATUS.ACTIVE,
+          status: STATUS.ACTIVE,
           authProvider: 'google',
         },
         uid

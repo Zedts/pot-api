@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const Produk = require('../models/produk.model');
+const { STATUS } = require('../constants/status');
 
 /**
  * Produk Repository
@@ -28,6 +29,7 @@ class ProdukRepository {
       nama_kategori: data.nama_kategori ? data.nama_kategori.trim() : '',
       satuan_id: data.satuan_id.trim(),
       jenis_satuan: data.jenis_satuan ? data.jenis_satuan.trim() : '',
+      is_active: data.is_active || STATUS.ACTIVE,
       createdAt: now,
       updatedAt: now,
     };
@@ -213,7 +215,7 @@ class ProdukRepository {
 
   /**
    * Retrieve all produk documents with optional filtering
-   * @param {Object} filters { kategori_id, satuan_id }
+   * @param {Object} filters { kategori_id, satuan_id, is_active }
    * @returns {Promise<Array<Produk>>}
    */
   async findAll(filters = {}) {
@@ -229,6 +231,11 @@ class ProdukRepository {
       query = query.where('satuan_id', '==', satuanId.trim());
     } else if (filters.satuan) {
       query = query.where('jenis_satuan', '==', filters.satuan.trim());
+    }
+
+    const isActive = filters.is_active || filters.isActive;
+    if (isActive) {
+      query = query.where('is_active', '==', isActive.toLowerCase().trim());
     }
 
     const snapshot = await query.get();
@@ -282,6 +289,10 @@ class ProdukRepository {
 
     if (dataToUpdate.jenis_satuan !== undefined) {
       dataToUpdate.jenis_satuan = dataToUpdate.jenis_satuan ? dataToUpdate.jenis_satuan.trim() : '';
+    }
+
+    if (dataToUpdate.is_active !== undefined) {
+      dataToUpdate.is_active = dataToUpdate.is_active.toLowerCase().trim();
     }
 
     await docRef.update(dataToUpdate);

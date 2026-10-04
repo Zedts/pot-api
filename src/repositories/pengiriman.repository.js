@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const { Pengiriman } = require('../models/pengiriman.model');
+const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const pengirimanDetailRepository = require('./pengirimanDetail.repository');
 
 /**
@@ -26,7 +27,7 @@ class PengirimanRepository {
       tanggal: pengirimanData.tanggal || now,
       lapak_id: pengirimanData.lapak_id.trim(),
       created_by: pengirimanData.created_by.trim(),
-      status: pengirimanData.status || 'siap_kirim',
+      status: pengirimanData.status || PENGIRIMAN_STATUS.DRAFT,
       total_items: itemsData.length,
       total_qty: itemsData.reduce((sum, item) => sum + Number(item.qty), 0),
       createdAt: now,

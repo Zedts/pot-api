@@ -1,14 +1,7 @@
-/**
- * Allowed status values for Pengiriman
- */
-const PENGIRIMAN_STATUS = Object.freeze({
-  SIAP_KIRIM: 'siap_kirim',
-  DIKIRIM: 'dikirim',
-  SAMPAI: 'sampai',
-  SELESAI: 'selesai',
-});
-
-const VALID_PENGIRIMAN_STATUSES = Object.values(PENGIRIMAN_STATUS);
+const {
+  PENGIRIMAN_STATUS,
+  VALID_PENGIRIMAN_STATUSES,
+} = require('../constants/pengirimanStatus');
 
 /**
  * OOP Pengiriman Entity
@@ -20,7 +13,7 @@ class Pengiriman {
     tanggal = null,
     lapak_id,
     created_by,
-    status = PENGIRIMAN_STATUS.SIAP_KIRIM,
+    status = PENGIRIMAN_STATUS.DRAFT,
     total_items = 0,
     total_qty = 0,
     createdAt = null,
@@ -30,7 +23,7 @@ class Pengiriman {
     this.tanggal = tanggal ? (tanggal instanceof Date ? tanggal : new Date(tanggal)) : null;
     this.lapak_id = lapak_id ? lapak_id.trim() : '';
     this.created_by = created_by ? created_by.trim() : '';
-    this.status = status || PENGIRIMAN_STATUS.SIAP_KIRIM;
+    this.status = status || PENGIRIMAN_STATUS.DRAFT;
     this.total_items = Number(total_items || 0);
     this.total_qty = Number(total_qty || 0);
     this.createdAt = createdAt;
@@ -89,7 +82,7 @@ class Pengiriman {
       tanggal: data.tanggal ? (data.tanggal.toDate ? data.tanggal.toDate() : new Date(data.tanggal)) : null,
       lapak_id: data.lapak_id || '',
       created_by: data.created_by || '',
-      status: data.status || PENGIRIMAN_STATUS.SIAP_KIRIM,
+      status: data.status || PENGIRIMAN_STATUS.DRAFT,
       total_items: data.total_items || 0,
       total_qty: data.total_qty || 0,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
