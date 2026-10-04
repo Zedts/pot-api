@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const { auth } = require('../firebase');
 const userRepository = require('../repositories/user.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
-const { VALID_ROLES } = require('../constants/roles');
+const { VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
 const { VALID_USER_STATUSES } = require('../constants/userStatus');
 const {
   BadRequestError,
@@ -73,14 +73,14 @@ class UserService {
   async updateUser(id, updateData, currentUser) {
     if (currentUser) {
       const isSelf = currentUser.id === id || currentUser.uid === id;
-      const isAdmin = currentUser.role === 'admin';
+      const isPrivileged = ADMIN_ROLES.includes(currentUser.role) || (currentUser.isAdmin && currentUser.isAdmin());
 
-      if (!isAdmin && !isSelf) {
+      if (!isPrivileged && !isSelf) {
         throw new ForbiddenError('Forbidden: You can only update your own user profile.');
       }
 
-      if (!isAdmin && (updateData.role !== undefined || updateData.status !== undefined)) {
-        throw new ForbiddenError('Forbidden: Only administrators can modify user role or account status.');
+      if (!isPrivileged && (updateData.role !== undefined || updateData.status !== undefined)) {
+        throw new ForbiddenError('Forbidden: Only administrators or owners can modify user role or account status.');
       }
     }
 

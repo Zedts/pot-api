@@ -1,49 +1,50 @@
-const { ROLES } = require('./roles');
+const { ROLES, ADMIN_ROLES } = require('./roles');
 
 /**
  * Granular Permission Matrix for Resources and Operations
  * Maps resources and operations to arrays of permitted roles.
  * Modify access permissions centrally here without changing route definitions or controllers.
+ * Both ADMIN and OWNER share identical full administrative permissions via ADMIN_ROLES.
  */
 const PERMISSIONS = Object.freeze({
   USER: {
-    READ: Object.freeze([ROLES.ADMIN]),
-    UPDATE_ROLE: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    READ: ADMIN_ROLES,
+    UPDATE_ROLE: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   LAPAK: {
-    CREATE: Object.freeze([ROLES.ADMIN]),
-    READ: Object.freeze([ROLES.ADMIN]),
-    UPDATE: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    CREATE: ADMIN_ROLES,
+    READ: ADMIN_ROLES,
+    UPDATE: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   PRODUK: {
-    CREATE: Object.freeze([ROLES.ADMIN]),
-    READ: Object.freeze([ROLES.ADMIN]),
-    UPDATE: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    CREATE: ADMIN_ROLES,
+    READ: ADMIN_ROLES,
+    UPDATE: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   KATEGORI: {
-    CREATE: Object.freeze([ROLES.ADMIN]),
-    READ: Object.freeze([ROLES.ADMIN]),
-    UPDATE: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    CREATE: ADMIN_ROLES,
+    READ: ADMIN_ROLES,
+    UPDATE: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   SATUAN: {
-    CREATE: Object.freeze([ROLES.ADMIN]),
-    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI]),
-    UPDATE: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    CREATE: ADMIN_ROLES,
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI]),
+    UPDATE: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   PENGIRIMAN: {
-    CREATE: Object.freeze([ROLES.ADMIN]),
-    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI, ROLES.PENGIRIM, ROLES.SPG]),
-    UPDATE: Object.freeze([ROLES.ADMIN]),
-    UPDATE_STATUS: Object.freeze([ROLES.ADMIN]),
-    DELETE: Object.freeze([ROLES.ADMIN]),
+    CREATE: ADMIN_ROLES,
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI, ROLES.VIAR, ROLES.SPG]),
+    UPDATE: ADMIN_ROLES,
+    UPDATE_STATUS: ADMIN_ROLES,
+    DELETE: ADMIN_ROLES,
   },
   PENGIRIMAN_DETAIL: {
-    READ: Object.freeze([ROLES.ADMIN, ROLES.PRODUKSI, ROLES.PENGIRIM, ROLES.SPG]),
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.PRODUKSI, ROLES.VIAR, ROLES.SPG]),
   },
 });
 

@@ -14,8 +14,8 @@ const router = Router();
 // =========================================================================
 // Pengiriman Management Endpoints (Protected with 30-Day Bearer Token)
 // RBAC controlled via centralized PERMISSIONS.PENGIRIMAN matrix:
-//   - Admin: Full CRUD + Status transition
-//   - Produksi, Pengirim, SPG: Read access
+//   - Admin, Owner: Full CRUD + Status transition
+//   - Produksi, Viar, SPG: Read access
 // =========================================================================
 
 // Create new shipment with items atomically

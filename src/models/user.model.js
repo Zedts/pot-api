@@ -38,10 +38,17 @@ class User {
   }
 
   /**
-   * Check if user has administrator privileges
+   * Check if user has administrator or owner privileges
    */
   isAdmin() {
-    return this.role === ROLES.ADMIN;
+    return this.role === ROLES.ADMIN || this.role === ROLES.OWNER;
+  }
+
+  /**
+   * Check if user has owner role
+   */
+  isOwner() {
+    return this.role === ROLES.OWNER;
   }
 
   /**
@@ -52,10 +59,10 @@ class User {
   }
 
   /**
-   * Check if user has pengirim role
+   * Check if user has viar role
    */
-  isPengirim() {
-    return this.role === ROLES.PENGIRIM;
+  isViar() {
+    return this.role === ROLES.VIAR;
   }
 
   /**
