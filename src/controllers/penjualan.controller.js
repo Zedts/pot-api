@@ -1,10 +1,13 @@
 const penjualanService = require('../services/penjualan.service');
-const { uploadImageBuffer } = require('../utils/cloudinary');
+const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { assertValidImageFile } = require('../utils/fileValidation');
 const { BadRequestError } = require('../errors/AppError');
 
 /**
  * Penjualan Controller
  * Handles HTTP requests for sales transactions and delegates to PenjualanService.
+ * Safely guards against orphaned Cloudinary uploads by pre-validating formats & resources
+ * and rolling back Cloudinary assets if downstream database operations fail.
  */
 class PenjualanController {
   /**
@@ -12,12 +15,7 @@ class PenjualanController {
    * Create a new sales transaction
    */
   async createPenjualan(req, res) {
-    if (req.file) {
-      const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
-      req.body.bukti_qris_url = uploadRes.secure_url;
-    }
-
-    // Support JSON array if sent as stringified multipart field
+    // 1. Support JSON array if sent as stringified multipart field
     if (typeof req.body.items === 'string') {
       try {
         req.body.items = JSON.parse(req.body.items);
@@ -26,12 +24,28 @@ class PenjualanController {
       }
     }
 
-    const created = await penjualanService.createPenjualan(req.body, req.user);
-    return res.status(201).json({
-      success: true,
-      message: 'Sales transaction recorded successfully.',
-      data: created,
-    });
+    // 2. Pre-validate image file format & magic bytes BEFORE touching Cloudinary
+    let uploadRes = null;
+    if (req.file) {
+      assertValidImageFile(req.file, 'bukti_qris');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
+      req.body.bukti_qris_url = uploadRes.secure_url;
+    }
+
+    try {
+      const created = await penjualanService.createPenjualan(req.body, req.user);
+      return res.status(201).json({
+        success: true,
+        message: 'Sales transaction recorded successfully.',
+        data: created,
+      });
+    } catch (err) {
+      // Rollback Cloudinary asset if sales creation failed
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
   }
 
   /**
@@ -76,17 +90,29 @@ class PenjualanController {
   async updatePenjualan(req, res) {
     const { id } = req.params;
 
+    // 1. Verify existence before uploading
+    await penjualanService.getPenjualanById(id);
+
+    let uploadRes = null;
     if (req.file) {
-      const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
+      assertValidImageFile(req.file, 'bukti_qris');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
       req.body.bukti_qris_url = uploadRes.secure_url;
     }
 
-    const updated = await penjualanService.updatePenjualan(id, req.body);
-    return res.status(200).json({
-      success: true,
-      message: 'Sales transaction updated successfully.',
-      data: updated,
-    });
+    try {
+      const updated = await penjualanService.updatePenjualan(id, req.body);
+      return res.status(200).json({
+        success: true,
+        message: 'Sales transaction updated successfully.',
+        data: updated,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
   }
 
   /**
@@ -95,20 +121,36 @@ class PenjualanController {
    */
   async uploadBuktiQris(req, res) {
     const { id } = req.params;
+
+    // 1. Pre-validate sales document existence BEFORE touching Cloudinary
+    await penjualanService.getPenjualanById(id);
+
+    // 2. Strict format and magic bytes validation
     if (!req.file || !req.file.buffer) {
       throw new BadRequestError('Valid image file is required.');
     }
+    assertValidImageFile(req.file, 'bukti_qris');
 
+    // 3. Upload to Cloudinary
     const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
-    const updated = await penjualanService.updatePenjualan(id, {
-      bukti_qris_url: uploadRes.secure_url,
-    });
 
-    return res.status(200).json({
-      success: true,
-      message: 'Payment proof image uploaded successfully.',
-      data: updated,
-    });
+    // 4. Update sales record with automatic rollback on error
+    try {
+      const updated = await penjualanService.updatePenjualan(id, {
+        bukti_qris_url: uploadRes.secure_url,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Payment proof image uploaded successfully.',
+        data: updated,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
   }
 
   /**

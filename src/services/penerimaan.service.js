@@ -4,10 +4,12 @@ const pengirimanDetailRepository = require('../repositories/pengirimanDetail.rep
 const stokLapakRepository = require('../repositories/stokLapak.repository');
 const userRepository = require('../repositories/user.repository');
 const lapakRepository = require('../repositories/lapak.repository');
+const lapakService = require('./lapak.service');
 const { PENERIMAAN_STATUS } = require('../constants/penerimaanStatus');
 const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
-const { uploadPdfBuffer } = require('../utils/cloudinary');
+const { uploadPdfBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { assertValidPdfFile } = require('../utils/fileValidation');
 const { parseDateOrDefault } = require('../utils/validators');
 
 /**
@@ -38,18 +40,7 @@ class PenerimaanService {
       ...new Set(Array.from(shipmentsMap.values()).map((s) => s.lapak_id).filter(Boolean)),
     ];
     const lapakMap = await lapakRepository.findByIds(lapakIds);
-    const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
-    const [lapakSpgMap, lapakUsersMap] = await Promise.all([
-      userRepository.findByIds(lapakSpgIds),
-      userRepository.findByLapakIds(lapakIds),
-    ]);
-    for (const lapak of lapakMap.values()) {
-      if (lapak.spg_id) {
-        lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
-      }
-      const assignedUsers = lapakUsersMap.get(lapak.id) || [];
-      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
-    }
+    await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
     return receipts.map((r) => {
       const json = r.toJSON();
@@ -247,16 +238,17 @@ class PenerimaanService {
    * @returns {Promise<Object>}
    */
   async uploadNota(id, fileBuffer) {
+    // 1. Verify existence before processing
     const existing = await this.getPenerimaanById(id);
 
-    if (!fileBuffer || !Buffer.isBuffer(fileBuffer)) {
-      throw new BadRequestError('Valid PDF file buffer is required.');
-    }
+    // 2. Strict format and magic bytes validation
+    assertValidPdfFile(fileBuffer, 'nota');
 
     const uniqueIdentifier = existing.unique_id || (existing.pengiriman && existing.pengiriman.unique_id) || id;
     const cleanIdentifier = uniqueIdentifier.replace(/[^a-zA-Z0-9_-]/g, '_');
     const publicId = `nota_${cleanIdentifier}_${Date.now()}`;
 
+    // 3. Upload to Cloudinary
     const uploadResult = await uploadPdfBuffer(fileBuffer, {
       folder: 'pot_nota_penerimaan',
       public_id: publicId,
@@ -264,7 +256,16 @@ class PenerimaanService {
 
     const secureUrl = uploadResult.secure_url || uploadResult.url;
 
-    await penerimaanRepository.update(id, { nota_url: secureUrl });
+    // 4. Update repository with rollback if database write fails
+    try {
+      await penerimaanRepository.update(id, { nota_url: secureUrl });
+    } catch (dbErr) {
+      if (uploadResult && uploadResult.public_id) {
+        await deleteCloudinaryAsset(uploadResult.public_id, 'raw');
+      }
+      throw dbErr;
+    }
+
     return await this.getPenerimaanById(id);
   }
 

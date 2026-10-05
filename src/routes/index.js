@@ -13,6 +13,9 @@ const counterRoutes = require('./counter.routes');
 const penjualanRoutes = require('./penjualan.routes');
 const penjualanDetailRoutes = require('./penjualanDetail.routes');
 const absensiRoutes = require('./absensi.routes');
+const closingRoutes = require('./closing.routes');
+const payrollRoutes = require('./payroll.routes');
+const slipGajiRoutes = require('./slipGaji.routes');
 
 const router = Router();
 
@@ -66,6 +69,15 @@ router.use('/penjualan-detail', penjualanDetailRoutes);
 
 // Absensi module routes (Protected with 30-day Bearer token & RBAC)
 router.use('/absensi', absensiRoutes);
+
+// Closing module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/closing', closingRoutes);
+
+// Payroll module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/payroll', payrollRoutes);
+
+// Slip Gaji module routes (Protected with 30-day Bearer token & RBAC)
+router.use('/slip-gaji', slipGajiRoutes);
 
 module.exports = router;
 

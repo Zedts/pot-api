@@ -55,7 +55,7 @@ router.put(
 router.post(
   '/:id/bukti-qris',
   authenticate,
-  authorizePermission('PENJUALAN', 'UPDATE'),
+  authorizePermission('PENJUALAN', 'UPLOAD_BUKTI'),
   uploadImage.single('bukti_qris'),
   asyncWrapper((req, res) => penjualanController.uploadBuktiQris(req, res))
 );

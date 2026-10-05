@@ -60,8 +60,32 @@ function uploadImageBuffer(buffer, { folder = 'pot_images', public_id, format } 
   });
 }
 
+/**
+ * Safely delete an asset from Cloudinary (e.g. for rollback on downstream error)
+ * @param {string} publicId
+ * @param {string} [resourceType='image'] 'image' or 'raw'
+ * @returns {Promise<Object>}
+ */
+function deleteCloudinaryAsset(publicId, resourceType = 'image') {
+  if (!publicId) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    cloudinary.uploader.destroy(
+      publicId,
+      { resource_type: resourceType },
+      (error, result) => {
+        if (error) {
+          console.warn('[CLOUDINARY_CLEANUP_WARN]:', error.message);
+          return resolve(null);
+        }
+        resolve(result);
+      }
+    );
+  });
+}
+
 module.exports = {
   cloudinary,
   uploadPdfBuffer,
   uploadImageBuffer,
+  deleteCloudinaryAsset,
 };

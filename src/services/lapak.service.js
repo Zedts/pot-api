@@ -5,6 +5,7 @@ const pengirimanRepository = require('../repositories/pengiriman.repository');
 const stokLapakRepository = require('../repositories/stokLapak.repository');
 const penjualanRepository = require('../repositories/penjualan.repository');
 const absensiRepository = require('../repositories/absensi.repository');
+const closingRepository = require('../repositories/closing.repository');
 const { ROLES } = require('../constants/roles');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -252,6 +253,13 @@ class LapakService {
     if (attendanceCount > 0) {
       throw new ConflictError(
         `Cannot delete lapak: it is currently referenced by ${attendanceCount} attendance record(s). Please archive or delete the associated attendance records first.`
+      );
+    }
+
+    const closingCount = await closingRepository.countByLapakId(id);
+    if (closingCount > 0) {
+      throw new ConflictError(
+        `Cannot delete lapak: it is currently referenced by ${closingCount} closing record(s). Please archive or delete the associated closing records first.`
       );
     }
 

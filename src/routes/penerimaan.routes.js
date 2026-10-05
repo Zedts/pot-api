@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const multer = require('multer');
 const penerimaanController = require('../controllers/penerimaan.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const { authorizePermission } = require('../middlewares/rbac.middleware');
@@ -12,13 +11,7 @@ const {
 
 const router = Router();
 
-// Configure Multer for memory buffer uploads (stateless serverless compatible)
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10 MB maximum file size
-  },
-});
+const uploadPdf = require('../middlewares/uploadPdf.middleware');
 
 // =========================================================================
 // Penerimaan Management Endpoints (Protected with 30-Day Bearer Token)
@@ -67,7 +60,7 @@ router.post(
   '/:id/nota',
   authenticate,
   authorizePermission('PENERIMAAN', 'UPDATE'),
-  upload.single('nota'),
+  uploadPdf.single('nota'),
   validateUploadNota,
   asyncWrapper((req, res) => penerimaanController.uploadNota(req, res))
 );

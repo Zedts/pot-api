@@ -1,10 +1,13 @@
 const absensiService = require('../services/absensi.service');
-const { uploadImageBuffer } = require('../utils/cloudinary');
+const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { assertValidImageFile } = require('../utils/fileValidation');
 const { BadRequestError } = require('../errors/AppError');
 
 /**
  * Absensi Controller
  * Handles HTTP requests for staff attendance and delegates to AbsensiService.
+ * Safely guards against orphaned Cloudinary uploads by pre-validating formats & resources
+ * and rolling back Cloudinary assets if downstream database operations fail.
  */
 class AbsensiController {
   /**
@@ -12,12 +15,7 @@ class AbsensiController {
    * Record clock-in for staff
    */
   async clockIn(req, res) {
-    if (req.file) {
-      const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
-      req.body.foto_masuk_url = uploadRes.secure_url;
-    }
-
-    // Support JSON object if sent as stringified multipart field
+    // 1. Support JSON object if sent as stringified multipart field
     if (typeof req.body.lokasi_masuk === 'string' && req.body.lokasi_masuk.startsWith('{')) {
       try {
         req.body.lokasi_masuk = JSON.parse(req.body.lokasi_masuk);
@@ -26,12 +24,28 @@ class AbsensiController {
       }
     }
 
-    const created = await absensiService.clockIn(req.body, req.user);
-    return res.status(201).json({
-      success: true,
-      message: 'Attendance recorded (clock-in) successfully.',
-      data: created,
-    });
+    // 2. Pre-validate image file format & magic bytes BEFORE touching Cloudinary
+    let uploadRes = null;
+    if (req.file) {
+      assertValidImageFile(req.file, 'foto');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
+      req.body.foto_masuk_url = uploadRes.secure_url;
+    }
+
+    try {
+      const created = await absensiService.clockIn(req.body, req.user);
+      return res.status(201).json({
+        success: true,
+        message: 'Attendance recorded (clock-in) successfully.',
+        data: created,
+      });
+    } catch (err) {
+      // Rollback Cloudinary asset if attendance creation failed
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
   }
 
   /**
@@ -90,17 +104,29 @@ class AbsensiController {
   async updateAbsensi(req, res) {
     const { id } = req.params;
 
+    // 1. Verify existence before uploading
+    await absensiService.getAbsensiById(id);
+
+    let uploadRes = null;
     if (req.file) {
-      const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
+      assertValidImageFile(req.file, 'foto');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
       req.body.foto_masuk_url = uploadRes.secure_url;
     }
 
-    const updated = await absensiService.updateAbsensi(id, req.body);
-    return res.status(200).json({
-      success: true,
-      message: 'Attendance record updated successfully.',
-      data: updated,
-    });
+    try {
+      const updated = await absensiService.updateAbsensi(id, req.body);
+      return res.status(200).json({
+        success: true,
+        message: 'Attendance record updated successfully.',
+        data: updated,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
   }
 
   /**

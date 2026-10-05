@@ -85,22 +85,18 @@ function validateUpdatePenerimaan(req, res, next) {
   next();
 }
 
+const { assertValidPdfFile } = require('../utils/fileValidation');
+
 /**
  * Middleware: Validate uploaded nota file
  */
 function validateUploadNota(req, res, next) {
-  if (!req.file) {
-    return next(new BadRequestError('No file uploaded. Please upload a PDF file under the "nota" field.'));
+  try {
+    assertValidPdfFile(req.file, 'nota');
+    next();
+  } catch (err) {
+    next(err);
   }
-
-  const isPdfMime = req.file.mimetype === 'application/pdf';
-  const isPdfExt = req.file.originalname && req.file.originalname.toLowerCase().endsWith('.pdf');
-
-  if (!isPdfMime && !isPdfExt) {
-    return next(new BadRequestError('Invalid file type. Only PDF documents (.pdf) are allowed.'));
-  }
-
-  next();
 }
 
 module.exports = {

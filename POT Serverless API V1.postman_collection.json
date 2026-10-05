@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "b343cd7a-1d25-4ccb-93fd-0377d30e98d3",
+    "_postman_id": "7f981152-8f7c-4c48-8355-b12d4947ca38",
     "name": "POT Serverless API V1",
     "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -6266,6 +6266,118 @@
               "body": "{\n  \"success\": true,\n  \"message\": \"Sales transaction deleted successfully and inventory rolled back.\"\n}"
             }
           ]
+        },
+        {
+          "name": "6. Upload Bukti QRIS (Dedicated File Endpoint)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "bukti_qris",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f1c0ed9-8087-47f0-990e-0522492ea2cd"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/penjualan/{{penjualan_id}}/bukti-qris",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan",
+                "{{penjualan_id}}",
+                "bukti-qris"
+              ]
+            },
+            "description": "Upload payment proof image for QRIS transactions. Automatically uploads to Cloudinary and updates bukti_qris_url on the sales document."
+          },
+          "response": [
+            {
+              "name": "Upload Bukti QRIS (Dedicated File Endpoint)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "bukti_qris",
+                      "type": "file",
+                      "src": [
+                        "postman-cloud:///1f1c0ed9-8087-47f0-990e-0522492ea2cd"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan/{{penjualan_id}}/bukti-qris",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan",
+                    "{{penjualan_id}}",
+                    "bukti-qris"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1050"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"41a-RhMz3t7+kwlTMdimZATrWZm8bHM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 18:50:47 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payment proof image uploaded successfully.\",\n  \"data\": {\n    \"id\": \"BvGWpQ1ptKD8oBlUvMir\",\n    \"tanggal\": \"2026-09-30T00:00:00.000Z\",\n    \"total_harga\": 30000,\n    \"metode_pembayaran\": \"tunai\",\n    \"bukti_qris_url\": \"https://res.cloudinary.com/xfdgh246/image/upload/v1791226252/pot_penjualan_qris/igwq4odsiayy4kuyomnw.png\",\n    \"catatan\": \"\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"items\": [\n      {\n        \"id\": \"N054UwKkmrkaIQGsSinP\",\n        \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\",\n        \"nama_produk\": \"Produk Pen Test 1791130533938\",\n        \"qty\": 2,\n        \"harga_satuan\": 15000,\n        \"subtotal\": 30000,\n        \"createdAt\": \"2026-10-05T18:50:37.147Z\",\n        \"updatedAt\": \"2026-10-05T18:50:37.147Z\"\n      }\n    ],\n    \"createdAt\": \"2026-10-05T18:50:37.147Z\",\n    \"updatedAt\": \"2026-10-05T18:50:47.191Z\"\n  }\n}"
+            }
+          ]
         }
       ]
     },
@@ -7108,6 +7220,1784 @@
               ],
               "cookie": [],
               "body": "{\n  \"success\": true,\n  \"message\": \"Attendance record deleted successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Closing",
+      "item": [
+        {
+          "name": "1. Record Daily Closing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lapak_id\": \"{{lapak_id}}\",\n  \"stok_sistem\": 100,\n  \"stok_fisik\": 98,\n  \"total_omset\": 1500000,\n  \"tunai_sistem\": 500000,\n  \"qris_sistem\": 600000,\n  \"transfer_sistem\": 400000,\n  \"uang_tunai_fisik\": 495000,\n  \"catatan\": \"Closing shift sore booth\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/closing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing"
+              ]
+            },
+            "description": "Record end-of-day physical stock count and cash drawer tally. Tanggal automatically generated using new Date() formatted as YYYY-MM-DD. Discrepancies (selisih_stok = stok_fisik - stok_sistem, selisih_uang = uang_tunai_fisik - tunai_sistem) are calculated automatically."
+          },
+          "response": [
+            {
+              "name": "1. Record Daily Closing",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lapak_id\": \"adymChVi79hwhV9hfNM2\",\n  \"stok_sistem\": 100,\n  \"stok_fisik\": 98,\n  \"total_omset\": 1500000,\n  \"tunai_sistem\": 500000,\n  \"qris_sistem\": 600000,\n  \"transfer_sistem\": 400000,\n  \"uang_tunai_fisik\": 495000,\n  \"catatan\": \"Closing shift sore booth\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/closing",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1006"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3ee-iDgbfIGaUAW5kH86umHjCDJcmOg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:11:01 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Daily closing recorded successfully.\",\n  \"data\": {\n    \"id\": \"tiaDMvzkcskxhhzUt9yL\",\n    \"tanggal\": \"2026-10-05\",\n    \"stok_sistem\": 100,\n    \"stok_fisik\": 98,\n    \"total_omset\": 1500000,\n    \"tunai_sistem\": 500000,\n    \"qris_sistem\": 600000,\n    \"transfer_sistem\": 400000,\n    \"uang_tunai_fisik\": 495000,\n    \"selisih_stok\": -2,\n    \"selisih_uang\": -5000,\n    \"catatan\": \"Closing shift sore booth\",\n    \"status\": \"pending\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"adymChVi79hwhV9hfNM2\",\n      \"nama\": \"Lapak Test 1791219719017\",\n      \"lokasi\": \"Lokasi Test\",\n      \"keterangan\": \"\",\n      \"spg\": null,\n      \"users\": [\n        {\n          \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n          \"nama\": \"SPG A\",\n          \"username\": \"spga_1791219719017\",\n          \"email\": \"spga_1791219719017@pot.com\",\n          \"no_hp\": \"\",\n          \"role\": \"unassigned\",\n          \"status\": \"active\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n      \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n    },\n    \"validator\": null,\n    \"createdAt\": \"2026-10-05T19:11:01.267Z\",\n    \"updatedAt\": \"2026-10-05T19:11:01.267Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Closing Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/closing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing"
+              ],
+              "query": [
+                {
+                  "key": "lapak_id",
+                  "value": "{{lapak_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "spg_id",
+                  "value": "{{spg_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "tanggal",
+                  "value": "2026-10-05",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all daily booth closing records with optional filtering. Returns enriched spg, lapak, and validator objects without exposing raw spg_id or lapak_id."
+          },
+          "response": [
+            {
+              "name": "2. Get All Closing Records",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/closing",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing"
+                  ],
+                  "query": [
+                    {
+                      "key": "lapak_id",
+                      "value": "{{lapak_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "spg_id",
+                      "value": "{{spg_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "tanggal",
+                      "value": "2026-10-05",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "pending",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1021"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3fd-4cBfnM0lfOuKxJWfUXKDLYhuiw0\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:13:54 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Closing records retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"tiaDMvzkcskxhhzUt9yL\",\n      \"tanggal\": \"2026-10-05\",\n      \"stok_sistem\": 100,\n      \"stok_fisik\": 98,\n      \"total_omset\": 1500000,\n      \"tunai_sistem\": 500000,\n      \"qris_sistem\": 600000,\n      \"transfer_sistem\": 400000,\n      \"uang_tunai_fisik\": 495000,\n      \"selisih_stok\": -2,\n      \"selisih_uang\": -5000,\n      \"catatan\": \"Closing shift sore booth\",\n      \"status\": \"pending\",\n      \"spg\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"lapak\": {\n        \"id\": \"adymChVi79hwhV9hfNM2\",\n        \"nama\": \"Lapak Test 1791219719017\",\n        \"lokasi\": \"Lokasi Test\",\n        \"keterangan\": \"\",\n        \"spg\": null,\n        \"users\": [\n          {\n            \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n            \"nama\": \"SPG A\",\n            \"username\": \"spga_1791219719017\",\n            \"email\": \"spga_1791219719017@pot.com\",\n            \"no_hp\": \"\",\n            \"role\": \"unassigned\",\n            \"status\": \"active\"\n          }\n        ],\n        \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n        \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n      },\n      \"validator\": null,\n      \"createdAt\": \"2026-10-05T19:11:01.267Z\",\n      \"updatedAt\": \"2026-10-05T19:11:01.267Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Closing Record by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/closing/{{closing_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing",
+                "{{closing_id}}"
+              ]
+            },
+            "description": "Retrieve a single daily closing record by ID with populated relational details."
+          },
+          "response": [
+            {
+              "name": "3. Get Closing Record by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/closing/{{closing_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing",
+                    "{{closing_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1008"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3f0-2gVfadJUjOirKkg6uVVaXYuYAz4\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:14:47 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Closing record retrieved successfully.\",\n  \"data\": {\n    \"id\": \"tiaDMvzkcskxhhzUt9yL\",\n    \"tanggal\": \"2026-10-05\",\n    \"stok_sistem\": 100,\n    \"stok_fisik\": 98,\n    \"total_omset\": 1500000,\n    \"tunai_sistem\": 500000,\n    \"qris_sistem\": 600000,\n    \"transfer_sistem\": 400000,\n    \"uang_tunai_fisik\": 495000,\n    \"selisih_stok\": -2,\n    \"selisih_uang\": -5000,\n    \"catatan\": \"Closing shift sore booth\",\n    \"status\": \"pending\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"adymChVi79hwhV9hfNM2\",\n      \"nama\": \"Lapak Test 1791219719017\",\n      \"lokasi\": \"Lokasi Test\",\n      \"keterangan\": \"\",\n      \"spg\": null,\n      \"users\": [\n        {\n          \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n          \"nama\": \"SPG A\",\n          \"username\": \"spga_1791219719017\",\n          \"email\": \"spga_1791219719017@pot.com\",\n          \"no_hp\": \"\",\n          \"role\": \"unassigned\",\n          \"status\": \"active\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n      \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n    },\n    \"validator\": null,\n    \"createdAt\": \"2026-10-05T19:11:01.267Z\",\n    \"updatedAt\": \"2026-10-05T19:11:01.267Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Closing Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stok_fisik\": 100,\n  \"uang_tunai_fisik\": 500000,\n  \"catatan\": \"Updated after recounting cash drawer\",\n  \"stok_sistem\": 200,\n  \"total_omset\": 2500000,\n  \"tunai_sistem\": 200000,\n  \"qris_sistem\": 200000,\n  \"transfer_sistem\": 200000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/closing/{{closing_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing",
+                "{{closing_id}}"
+              ]
+            },
+            "description": "Update closing inputs. Discrepancies (selisih_stok and selisih_uang) are recalculated dynamically."
+          },
+          "response": [
+            {
+              "name": "4. Update Closing Record",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"stok_fisik\": 100,\n  \"uang_tunai_fisik\": 500000,\n  \"catatan\": \"Updated after recounting cash drawer\",\n  \"stok_sistem\": 200,\n  \"total_omset\": 2500000,\n  \"tunai_sistem\": 200000,\n  \"qris_sistem\": 200000,\n  \"transfer_sistem\": 200000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/closing/{{closing_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing",
+                    "{{closing_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1022"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3fe-s8eMwMGjJyInqgRoM0QBkEwKMF8\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:16:33 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Closing record updated successfully.\",\n  \"data\": {\n    \"id\": \"tiaDMvzkcskxhhzUt9yL\",\n    \"tanggal\": \"2026-10-05\",\n    \"stok_sistem\": 200,\n    \"stok_fisik\": 100,\n    \"total_omset\": 2500000,\n    \"tunai_sistem\": 200000,\n    \"qris_sistem\": 200000,\n    \"transfer_sistem\": 200000,\n    \"uang_tunai_fisik\": 500000,\n    \"selisih_stok\": -100,\n    \"selisih_uang\": 300000,\n    \"catatan\": \"Updated after recounting cash drawer\",\n    \"status\": \"pending\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"adymChVi79hwhV9hfNM2\",\n      \"nama\": \"Lapak Test 1791219719017\",\n      \"lokasi\": \"Lokasi Test\",\n      \"keterangan\": \"\",\n      \"spg\": null,\n      \"users\": [\n        {\n          \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n          \"nama\": \"SPG A\",\n          \"username\": \"spga_1791219719017\",\n          \"email\": \"spga_1791219719017@pot.com\",\n          \"no_hp\": \"\",\n          \"role\": \"unassigned\",\n          \"status\": \"active\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n      \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n    },\n    \"validator\": null,\n    \"createdAt\": \"2026-10-05T19:11:01.267Z\",\n    \"updatedAt\": \"2026-10-05T19:16:32.975Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Verify / Update Closing Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"terverifikasi\" // \"pending\", \"terverifikasi\", \"perlu_revisi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/closing/{{closing_id}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing",
+                "{{closing_id}}",
+                "status"
+              ]
+            },
+            "description": "Admin/Owner verification workflow for daily closing records. Allowed statuses: terverifikasi, perlu_revisi. Automatically captures validated_by."
+          },
+          "response": [
+            {
+              "name": "5. Verify / Update Closing Status",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"terverifikasi\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/closing/{{closing_id}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing",
+                    "{{closing_id}}",
+                    "status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1155"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"483-XAWCnDRjciLdxBFP7XaTnAba2FY\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:17:18 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Closing status updated to 'terverifikasi' successfully.\",\n  \"data\": {\n    \"id\": \"tiaDMvzkcskxhhzUt9yL\",\n    \"tanggal\": \"2026-10-05\",\n    \"stok_sistem\": 200,\n    \"stok_fisik\": 100,\n    \"total_omset\": 2500000,\n    \"tunai_sistem\": 200000,\n    \"qris_sistem\": 200000,\n    \"transfer_sistem\": 200000,\n    \"uang_tunai_fisik\": 500000,\n    \"selisih_stok\": -100,\n    \"selisih_uang\": 300000,\n    \"catatan\": \"Updated after recounting cash drawer\",\n    \"status\": \"terverifikasi\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"adymChVi79hwhV9hfNM2\",\n      \"nama\": \"Lapak Test 1791219719017\",\n      \"lokasi\": \"Lokasi Test\",\n      \"keterangan\": \"\",\n      \"spg\": null,\n      \"users\": [\n        {\n          \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n          \"nama\": \"SPG A\",\n          \"username\": \"spga_1791219719017\",\n          \"email\": \"spga_1791219719017@pot.com\",\n          \"no_hp\": \"\",\n          \"role\": \"unassigned\",\n          \"status\": \"active\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n      \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n    },\n    \"validator\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\"\n    },\n    \"createdAt\": \"2026-10-05T19:11:01.267Z\",\n    \"updatedAt\": \"2026-10-05T19:17:18.795Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "6. Delete Closing Record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/closing/{{closing_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "closing",
+                "{{closing_id}}"
+              ]
+            },
+            "description": "Delete a closing record (Admin/Owner only)."
+          },
+          "response": [
+            {
+              "name": "6. Delete Closing Record",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/closing/{{closing_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "closing",
+                    "{{closing_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "65"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"41-9q8rg3R7KuVtyGAJ/xqFE6f0TrA\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:18:08 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Closing record deleted successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payroll",
+      "item": [
+        {
+          "name": "1. Create Monthly Payroll",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"\",\n  \"periode\": \"2026-10\",\n  \"hari_kerja\": 26,\n  \"total_penjualan\": 45000000,\n  \"gaji_pokok\": 3000000,\n  \"bonus_penjualan\": 500000,\n  \"lembur\": 200000,\n  \"potongan\": 100000,\n  \"kasbon\": 50000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payroll",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll"
+              ]
+            },
+            "description": "Create an employee monthly payroll record. Net pay total_gaji is computed automatically: (gaji_pokok + bonus_penjualan + lembur) - (potongan + kasbon)."
+          },
+          "response": [
+            {
+              "name": "1. Create Monthly Payroll",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n  \"periode\": \"2026-10\",\n  \"hari_kerja\": 26,\n  \"total_penjualan\": 45000000,\n  \"gaji_pokok\": 3000000,\n  \"bonus_penjualan\": 500000,\n  \"lembur\": 200000,\n  \"potongan\": 100000,\n  \"kasbon\": 50000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/payroll",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "537"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"219-fkWrPRPOgN2NXtdWLPKLmBnnf9w\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:27:27 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll record created successfully.\",\n  \"data\": {\n    \"id\": \"qCx0AtktxJrh3QrhUBsM\",\n    \"periode\": \"2026-10\",\n    \"hari_kerja\": 26,\n    \"total_penjualan\": 45000000,\n    \"gaji_pokok\": 3000000,\n    \"bonus_penjualan\": 500000,\n    \"lembur\": 200000,\n    \"potongan\": 100000,\n    \"kasbon\": 50000,\n    \"total_gaji\": 3550000,\n    \"status\": \"draft\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"createdAt\": \"2026-10-05T19:27:27.260Z\",\n    \"updatedAt\": \"2026-10-05T19:27:27.260Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Payroll Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payroll?periode=2026-10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{user_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "periode",
+                  "value": "2026-10"
+                },
+                {
+                  "key": "status",
+                  "value": "draft",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all payroll records with optional filtering. Returns enriched user details omitting raw user_id."
+          },
+          "response": [
+            {
+              "name": "2. Get All Payroll Records",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payroll",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll"
+                  ],
+                  "query": [
+                    {
+                      "key": "user_id",
+                      "value": "{{user_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "periode",
+                      "value": "2026-10",
+                      "disabled": true
+                    },
+                    {
+                      "key": "status",
+                      "value": "draft",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "552"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"228-ZhUZInKLwyKmX/s8OrIf8dm/OrQ\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:20:16 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll records retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"NkTpK6jm5BhX3r86HPWq\",\n      \"periode\": \"2026-10\",\n      \"hari_kerja\": 26,\n      \"total_penjualan\": 45000000,\n      \"gaji_pokok\": 3000000,\n      \"bonus_penjualan\": 500000,\n      \"lembur\": 200000,\n      \"potongan\": 100000,\n      \"kasbon\": 50000,\n      \"total_gaji\": 3550000,\n      \"status\": \"draft\",\n      \"user\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"createdAt\": \"2026-10-05T19:19:15.945Z\",\n      \"updatedAt\": \"2026-10-05T19:19:15.945Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Payroll by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll",
+                "{{payroll_id}}"
+              ]
+            },
+            "description": "Retrieve a single payroll record by ID with populated employee details."
+          },
+          "response": [
+            {
+              "name": "3. Get Payroll by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll",
+                    "{{payroll_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "539"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"21b-LDNcwwd0FQfRYq4giv0xNzNBawg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:20:26 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll record retrieved successfully.\",\n  \"data\": {\n    \"id\": \"NkTpK6jm5BhX3r86HPWq\",\n    \"periode\": \"2026-10\",\n    \"hari_kerja\": 26,\n    \"total_penjualan\": 45000000,\n    \"gaji_pokok\": 3000000,\n    \"bonus_penjualan\": 500000,\n    \"lembur\": 200000,\n    \"potongan\": 100000,\n    \"kasbon\": 50000,\n    \"total_gaji\": 3550000,\n    \"status\": \"draft\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"createdAt\": \"2026-10-05T19:19:15.945Z\",\n    \"updatedAt\": \"2026-10-05T19:19:15.945Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Payroll Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bonus_penjualan\": 700000,\n  \"lembur\": 250000,\n  \"periode\": \"2026-11\",\n  \"hari_kerja\": 25,\n  \"total_penjualan\": 25000000,\n  \"gaji_pokok\": 2000000,\n  \"potongan\": 200000,\n  \"kasbon\": 20000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll",
+                "{{payroll_id}}"
+              ]
+            },
+            "description": "Update salary components of a payroll record. Net pay total_gaji is recalculated dynamically."
+          },
+          "response": [
+            {
+              "name": "4. Update Payroll Record",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"bonus_penjualan\": 700000,\n  \"lembur\": 250000,\n  \"periode\": \"2026-11\",\n  \"hari_kerja\": 25,\n  \"total_penjualan\": 25000000,\n  \"gaji_pokok\": 2000000,\n  \"potongan\": 200000,\n  \"kasbon\": 20000\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll",
+                    "{{payroll_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "541"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"21d-n+T8oOYY4LA2dnNd0D+130TFCzE\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:26:06 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll record updated successfully.\",\n  \"data\": {\n    \"id\": \"NkTpK6jm5BhX3r86HPWq\",\n    \"periode\": \"2026-11\",\n    \"hari_kerja\": 25,\n    \"total_penjualan\": 25000000,\n    \"gaji_pokok\": 2000000,\n    \"bonus_penjualan\": 700000,\n    \"lembur\": 250000,\n    \"potongan\": 200000,\n    \"kasbon\": 20000,\n    \"total_gaji\": 2730000,\n    \"status\": \"published\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"createdAt\": \"2026-10-05T19:19:15.945Z\",\n    \"updatedAt\": \"2026-10-05T19:26:06.076Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Update Payroll Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"published\" // \"draft\", \"published\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payroll/{{payroll_id}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll",
+                "{{payroll_id}}",
+                "status"
+              ]
+            },
+            "description": "Publish a payroll record (status: draft -> published)."
+          },
+          "response": [
+            {
+              "name": "5. Update Payroll Status",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"draft\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/payroll/{{payroll_id}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll",
+                    "{{payroll_id}}",
+                    "status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "548"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"224-txKs4qbqyb2aQn/n8npaTHt66Mg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:26:15 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll status updated to 'draft' successfully.\",\n  \"data\": {\n    \"id\": \"NkTpK6jm5BhX3r86HPWq\",\n    \"periode\": \"2026-11\",\n    \"hari_kerja\": 25,\n    \"total_penjualan\": 25000000,\n    \"gaji_pokok\": 2000000,\n    \"bonus_penjualan\": 700000,\n    \"lembur\": 250000,\n    \"potongan\": 200000,\n    \"kasbon\": 20000,\n    \"total_gaji\": 2730000,\n    \"status\": \"draft\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"createdAt\": \"2026-10-05T19:19:15.945Z\",\n    \"updatedAt\": \"2026-10-05T19:26:15.526Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "6. Delete Payroll Record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payroll",
+                "{{payroll_id}}"
+              ]
+            },
+            "description": "Delete a payroll record (Admin/Owner only)."
+          },
+          "response": [
+            {
+              "name": "6. Delete Payroll Record",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/payroll/{{payroll_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payroll",
+                    "{{payroll_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "65"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"41-AyZ33uUtWMbKNzRq8I4f19C65EA\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:26:30 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Payroll record deleted successfully.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Slip Gaji",
+      "item": [
+        {
+          "name": "1. Create Slip Gaji Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payroll_id\": \"{{payroll_id}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/slip-gaji",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slip-gaji"
+              ]
+            },
+            "description": "Create a new salary slip document record for a published payroll. file_url and tanggal are initially null until the PDF is uploaded."
+          },
+          "response": [
+            {
+              "name": "1. Create Slip Gaji Record",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payroll_id\": \"qCx0AtktxJrh3QrhUBsM\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/slip-gaji",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "slip-gaji"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "688"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"2b0-jb7LapDOZZSA82OTg/3DxvJJS3w\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:31:37 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Slip gaji record created successfully.\",\n  \"data\": {\n    \"id\": \"Uwq6HKpTJl2AL5P5Ecvl\",\n    \"file_url\": null,\n    \"tanggal\": null,\n    \"payroll\": {\n      \"id\": \"qCx0AtktxJrh3QrhUBsM\",\n      \"periode\": \"2026-10\",\n      \"hari_kerja\": 26,\n      \"total_penjualan\": 45000000,\n      \"gaji_pokok\": 3000000,\n      \"bonus_penjualan\": 500000,\n      \"lembur\": 200000,\n      \"potongan\": 100000,\n      \"kasbon\": 50000,\n      \"total_gaji\": 3550000,\n      \"status\": \"draft\",\n      \"user\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"createdAt\": \"2026-10-05T19:27:27.260Z\",\n      \"updatedAt\": \"2026-10-05T19:27:27.260Z\"\n    },\n    \"createdAt\": \"2026-10-05T19:31:37.831Z\",\n    \"updatedAt\": \"2026-10-05T19:31:37.831Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Slip Gaji Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/slip-gaji",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slip-gaji"
+              ],
+              "query": [
+                {
+                  "key": "payroll_id",
+                  "value": "{{payroll_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "tanggal",
+                  "value": "2026-10-05",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all salary slips with optional filtering. Returns enriched payroll and user details omitting raw payroll_id."
+          },
+          "response": [
+            {
+              "name": "2. Get All Slip Gaji Records",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/slip-gaji",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "slip-gaji"
+                  ],
+                  "query": [
+                    {
+                      "key": "payroll_id",
+                      "value": "{{payroll_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "tanggal",
+                      "value": "2026-10-05",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "703"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"2bf-WizO+sVVxa2blhYqAHvmM+D6G2U\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:34:37 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Slip gaji records retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"Uwq6HKpTJl2AL5P5Ecvl\",\n      \"file_url\": null,\n      \"tanggal\": null,\n      \"payroll\": {\n        \"id\": \"qCx0AtktxJrh3QrhUBsM\",\n        \"periode\": \"2026-10\",\n        \"hari_kerja\": 26,\n        \"total_penjualan\": 45000000,\n        \"gaji_pokok\": 3000000,\n        \"bonus_penjualan\": 500000,\n        \"lembur\": 200000,\n        \"potongan\": 100000,\n        \"kasbon\": 50000,\n        \"total_gaji\": 3550000,\n        \"status\": \"draft\",\n        \"user\": {\n          \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n          \"nama\": \"Admin System\",\n          \"username\": \"\",\n          \"email\": \"admin@pot.com\",\n          \"no_hp\": \"081234567890\",\n          \"role\": \"admin\",\n          \"status\": \"active\"\n        },\n        \"createdAt\": \"2026-10-05T19:27:27.260Z\",\n        \"updatedAt\": \"2026-10-05T19:27:27.260Z\"\n      },\n      \"createdAt\": \"2026-10-05T19:31:37.831Z\",\n      \"updatedAt\": \"2026-10-05T19:31:37.831Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Slip Gaji by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slip-gaji",
+                "{{slip_gaji_id}}"
+              ]
+            },
+            "description": "Retrieve a single salary slip record by ID with populated payroll breakdown and employee details."
+          },
+          "response": [
+            {
+              "name": "3. Get Slip Gaji by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "slip-gaji",
+                    "{{slip_gaji_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "690"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"2b2-KEcrQ2INzTdlsSYEvmPRfTqF/7g\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:34:56 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Slip gaji record retrieved successfully.\",\n  \"data\": {\n    \"id\": \"Uwq6HKpTJl2AL5P5Ecvl\",\n    \"file_url\": null,\n    \"tanggal\": null,\n    \"payroll\": {\n      \"id\": \"qCx0AtktxJrh3QrhUBsM\",\n      \"periode\": \"2026-10\",\n      \"hari_kerja\": 26,\n      \"total_penjualan\": 45000000,\n      \"gaji_pokok\": 3000000,\n      \"bonus_penjualan\": 500000,\n      \"lembur\": 200000,\n      \"potongan\": 100000,\n      \"kasbon\": 50000,\n      \"total_gaji\": 3550000,\n      \"status\": \"draft\",\n      \"user\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"createdAt\": \"2026-10-05T19:27:27.260Z\",\n      \"updatedAt\": \"2026-10-05T19:27:27.260Z\"\n    },\n    \"createdAt\": \"2026-10-05T19:31:37.831Z\",\n    \"updatedAt\": \"2026-10-05T19:31:37.831Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Upload Slip Gaji PDF (Cloudinary Auto-Patch)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f1c0113-7fe8-4480-9598-42ac5e064840"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}/file",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slip-gaji",
+                "{{slip_gaji_id}}",
+                "file"
+              ]
+            },
+            "description": "Upload generated PDF document to Cloudinary (folder pot_slip_gaji). Automatically updates file_url and stamps tanggal with new Date() formatted as YYYY-MM-DD."
+          },
+          "response": [
+            {
+              "name": "4. Upload Slip Gaji PDF (Cloudinary Auto-Patch)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": [
+                        "postman-cloud:///1f1c0113-7fe8-4480-9598-42ac5e064840"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}/file",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "slip-gaji",
+                    "{{slip_gaji_id}}",
+                    "file"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "815"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"32f-G8VW2SHL1ULyCbOVYphdG25Q+1g\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:38:56 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Salary slip PDF uploaded successfully.\",\n  \"data\": {\n    \"id\": \"Uwq6HKpTJl2AL5P5Ecvl\",\n    \"file_url\": \"https://res.cloudinary.com/xfdgh246/raw/upload/v1791229141/pot_slip_gaji/slip_gaji_Uwq6HKpTJl2AL5P5Ecvl_1791229134347.pdf\",\n    \"tanggal\": \"2026-10-05\",\n    \"payroll\": {\n      \"id\": \"qCx0AtktxJrh3QrhUBsM\",\n      \"periode\": \"2026-10\",\n      \"hari_kerja\": 26,\n      \"total_penjualan\": 45000000,\n      \"gaji_pokok\": 3000000,\n      \"bonus_penjualan\": 500000,\n      \"lembur\": 200000,\n      \"potongan\": 100000,\n      \"kasbon\": 50000,\n      \"total_gaji\": 3550000,\n      \"status\": \"draft\",\n      \"user\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"createdAt\": \"2026-10-05T19:27:27.260Z\",\n      \"updatedAt\": \"2026-10-05T19:27:27.260Z\"\n    },\n    \"createdAt\": \"2026-10-05T19:31:37.831Z\",\n    \"updatedAt\": \"2026-10-05T19:38:56.068Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Slip Gaji Record",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "slip-gaji",
+                "{{slip_gaji_id}}"
+              ]
+            },
+            "description": "Delete a salary slip document record (Admin/Owner only)."
+          },
+          "response": [
+            {
+              "name": "5. Delete Slip Gaji Record",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/slip-gaji/{{slip_gaji_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "slip-gaji",
+                    "{{slip_gaji_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "67"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"43-g+SDb9GaPhoIbFKAFLkFDr1nN9c\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 19:39:20 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Slip gaji record deleted successfully.\"\n}"
             }
           ]
         }

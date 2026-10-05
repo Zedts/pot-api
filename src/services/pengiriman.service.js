@@ -2,6 +2,7 @@ const pengirimanRepository = require('../repositories/pengiriman.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
 const penerimaanRepository = require('../repositories/penerimaan.repository');
 const lapakRepository = require('../repositories/lapak.repository');
+const lapakService = require('./lapak.service');
 const produkRepository = require('../repositories/produk.repository');
 const userRepository = require('../repositories/user.repository');
 const { VALID_PENGIRIMAN_STATUSES, PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
@@ -98,18 +99,11 @@ class PengirimanService {
       snapshotItems
     );
 
-    if (lapak) {
-      const [spgUser, assignedUsers] = await Promise.all([
-        lapak.spg_id ? userRepository.findById(lapak.spg_id) : null,
-        userRepository.findByLapakId(lapak.id),
-      ]);
-      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-      lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
-    }
+    const enrichedLapak = await lapakService.getLapakById(trimmedLapakId);
 
     return {
       ...pengiriman.toJSON(),
-      lapak: lapak.toJSON(),
+      lapak: enrichedLapak ? enrichedLapak.toJSON() : null,
       creator: currentUser
         ? {
             id: currentUser.id,
@@ -136,18 +130,7 @@ class PengirimanService {
     // Populate lapak details efficiently in single batch
     const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
     const lapakMap = await lapakRepository.findByIds(uniqueLapakIds);
-    const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
-    const [lapakSpgMap, lapakUsersMap] = await Promise.all([
-      userRepository.findByIds(lapakSpgIds),
-      userRepository.findByLapakIds(uniqueLapakIds),
-    ]);
-    for (const lapak of lapakMap.values()) {
-      if (lapak.spg_id) {
-        lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
-      }
-      const assignedUsers = lapakUsersMap.get(lapak.id) || [];
-      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
-    }
+    await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
     return shipments.map((s) => {
       const json = s.toJSON();
@@ -174,18 +157,9 @@ class PengirimanService {
 
     const [items, lapak, creator] = await Promise.all([
       pengirimanDetailRepository.findByPengirimanId(id),
-      lapakRepository.findById(shipment.lapak_id),
+      shipment.lapak_id ? lapakService.getLapakById(shipment.lapak_id) : null,
       shipment.created_by ? userRepository.findById(shipment.created_by) : null,
     ]);
-
-    if (lapak) {
-      const [spgUser, assignedUsers] = await Promise.all([
-        lapak.spg_id ? userRepository.findById(lapak.spg_id) : null,
-        userRepository.findByLapakId(lapak.id),
-      ]);
-      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-      lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
-    }
 
     return {
       ...shipment.toJSON(),
