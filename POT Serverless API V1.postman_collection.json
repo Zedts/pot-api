@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "63022ac0-8847-42a3-b0b9-f8d54de66f07",
+    "_postman_id": "b343cd7a-1d25-4ccb-93fd-0377d30e98d3",
     "name": "POT Serverless API V1",
     "description": "Postman Collection for POT Node.js + Express API running on Vercel Serverless Functions.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -144,7 +144,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Account registered successfully.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2SlZOMnBrSGtWb2g2OW9xM1N6aWJnZVFtQTMiLCJlbWFpbCI6InRlc0BleGFtcGxlLmNvbSIsInJvbGUiOiJ1bmFzc2lnbmVkIiwiaWF0IjoxNzkxMTE4OTMxLCJleHAiOjE3OTM3MTA5MzF9.xzjKJtzPHkJApZq-0bqyLbeZlMHB-aM4mlAjTKQhh4M\",\n    \"user\": {\n      \"id\": \"c6JVN2pkHkVoh69oq3SzibgeQmA3\",\n      \"nama\": \"tes\",\n      \"username\": \"tes_user\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"unassigned\",\n      \"lapak_id\": null,\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-10-04T13:02:09.271Z\",\n      \"updatedAt\": \"2026-10-04T13:02:09.271Z\"\n    }\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Account registered successfully.\",\n  \"data\": {\n    \"token\": \"\",\n    \"user\": {\n      \"id\": \"c6JVN2pkHkVoh69oq3SzibgeQmA3\",\n      \"nama\": \"tes\",\n      \"username\": \"tes_user\",\n      \"email\": \"tes@example.com\",\n      \"role\": \"unassigned\",\n      \"lapak_id\": null,\n      \"no_hp\": \"081399887766\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-10-04T13:02:09.271Z\",\n      \"updatedAt\": \"2026-10-04T13:02:09.271Z\"\n    }\n  }\n}"
             }
           ]
         },
@@ -259,7 +259,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful.\",\n  \"data\": {\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkxMb3B0amJEU2lTZVgySEhwZkt6RmNKMHp5QjIiLCJlbWFpbCI6ImFkbWluQHBvdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTExMTg5NjUsImV4cCI6MTc5MzcxMDk2NX0.aYvnBAr7R7YSbwHFf-z9Pm309FQfTPdMITFyDno_TIs\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\",\n      \"lapak_id\": null,\n      \"no_hp\": \"081234567890\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T13:38:25.270Z\",\n      \"updatedAt\": \"2026-09-23T13:56:37.694Z\"\n    }\n  }\n}"
+              "body": "{\n  \"success\": true,\n  \"message\": \"Login successful.\",\n  \"data\": {\n    \"token\": \"\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"role\": \"admin\",\n      \"lapak_id\": null,\n      \"no_hp\": \"081234567890\",\n      \"status\": \"active\",\n      \"authProvider\": \"password\",\n      \"createdAt\": \"2026-09-23T13:38:25.270Z\",\n      \"updatedAt\": \"2026-09-23T13:56:37.694Z\"\n    }\n  }\n}"
             }
           ]
         },
@@ -4767,9 +4767,7 @@
                   "key": "nota",
                   "type": "file",
                   "description": "Select PDF file (.pdf) to upload directly to Cloudinary raw storage",
-                  "src": [
-                    "postman-cloud:///1f1c0113-7fe8-4480-9598-42ac5e064840"
-                  ]
+                  "src": "postman-cloud:///1f1c0113-7fe8-4480-9598-42ac5e064840"
                 }
               ]
             },
@@ -5723,6 +5721,1393 @@
               ],
               "cookie": [],
               "body": "{\n  \"success\": true,\n  \"message\": \"Counter retrieved successfully.\",\n  \"data\": {\n    \"id\": \"pengiriman_20260929\",\n    \"date\": \"20260929\",\n    \"last_counter\": 15,\n    \"updatedAt\": {\n      \"_seconds\": 1791132809,\n      \"_nanoseconds\": 994000000\n    },\n    \"referencing_shipments_count\": 7\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Penjualan",
+      "item": [
+        {
+          "name": "1. Create Penjualan (Record Sale)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tanggal\": \"2026-09-30\",\n  \"lapak_id\": \"{{lapak_id}}\",\n  \"metode_pembayaran\": \"qris\",\n  \"bukti_qris_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n  \"catatan\": \"Customer paid with QRIS\",\n  \"items\": [\n    {\n      \"produk_id\": \"{{produk_id}}\",\n      \"qty\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/penjualan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan"
+              ]
+            },
+            "description": "Record a new sales transaction at a stall. Atomically updates continuous inventory in stok_lapak."
+          },
+          "response": [
+            {
+              "name": "1. Create Penjualan (Record Sale)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tanggal\": \"2026-09-30\",\n  \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n  \"metode_pembayaran\": \"tunai\", // \"tunai\", \"qris\", \"transfer\"\n//   \"bukti_qris_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n//   \"catatan\": \"Customer paid with QRIS\",\n  \"items\": [\n    {\n      \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\",\n      \"qty\": 2\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "984"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3d8-GcNRmqSmus7GMK/qnvSqg2U9OYA\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 15:57:53 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales transaction recorded successfully.\",\n  \"data\": {\n    \"id\": \"x6lggq6IJllSfjzNpZC0\",\n    \"tanggal\": \"2026-09-30T00:00:00.000Z\",\n    \"total_harga\": 30000,\n    \"metode_pembayaran\": \"tunai\",\n    \"bukti_qris_url\": null,\n    \"catatan\": \"\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"items\": [\n      {\n        \"id\": \"yYAUlwY8gFfRE2iAcmTG\",\n        \"penjualan_id\": \"x6lggq6IJllSfjzNpZC0\",\n        \"nama_produk\": \"Produk Pen Test 1791130533938\",\n        \"qty\": 2,\n        \"harga_satuan\": 15000,\n        \"subtotal\": 30000,\n        \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n        \"updatedAt\": \"2026-10-05T15:57:53.332Z\",\n        \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\"\n      }\n    ],\n    \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n    \"updatedAt\": \"2026-10-05T15:57:53.332Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get All Penjualan",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/penjualan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan"
+              ],
+              "query": [
+                {
+                  "key": "lapak_id",
+                  "value": "{{lapak_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "metode_pembayaran",
+                  "value": "qris",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all sales transactions with optional filtering and relational enrichment."
+          },
+          "response": [
+            {
+              "name": "2. Get All Penjualan",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan"
+                  ],
+                  "query": [
+                    {
+                      "key": "lapak_id",
+                      "value": "{{lapak_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "metode_pembayaran",
+                      "value": "qris",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "998"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3e6-9CVuVpI4H6xGGoB/EcYuRFSsd8Y\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:01:00 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales transactions retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"x6lggq6IJllSfjzNpZC0\",\n      \"tanggal\": \"2026-09-30T00:00:00.000Z\",\n      \"total_harga\": 30000,\n      \"metode_pembayaran\": \"tunai\",\n      \"bukti_qris_url\": null,\n      \"catatan\": \"\",\n      \"spg\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"lapak\": {\n        \"id\": \"25u3fPsqMDThhh4d3elF\",\n        \"nama\": \"Lapak Sukses 01\",\n        \"lokasi\": \"Pasar Baru Blok A No. 12\",\n        \"keterangan\": \"Cabang utama pagi hari\",\n        \"spg\": null,\n        \"users\": [],\n        \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n        \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n      },\n      \"items\": [\n        {\n          \"id\": \"yYAUlwY8gFfRE2iAcmTG\",\n          \"penjualan_id\": \"x6lggq6IJllSfjzNpZC0\",\n          \"nama_produk\": \"Produk Pen Test 1791130533938\",\n          \"qty\": 2,\n          \"harga_satuan\": 15000,\n          \"subtotal\": 30000,\n          \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n          \"updatedAt\": \"2026-10-05T15:57:53.332Z\",\n          \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n      \"updatedAt\": \"2026-10-05T15:57:53.332Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get Penjualan by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/penjualan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "penjualan_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve single sales transaction by ID with enriched stall, staff, and line items."
+          },
+          "response": [
+            {
+              "name": "3. Get Penjualan by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "x6lggq6IJllSfjzNpZC0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "985"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"3d9-2idOMCbKhAh61XC8/PKnGxnFPAE\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:01:35 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales transaction retrieved successfully.\",\n  \"data\": {\n    \"id\": \"x6lggq6IJllSfjzNpZC0\",\n    \"tanggal\": \"2026-09-30T00:00:00.000Z\",\n    \"total_harga\": 30000,\n    \"metode_pembayaran\": \"tunai\",\n    \"bukti_qris_url\": null,\n    \"catatan\": \"\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"items\": [\n      {\n        \"id\": \"yYAUlwY8gFfRE2iAcmTG\",\n        \"penjualan_id\": \"x6lggq6IJllSfjzNpZC0\",\n        \"nama_produk\": \"Produk Pen Test 1791130533938\",\n        \"qty\": 2,\n        \"harga_satuan\": 15000,\n        \"subtotal\": 30000,\n        \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n        \"updatedAt\": \"2026-10-05T15:57:53.332Z\",\n        \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\"\n      }\n    ],\n    \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n    \"updatedAt\": \"2026-10-05T15:57:53.332Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Update Penjualan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"catatan\": \"Updated transaction notes\",\n  \"metode_pembayaran\": \"tunai\",\n  \"bukti_qris_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/penjualan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "penjualan_id_here"
+                }
+              ]
+            },
+            "description": "Update sales transaction metadata."
+          },
+          "response": [
+            {
+              "name": "4. Update Penjualan",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"catatan\": \"Updated transaction notes\",\n  \"metode_pembayaran\": \"qris\",\n  \"bukti_qris_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "x6lggq6IJllSfjzNpZC0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1060"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"424-9RwJaTd2U3o+twrxTpuQbkRozoc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:02:57 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales transaction updated successfully.\",\n  \"data\": {\n    \"id\": \"x6lggq6IJllSfjzNpZC0\",\n    \"tanggal\": \"2026-09-30T00:00:00.000Z\",\n    \"total_harga\": 30000,\n    \"metode_pembayaran\": \"qris\",\n    \"bukti_qris_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n    \"catatan\": \"Updated transaction notes\",\n    \"spg\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"items\": [\n      {\n        \"id\": \"yYAUlwY8gFfRE2iAcmTG\",\n        \"penjualan_id\": \"x6lggq6IJllSfjzNpZC0\",\n        \"nama_produk\": \"Produk Pen Test 1791130533938\",\n        \"qty\": 2,\n        \"harga_satuan\": 15000,\n        \"subtotal\": 30000,\n        \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n        \"updatedAt\": \"2026-10-05T15:57:53.332Z\",\n        \"produk_id\": \"HVJ10Q2EsQP29XnKtCTa\"\n      }\n    ],\n    \"createdAt\": \"2026-10-05T15:57:53.332Z\",\n    \"updatedAt\": \"2026-10-05T16:02:57.657Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Delete Penjualan",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/penjualan/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "penjualan_id_here"
+                }
+              ]
+            },
+            "description": "Delete sales transaction and automatically rollback sold inventory in stok_lapak."
+          },
+          "response": [
+            {
+              "name": "5. Delete Penjualan",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "x6lggq6IJllSfjzNpZC0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "94"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"5e-DcObjWNSPUB+I3z8BvUFeiPjKPM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:03:43 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales transaction deleted successfully and inventory rolled back.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Penjualan Detail",
+      "item": [
+        {
+          "name": "1. Get All Penjualan Detail",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/penjualan-detail",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan-detail"
+              ],
+              "query": [
+                {
+                  "key": "penjualan_id",
+                  "value": "{{penjualan_id}}",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all sales detail line items as a flat list enriched with product objects."
+          },
+          "response": [
+            {
+              "name": "1. Get All Penjualan Detail",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan-detail",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan-detail"
+                  ],
+                  "query": [
+                    {
+                      "key": "penjualan_id",
+                      "value": "{{penjualan_id}}",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1250"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"4e2-ADefXsOt6TwVG8KoHPn3H++q4ME\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:07:21 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales detail items retrieved successfully.\",\n  \"count\": 2,\n  \"data\": [\n    {\n      \"id\": \"DkpLmXjk0xFXqT7FTp04\",\n      \"penjualan_id\": \"zArBSJSmqd67ISwZfNqe\",\n      \"nama_produk\": \"Produk Pen Test 1791130533938\",\n      \"qty\": 2,\n      \"harga_satuan\": 15000,\n      \"subtotal\": 30000,\n      \"createdAt\": \"2026-10-05T16:06:48.922Z\",\n      \"updatedAt\": \"2026-10-05T16:06:48.922Z\",\n      \"produk\": {\n        \"id\": \"HVJ10Q2EsQP29XnKtCTa\",\n        \"nama\": \"Produk Pen Test 1791130533938\",\n        \"harga\": 15000,\n        \"kategori_id\": \"u5riaeloPnTgsKKuyxxL\",\n        \"nama_kategori\": \"Kat_pen_1791130533938\",\n        \"satuan_id\": \"WRMVOCAF4lx7xiFUEaVQ\",\n        \"jenis_satuan\": \"pcs_pen_1791130533938\",\n        \"is_active\": \"active\",\n        \"createdAt\": \"2026-10-04T16:15:41.827Z\",\n        \"updatedAt\": \"2026-10-04T16:15:41.827Z\"\n      }\n    },\n    {\n      \"id\": \"JjVlTmdiQuMM50ElGD7Q\",\n      \"penjualan_id\": \"6CPAwU1WpxRxTvseXQhr\",\n      \"nama_produk\": \"Produk Pen Test 1791130533938\",\n      \"qty\": 2,\n      \"harga_satuan\": 15000,\n      \"subtotal\": 30000,\n      \"createdAt\": \"2026-10-05T16:07:18.142Z\",\n      \"updatedAt\": \"2026-10-05T16:07:18.142Z\",\n      \"produk\": {\n        \"id\": \"HVJ10Q2EsQP29XnKtCTa\",\n        \"nama\": \"Produk Pen Test 1791130533938\",\n        \"harga\": 15000,\n        \"kategori_id\": \"u5riaeloPnTgsKKuyxxL\",\n        \"nama_kategori\": \"Kat_pen_1791130533938\",\n        \"satuan_id\": \"WRMVOCAF4lx7xiFUEaVQ\",\n        \"jenis_satuan\": \"pcs_pen_1791130533938\",\n        \"is_active\": \"active\",\n        \"createdAt\": \"2026-10-04T16:15:41.827Z\",\n        \"updatedAt\": \"2026-10-04T16:15:41.827Z\"\n      }\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Get Penjualan Detail by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/penjualan-detail/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "penjualan-detail",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "penjualan_detail_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve single sales detail item by ID with enriched product object."
+          },
+          "response": [
+            {
+              "name": "2. Get Penjualan Detail by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/penjualan-detail/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "penjualan-detail",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "JjVlTmdiQuMM50ElGD7Q"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "657"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"291-G03BIn1SFMB+g9L1l0hkVwGfaWM\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:07:46 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Sales detail item retrieved successfully.\",\n  \"data\": {\n    \"id\": \"JjVlTmdiQuMM50ElGD7Q\",\n    \"penjualan_id\": \"6CPAwU1WpxRxTvseXQhr\",\n    \"nama_produk\": \"Produk Pen Test 1791130533938\",\n    \"qty\": 2,\n    \"harga_satuan\": 15000,\n    \"subtotal\": 30000,\n    \"createdAt\": \"2026-10-05T16:07:18.142Z\",\n    \"updatedAt\": \"2026-10-05T16:07:18.142Z\",\n    \"produk\": {\n      \"id\": \"HVJ10Q2EsQP29XnKtCTa\",\n      \"nama\": \"Produk Pen Test 1791130533938\",\n      \"harga\": 15000,\n      \"kategori_id\": \"u5riaeloPnTgsKKuyxxL\",\n      \"nama_kategori\": \"Kat_pen_1791130533938\",\n      \"satuan_id\": \"WRMVOCAF4lx7xiFUEaVQ\",\n      \"jenis_satuan\": \"pcs_pen_1791130533938\",\n      \"is_active\": \"active\",\n      \"createdAt\": \"2026-10-04T16:15:41.827Z\",\n      \"updatedAt\": \"2026-10-04T16:15:41.827Z\"\n    }\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Absensi",
+      "item": [
+        {
+          "name": "1. Clock-in (Record Attendance)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lapak_id\": \"{{lapak_id}}\",\n  \"status\": \"hadir\", // \"hadir\", \"terlambat\", \"izin\" \n  \"lokasi_masuk\": {\n    \"latitude\": -6.2,\n    \"longitude\": 106.8\n  },\n  \"keterangan\": \"Pagi cerah siap melayani\",\n  \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/absensi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi"
+              ]
+            },
+            "description": "Record daily staff clock-in at assigned stall."
+          },
+          "response": [
+            {
+              "name": "1. Clock-in (Record Attendance)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"lapak_id\": \"25u3fPsqMDThhh4d3elF\",\n  \"status\": \"hadir\", // \"hadir\", \"terlambat\", \"izin\" \n  \"lokasi_masuk\": {\n    \"latitude\": -6.2,\n    \"longitude\": 106.8\n  },\n  \"keterangan\": \"Pagi cerah siap melayani\",\n  \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/absensi",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "849"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"351-pFmw5JeNGb01YKVIBkEGWenlbLo\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:11:57 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance recorded (clock-in) successfully.\",\n  \"data\": {\n    \"id\": \"8bADJkhJa8vFbbR1b5Gf\",\n    \"tanggal\": \"2026-10-05\",\n    \"jam_masuk\": \"2026-10-05T16:11:56.977Z\",\n    \"jam_pulang\": null,\n    \"lokasi_masuk\": {\n      \"latitude\": -6.2,\n      \"longitude\": 106.8\n    },\n    \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n    \"status\": \"hadir\",\n    \"keterangan\": \"Pagi cerah siap melayani\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"createdAt\": \"2026-10-05T16:11:56.977Z\",\n    \"updatedAt\": \"2026-10-05T16:11:56.977Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "2. Clock-out (Record Pulang)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absensi/:id/pulang",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi",
+                ":id",
+                "pulang"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "absensi_id_here"
+                }
+              ]
+            },
+            "description": "Record clock-out timestamp on attendance record."
+          },
+          "response": [
+            {
+              "name": "2. Clock-out (Record Pulang)",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absensi/:id/pulang",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi",
+                    ":id",
+                    "pulang"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8bADJkhJa8vFbbR1b5Gf"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "871"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"367-/r+6kGRVsHdBcB9bwLev4pfX9zU\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:13:53 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance updated (clock-out) successfully.\",\n  \"data\": {\n    \"id\": \"8bADJkhJa8vFbbR1b5Gf\",\n    \"tanggal\": \"2026-10-05\",\n    \"jam_masuk\": \"2026-10-05T16:11:56.977Z\",\n    \"jam_pulang\": \"2026-10-05T16:13:53.299Z\",\n    \"lokasi_masuk\": {\n      \"latitude\": -6.2,\n      \"longitude\": 106.8\n    },\n    \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n    \"status\": \"hadir\",\n    \"keterangan\": \"Pagi cerah siap melayani\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"createdAt\": \"2026-10-05T16:11:56.977Z\",\n    \"updatedAt\": \"2026-10-05T16:13:53.334Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "3. Get All Absensi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absensi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi"
+              ],
+              "query": [
+                {
+                  "key": "lapak_id",
+                  "value": "{{lapak_id}}",
+                  "disabled": true
+                },
+                {
+                  "key": "tanggal",
+                  "value": "2026-10-05",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve attendance records with filtering and relational enrichment."
+          },
+          "response": [
+            {
+              "name": "3. Get All Absensi",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absensi",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi"
+                  ],
+                  "query": [
+                    {
+                      "key": "lapak_id",
+                      "value": "{{lapak_id}}",
+                      "disabled": true
+                    },
+                    {
+                      "key": "tanggal",
+                      "value": "2026-10-05",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "859"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"35b-tGdA1n5vAXcNwa1EcV33nM8ypDo\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:13:27 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance records retrieved successfully.\",\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": \"8bADJkhJa8vFbbR1b5Gf\",\n      \"tanggal\": \"2026-10-05\",\n      \"jam_masuk\": \"2026-10-05T16:11:56.977Z\",\n      \"jam_pulang\": null,\n      \"lokasi_masuk\": {\n        \"latitude\": -6.2,\n        \"longitude\": 106.8\n      },\n      \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n      \"status\": \"hadir\",\n      \"keterangan\": \"Pagi cerah siap melayani\",\n      \"user\": {\n        \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n        \"nama\": \"Admin System\",\n        \"username\": \"\",\n        \"email\": \"admin@pot.com\",\n        \"no_hp\": \"081234567890\",\n        \"role\": \"admin\",\n        \"status\": \"active\"\n      },\n      \"lapak\": {\n        \"id\": \"25u3fPsqMDThhh4d3elF\",\n        \"nama\": \"Lapak Sukses 01\",\n        \"lokasi\": \"Pasar Baru Blok A No. 12\",\n        \"keterangan\": \"Cabang utama pagi hari\",\n        \"spg\": null,\n        \"users\": [],\n        \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n        \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n      },\n      \"createdAt\": \"2026-10-05T16:11:56.977Z\",\n      \"updatedAt\": \"2026-10-05T16:11:56.977Z\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "4. Get Absensi by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absensi/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "absensi_id_here"
+                }
+              ]
+            },
+            "description": "Retrieve single attendance record by ID."
+          },
+          "response": [
+            {
+              "name": "4. Get Absensi by ID",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absensi/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8bADJkhJa8vFbbR1b5Gf"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "846"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"34e-MKbWGefnclS3MeDBDi2iLT8slX0\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:13:39 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance record retrieved successfully.\",\n  \"data\": {\n    \"id\": \"8bADJkhJa8vFbbR1b5Gf\",\n    \"tanggal\": \"2026-10-05\",\n    \"jam_masuk\": \"2026-10-05T16:11:56.977Z\",\n    \"jam_pulang\": null,\n    \"lokasi_masuk\": {\n      \"latitude\": -6.2,\n      \"longitude\": 106.8\n    },\n    \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\",\n    \"status\": \"hadir\",\n    \"keterangan\": \"Pagi cerah siap melayani\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"createdAt\": \"2026-10-05T16:11:56.977Z\",\n    \"updatedAt\": \"2026-10-05T16:11:56.977Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "5. Update Absensi",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"izin\", // \"hadir\", \"terlambat\", \"izin\" \n  \"keterangan\": \"Koreksi admin\",\n  \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample1.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/absensi/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "absensi_id_here"
+                }
+              ]
+            },
+            "description": "Update attendance record metadata."
+          },
+          "response": [
+            {
+              "name": "5. Update Absensi",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"izin\", // \"hadir\", \"terlambat\", \"izin\" \n  \"keterangan\": \"Koreksi admin\",\n  \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample1.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/absensi/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8bADJkhJa8vFbbR1b5Gf"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "855"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"357-CBONLutDl5XOo+EC/6nHiV8WOIg\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:14:18 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance record updated successfully.\",\n  \"data\": {\n    \"id\": \"8bADJkhJa8vFbbR1b5Gf\",\n    \"tanggal\": \"2026-10-05\",\n    \"jam_masuk\": \"2026-10-05T16:11:56.977Z\",\n    \"jam_pulang\": \"2026-10-05T16:13:53.299Z\",\n    \"lokasi_masuk\": {\n      \"latitude\": -6.2,\n      \"longitude\": 106.8\n    },\n    \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample1.jpg\",\n    \"status\": \"izin\",\n    \"keterangan\": \"Koreksi admin\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"25u3fPsqMDThhh4d3elF\",\n      \"nama\": \"Lapak Sukses 01\",\n      \"lokasi\": \"Pasar Baru Blok A No. 12\",\n      \"keterangan\": \"Cabang utama pagi hari\",\n      \"spg\": null,\n      \"users\": [],\n      \"createdAt\": \"2026-09-24T07:42:11.873Z\",\n      \"updatedAt\": \"2026-10-04T13:21:05.104Z\"\n    },\n    \"createdAt\": \"2026-10-05T16:11:56.977Z\",\n    \"updatedAt\": \"2026-10-05T16:14:18.768Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "6. Delete Absensi",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absensi/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "absensi_id_here"
+                }
+              ]
+            },
+            "description": "Delete attendance record (Admin only)."
+          },
+          "response": [
+            {
+              "name": "6. Delete Absensi",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/absensi/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "8bADJkhJa8vFbbR1b5Gf"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "68"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"44-aYUoDIMs2Nykzv2oHNK+Opo4wec\""
+                },
+                {
+                  "key": "date",
+                  "value": "Mon, 05 Oct 2026 16:14:28 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance record deleted successfully.\"\n}"
             }
           ]
         }

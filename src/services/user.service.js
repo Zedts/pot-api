@@ -4,6 +4,8 @@ const userRepository = require('../repositories/user.repository');
 const lapakRepository = require('../repositories/lapak.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
 const penerimaanRepository = require('../repositories/penerimaan.repository');
+const penjualanRepository = require('../repositories/penjualan.repository');
+const absensiRepository = require('../repositories/absensi.repository');
 const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
 const { VALID_STATUSES } = require('../constants/status');
 const { PERMISSIONS } = require('../constants/permissions');
@@ -293,6 +295,20 @@ class UserService {
     if (referencingReceiptsCount > 0) {
       throw new ConflictError(
         `Cannot delete user: this user is associated with ${referencingReceiptsCount} receipt record(s). Please reassign or delete the associated receipts first.`
+      );
+    }
+
+    const referencingSalesCount = await penjualanRepository.countBySpgId(id);
+    if (referencingSalesCount > 0) {
+      throw new ConflictError(
+        `Cannot delete user: this user is associated with ${referencingSalesCount} sales transaction record(s). Please reassign or delete the associated sales records first.`
+      );
+    }
+
+    const referencingAttendanceCount = await absensiRepository.countByUserId(id);
+    if (referencingAttendanceCount > 0) {
+      throw new ConflictError(
+        `Cannot delete user: this user is associated with ${referencingAttendanceCount} attendance record(s). Please delete or archive attendance records before deleting this user.`
       );
     }
 

@@ -237,6 +237,91 @@ class StokLapakRepository {
   }
 
   /**
+   * Atomically increment stok_terjual for a specific lapak and product (used when recording a sale)
+   * Creates record if not exists
+   * @param {string} lapakId
+   * @param {string} produkId
+   * @param {number} qty
+   * @returns {Promise<StokLapak>}
+   */
+  async incrementStokTerjual(lapakId, produkId, qty) {
+    const cleanLapakId = lapakId.trim();
+    const cleanProdukId = produkId.trim();
+    const addQty = Number(qty || 0);
+
+    const snapshot = await this.collection
+      .where('lapak_id', '==', cleanLapakId)
+      .where('produk_id', '==', cleanProdukId)
+      .limit(1)
+      .get();
+
+    const now = new Date();
+
+    if (snapshot.empty) {
+      return await this.create({
+        lapak_id: cleanLapakId,
+        produk_id: cleanProdukId,
+        stok_awal: 0,
+        stok_masuk: 0,
+        stok_terjual: addQty,
+      });
+    }
+
+    const docRef = snapshot.docs[0].ref;
+    const current = snapshot.docs[0].data();
+    const newStokTerjual = Number(current.stok_terjual || 0) + addQty;
+    const stokAwal = Number(current.stok_awal || 0);
+    const stokMasuk = Number(current.stok_masuk || 0);
+    const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+    await docRef.update({
+      stok_terjual: newStokTerjual,
+      stok_akhir: stokAkhir,
+      updatedAt: now,
+    });
+
+    const updatedDoc = await docRef.get();
+    return StokLapak.fromFirestore(updatedDoc);
+  }
+
+  /**
+   * Atomically decrement stok_terjual for a specific lapak and product (used on sale rollback / deletion)
+   * @param {string} lapakId
+   * @param {string} produkId
+   * @param {number} qty
+   * @returns {Promise<StokLapak|null>}
+   */
+  async decrementStokTerjual(lapakId, produkId, qty) {
+    const cleanLapakId = lapakId.trim();
+    const cleanProdukId = produkId.trim();
+    const subQty = Number(qty || 0);
+
+    const snapshot = await this.collection
+      .where('lapak_id', '==', cleanLapakId)
+      .where('produk_id', '==', cleanProdukId)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return null;
+
+    const docRef = snapshot.docs[0].ref;
+    const current = snapshot.docs[0].data();
+    const newStokTerjual = Math.max(0, Number(current.stok_terjual || 0) - subQty);
+    const stokAwal = Number(current.stok_awal || 0);
+    const stokMasuk = Number(current.stok_masuk || 0);
+    const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+    await docRef.update({
+      stok_terjual: newStokTerjual,
+      stok_akhir: stokAkhir,
+      updatedAt: new Date(),
+    });
+
+    const updatedDoc = await docRef.get();
+    return StokLapak.fromFirestore(updatedDoc);
+  }
+
+  /**
    * Count records referencing lapakId
    * @param {string} lapakId
    * @returns {Promise<number>}

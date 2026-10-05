@@ -3,6 +3,8 @@ const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
 const stokLapakRepository = require('../repositories/stokLapak.repository');
+const penjualanRepository = require('../repositories/penjualan.repository');
+const absensiRepository = require('../repositories/absensi.repository');
 const { ROLES } = require('../constants/roles');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -19,12 +21,19 @@ class LapakService {
   async enrichLapakList(lapakList) {
     if (!lapakList || lapakList.length === 0) return [];
 
+    const lapakIds = lapakList.map((l) => l.id).filter(Boolean);
     const spgIds = [...new Set(lapakList.map((l) => l.spg_id).filter(Boolean))];
-    const usersMap = await userRepository.findByIds(spgIds);
+
+    const [usersMap, lapakUsersMap] = await Promise.all([
+      userRepository.findByIds(spgIds),
+      userRepository.findByLapakIds(lapakIds),
+    ]);
 
     return lapakList.map((lapak) => {
-      const user = lapak.spg_id ? usersMap.get(lapak.spg_id) : null;
-      lapak.spg = user ? Lapak.formatSpg(user) : null;
+      const spgUser = lapak.spg_id ? usersMap.get(lapak.spg_id) : null;
+      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+      const assignedUsers = lapakUsersMap.get(lapak.id) || [];
+      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
       return lapak;
     });
   }
@@ -75,6 +84,7 @@ class LapakService {
     }
 
     newLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+    newLapak.users = spgUser ? [Lapak.formatUser(spgUser)] : [];
     return newLapak;
   }
 
@@ -102,10 +112,13 @@ class LapakService {
       throw new NotFoundError(`Lapak with ID '${id}' was not found.`);
     }
 
-    if (lapak.spg_id) {
-      const spgUser = await userRepository.findById(lapak.spg_id);
-      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-    }
+    const [spgUser, assignedUsers] = await Promise.all([
+      lapak.spg_id ? userRepository.findById(lapak.spg_id) : null,
+      userRepository.findByLapakId(id),
+    ]);
+
+    lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+    lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
 
     return lapak;
   }
@@ -194,10 +207,12 @@ class LapakService {
       }
     }
 
-    if (updatedLapak.spg_id) {
-      const spgUser = await userRepository.findById(updatedLapak.spg_id);
-      updatedLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-    }
+    const [spgUser, assignedUsers] = await Promise.all([
+      updatedLapak.spg_id ? userRepository.findById(updatedLapak.spg_id) : null,
+      userRepository.findByLapakId(id),
+    ]);
+    updatedLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+    updatedLapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
 
     return updatedLapak;
   }
@@ -223,6 +238,20 @@ class LapakService {
     if (stockCount > 0) {
       throw new ConflictError(
         `Cannot delete lapak: it is currently referenced by ${stockCount} inventory record(s). Please clear or archive associated stock records first.`
+      );
+    }
+
+    const salesCount = await penjualanRepository.countByLapakId(id);
+    if (salesCount > 0) {
+      throw new ConflictError(
+        `Cannot delete lapak: it is currently referenced by ${salesCount} sales transaction(s). Please archive or delete the associated transactions first.`
+      );
+    }
+
+    const attendanceCount = await absensiRepository.countByLapakId(id);
+    if (attendanceCount > 0) {
+      throw new ConflictError(
+        `Cannot delete lapak: it is currently referenced by ${attendanceCount} attendance record(s). Please archive or delete the associated attendance records first.`
       );
     }
 

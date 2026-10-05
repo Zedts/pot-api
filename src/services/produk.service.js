@@ -2,6 +2,7 @@ const produkRepository = require('../repositories/produk.repository');
 const kategoriRepository = require('../repositories/kategori.repository');
 const satuanRepository = require('../repositories/satuan.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
+const penjualanDetailRepository = require('../repositories/penjualanDetail.repository');
 const stokLapakRepository = require('../repositories/stokLapak.repository');
 const { STATUS, VALID_STATUSES } = require('../constants/status');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
@@ -264,6 +265,13 @@ class ProdukService {
     if (stockCount > 0) {
       throw new ConflictError(
         `Cannot delete product: it is currently referenced by ${stockCount} inventory record(s).`
+      );
+    }
+
+    const salesDetailCount = await penjualanDetailRepository.countByProdukId(id);
+    if (salesDetailCount > 0) {
+      throw new ConflictError(
+        `Cannot delete product: it is currently referenced by ${salesDetailCount} sales record(s).`
       );
     }
 

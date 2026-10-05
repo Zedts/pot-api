@@ -39,11 +39,16 @@ class PenerimaanService {
     ];
     const lapakMap = await lapakRepository.findByIds(lapakIds);
     const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
-    const lapakSpgMap = await userRepository.findByIds(lapakSpgIds);
+    const [lapakSpgMap, lapakUsersMap] = await Promise.all([
+      userRepository.findByIds(lapakSpgIds),
+      userRepository.findByLapakIds(lapakIds),
+    ]);
     for (const lapak of lapakMap.values()) {
       if (lapak.spg_id) {
         lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
       }
+      const assignedUsers = lapakUsersMap.get(lapak.id) || [];
+      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
     }
 
     return receipts.map((r) => {

@@ -1,5 +1,6 @@
 const stokLapakRepository = require('../repositories/stokLapak.repository');
 const lapakRepository = require('../repositories/lapak.repository');
+const lapakService = require('./lapak.service');
 const produkRepository = require('../repositories/produk.repository');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -24,6 +25,8 @@ class StokLapakService {
       lapakRepository.findByIds(uniqueLapakIds),
       produkRepository.findByIds(uniqueProdukIds),
     ]);
+
+    await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
     return stockList.map((s) => {
       const json = s.toJSON();
@@ -62,7 +65,7 @@ class StokLapakService {
     }
 
     const [lapak, produk] = await Promise.all([
-      lapakRepository.findById(item.lapak_id),
+      lapakService.getLapakById(item.lapak_id),
       produkRepository.findById(item.produk_id),
     ]);
 

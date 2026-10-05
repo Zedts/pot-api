@@ -98,8 +98,13 @@ class PengirimanService {
       snapshotItems
     );
 
-    if (lapak && lapak.spg_id) {
-      lapak.spg = await userRepository.findById(lapak.spg_id);
+    if (lapak) {
+      const [spgUser, assignedUsers] = await Promise.all([
+        lapak.spg_id ? userRepository.findById(lapak.spg_id) : null,
+        userRepository.findByLapakId(lapak.id),
+      ]);
+      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+      lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
     }
 
     return {
@@ -132,11 +137,16 @@ class PengirimanService {
     const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
     const lapakMap = await lapakRepository.findByIds(uniqueLapakIds);
     const lapakSpgIds = [...new Set(Array.from(lapakMap.values()).map((l) => l.spg_id).filter(Boolean))];
-    const lapakSpgMap = await userRepository.findByIds(lapakSpgIds);
+    const [lapakSpgMap, lapakUsersMap] = await Promise.all([
+      userRepository.findByIds(lapakSpgIds),
+      userRepository.findByLapakIds(uniqueLapakIds),
+    ]);
     for (const lapak of lapakMap.values()) {
       if (lapak.spg_id) {
         lapak.spg = lapakSpgMap.get(lapak.spg_id) || null;
       }
+      const assignedUsers = lapakUsersMap.get(lapak.id) || [];
+      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
     }
 
     return shipments.map((s) => {
@@ -168,8 +178,13 @@ class PengirimanService {
       shipment.created_by ? userRepository.findById(shipment.created_by) : null,
     ]);
 
-    if (lapak && lapak.spg_id) {
-      lapak.spg = await userRepository.findById(lapak.spg_id);
+    if (lapak) {
+      const [spgUser, assignedUsers] = await Promise.all([
+        lapak.spg_id ? userRepository.findById(lapak.spg_id) : null,
+        userRepository.findByLapakId(lapak.id),
+      ]);
+      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
+      lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
     }
 
     return {

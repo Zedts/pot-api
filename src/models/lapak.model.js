@@ -10,6 +10,7 @@ class Lapak {
     keterangan = '',
     spg_id = null,
     spg = null,
+    users = [],
     createdAt = null,
     updatedAt = null,
   }) {
@@ -19,6 +20,7 @@ class Lapak {
     this.keterangan = keterangan ? keterangan.trim() : '';
     this.spg_id = spg_id || null;
     this.spg = spg ? Lapak.formatSpg(spg) : null;
+    this.users = Array.isArray(users) ? users.map((u) => Lapak.formatUser(u)).filter(Boolean) : [];
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -37,6 +39,25 @@ class Lapak {
       username: user.username || '',
       email: user.email || '',
       no_hp: user.no_hp || '',
+      status: user.status || '',
+    };
+  }
+
+  /**
+   * Format an assigned staff/user object for the lapak.users array:
+   * { id, nama, username, email, no_hp, role, status }
+   * @param {Object|null} user
+   * @returns {Object|null}
+   */
+  static formatUser(user) {
+    if (!user) return null;
+    return {
+      id: user.id || user.spg_id || '',
+      nama: user.nama || '',
+      username: user.username || '',
+      email: user.email || '',
+      no_hp: user.no_hp || '',
+      role: user.role || '',
       status: user.status || '',
     };
   }
@@ -70,6 +91,7 @@ class Lapak {
       lokasi: this.lokasi,
       keterangan: this.keterangan,
       spg: this.spg ? Lapak.formatSpg(this.spg) : null,
+      users: Array.isArray(this.users) ? this.users : [],
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
       updatedAt: this.updatedAt ? (this.updatedAt.toISOString ? this.updatedAt.toISOString() : this.updatedAt) : null,
     };
@@ -78,7 +100,7 @@ class Lapak {
   /**
    * Factory method to reconstruct Lapak entity from a Firestore DocumentSnapshot
    */
-  static fromFirestore(doc, spgUser = null) {
+  static fromFirestore(doc, spgUser = null, users = []) {
     if (!doc || !doc.exists) {
       return null;
     }
@@ -91,6 +113,7 @@ class Lapak {
       keterangan: data.keterangan || '',
       spg_id: data.spg_id || null,
       spg: spgUser,
+      users: users,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
       updatedAt: data.updatedAt ? (data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt)) : null,
     });

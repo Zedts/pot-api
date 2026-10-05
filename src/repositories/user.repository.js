@@ -150,6 +150,35 @@ class UserRepository {
   }
 
   /**
+   * Find users assigned to any of the specified lapak IDs
+   * @param {Array<string>} lapakIds
+   * @returns {Promise<Map<string, Array<User>>>} Map of lapakId -> Array of User
+   */
+  async findByLapakIds(lapakIds) {
+    const map = new Map();
+    if (!lapakIds || !Array.isArray(lapakIds) || lapakIds.length === 0) return map;
+
+    const uniqueLapakIds = [...new Set(lapakIds.filter(Boolean))];
+    if (uniqueLapakIds.length === 0) return map;
+
+    uniqueLapakIds.forEach((id) => map.set(id, []));
+
+    const chunkSize = 30;
+    for (let i = 0; i < uniqueLapakIds.length; i += chunkSize) {
+      const chunk = uniqueLapakIds.slice(i, i + chunkSize);
+      const snapshot = await this.collection.where('lapak_id', 'in', chunk).get();
+      snapshot.forEach((doc) => {
+        const user = User.fromFirestore(doc);
+        if (user && user.lapak_id && map.has(user.lapak_id)) {
+          map.get(user.lapak_id).push(user);
+        }
+      });
+    }
+
+    return map;
+  }
+
+  /**
    * Retrieve all users with optional filtering
    * @param {Object} filters { role, status, lapak_id }
    * @returns {Promise<Array<User>>}

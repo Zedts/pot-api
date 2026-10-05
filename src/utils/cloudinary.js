@@ -33,7 +33,35 @@ function uploadPdfBuffer(buffer, { folder = 'pot_nota_penerimaan', public_id } =
   });
 }
 
+/**
+ * Uploads an image buffer (e.g. from multer memoryStorage) to Cloudinary
+ * @param {Buffer} buffer
+ * @param {Object} [options]
+ * @param {string} [options.folder]
+ * @param {string} [options.public_id]
+ * @param {string} [options.format]
+ * @returns {Promise<Object>} Cloudinary upload result
+ */
+function uploadImageBuffer(buffer, { folder = 'pot_images', public_id, format } = {}) {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        resource_type: 'image',
+        folder,
+        ...(format ? { format } : {}),
+        ...(public_id ? { public_id } : {}),
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+    uploadStream.end(buffer);
+  });
+}
+
 module.exports = {
   cloudinary,
   uploadPdfBuffer,
+  uploadImageBuffer,
 };
