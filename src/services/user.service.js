@@ -205,12 +205,12 @@ class UserService {
 
     const updatedUser = await userRepository.update(id, payload);
 
-    // Bidirectional sync: if lapak_id was modified and user is an SPG, keep lapak.spg_id consistent
+    // Non-exclusive stall assignment: multiple users can safely share the same lapak_id
     if (payload.lapak_id !== undefined) {
       const oldLapakId = existingUser.lapak_id;
       const newLapakId = payload.lapak_id;
 
-      // 1. If user previously had a lapak, clear old lapak's spg_id if it referenced this user
+      // 1. If user moved away from an old lapak, clear old lapak's spg_id if it referenced this user
       if (oldLapakId && oldLapakId !== newLapakId) {
         const oldLapak = await lapakRepository.findById(oldLapakId);
         if (oldLapak && oldLapak.spg_id === id) {
@@ -218,18 +218,14 @@ class UserService {
         }
       }
 
-      // 2. If new lapak assigned and user is SPG, point target lapak.spg_id to this user
+      // 2. If new lapak assigned and user is SPG, set as target lapak's lead SPG only if target lapak has no assigned SPG yet
       if (newLapakId) {
         const targetLapak = await lapakRepository.findById(newLapakId);
-        if (targetLapak && targetLapak.spg_id !== id) {
-          // If target lapak had another SPG, unassign that previous SPG's lapak_id
-          if (targetLapak.spg_id) {
-            const previousSpg = await userRepository.findById(targetLapak.spg_id);
-            if (previousSpg && previousSpg.id !== id) {
-              await userRepository.update(previousSpg.id, { lapak_id: null });
-            }
+        if (targetLapak && !targetLapak.spg_id) {
+          const userRole = payload.role || existingUser.role;
+          if (userRole === ROLES.SPG) {
+            await lapakRepository.update(newLapakId, { spg_id: id });
           }
-          await lapakRepository.update(newLapakId, { spg_id: id });
         }
       }
     }

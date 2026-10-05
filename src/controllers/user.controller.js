@@ -10,8 +10,8 @@ class UserController {
    * Retrieve all users with optional query filtering (Admin only)
    */
   async getAllUsers(req, res) {
-    const { role, status } = req.query;
-    const users = await userService.getAllUsers({ role, status });
+    const { role, status, lapak_id } = req.query;
+    const users = await userService.getAllUsers({ role, status, lapak_id });
     return res.status(200).json({
       success: true,
       message: 'Users retrieved successfully.',
