@@ -1,6 +1,7 @@
 const { db } = require('../firebase');
 const Penjualan = require('../models/penjualan.model');
 const PenjualanDetail = require('../models/penjualanDetail.model');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * Penjualan Repository
@@ -113,11 +114,11 @@ class PenjualanRepository {
     if (filters.tanggal) {
       const parsedDate = new Date(filters.tanggal);
       if (!isNaN(parsedDate.getTime())) {
-        const targetDateStr = parsedDate.toISOString().split('T')[0];
+        const targetDateStr = getLocalDateString(parsedDate);
         list = list.filter((p) => {
           if (!p.tanggal) return false;
           const pDate = p.tanggal instanceof Date ? p.tanggal : new Date(p.tanggal);
-          return pDate.toISOString().split('T')[0] === targetDateStr;
+          return getLocalDateString(pDate) === targetDateStr;
         });
       }
     }

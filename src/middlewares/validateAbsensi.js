@@ -17,6 +17,15 @@ function validateClockIn(req, res, next) {
     req.body.parsedTanggal = parseDateOrDefault(tanggal);
   }
 
+  // 1b. Jam Masuk validation (optional client timestamp)
+  const { jam_masuk } = req.body;
+  if (jam_masuk) {
+    const jamError = validateDateField(jam_masuk);
+    if (jamError) {
+      errors.push('Field "jam_masuk" must be a valid date or timestamp string.');
+    }
+  }
+
   // 2. Lapak ID validation
   const currentUser = req.user;
   if (!lapak_id) {

@@ -8,6 +8,9 @@ class Lapak {
     nama,
     lokasi,
     keterangan = '',
+    latitude = null,
+    longitude = null,
+    radius_meter = 25,
     spg_id = null,
     spg = null,
     users = [],
@@ -18,6 +21,9 @@ class Lapak {
     this.nama = nama ? nama.trim() : '';
     this.lokasi = lokasi ? lokasi.trim() : '';
     this.keterangan = keterangan ? keterangan.trim() : '';
+    this.latitude = latitude !== null && latitude !== undefined ? Number(latitude) : null;
+    this.longitude = longitude !== null && longitude !== undefined ? Number(longitude) : null;
+    this.radius_meter = radius_meter !== null && radius_meter !== undefined ? Math.max(1, Number(radius_meter)) : 25;
     this.spg_id = spg_id || null;
     this.spg = spg ? Lapak.formatSpg(spg) : null;
     this.users = Array.isArray(users) ? users.map((u) => Lapak.formatUser(u)).filter(Boolean) : [];
@@ -70,6 +76,9 @@ class Lapak {
       nama: this.nama,
       lokasi: this.lokasi,
       keterangan: this.keterangan,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      radius_meter: this.radius_meter,
       spg_id: this.spg_id,
       updatedAt: this.updatedAt || new Date(),
     };
@@ -90,6 +99,9 @@ class Lapak {
       nama: this.nama,
       lokasi: this.lokasi,
       keterangan: this.keterangan,
+      latitude: this.latitude,
+      longitude: this.longitude,
+      radius_meter: this.radius_meter,
       spg: this.spg ? Lapak.formatSpg(this.spg) : null,
       users: Array.isArray(this.users) ? this.users : [],
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
@@ -111,6 +123,9 @@ class Lapak {
       nama: data.nama,
       lokasi: data.lokasi,
       keterangan: data.keterangan || '',
+      latitude: data.latitude !== undefined ? data.latitude : null,
+      longitude: data.longitude !== undefined ? data.longitude : null,
+      radius_meter: data.radius_meter !== undefined && data.radius_meter !== null ? Number(data.radius_meter) : 25,
       spg_id: data.spg_id || null,
       spg: spgUser,
       users: users,

@@ -15,7 +15,7 @@ const PERMISSIONS = Object.freeze({
   },
   LAPAK: {
     CREATE: ADMIN_ROLES,
-    READ: ADMIN_ROLES,
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.SPG, ROLES.VIAR, ROLES.PRODUKSI]),
     UPDATE: ADMIN_ROLES,
     DELETE: ADMIN_ROLES,
   },

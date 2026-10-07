@@ -4,6 +4,7 @@ const userRepository = require('../repositories/user.repository');
 const payrollService = require('./payroll.service');
 const { uploadPdfBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
 const { assertValidPdfFile } = require('../utils/fileValidation');
+const { getLocalDateString } = require('../utils/timezone');
 const { BadRequestError, NotFoundError } = require('../errors/AppError');
 
 /**
@@ -33,7 +34,7 @@ class SlipGajiService {
 
     // Tanggal is optional, only populated if file_url is provided
     if (fileUrl && !tanggal) {
-      tanggal = new Date().toISOString().split('T')[0];
+      tanggal = getLocalDateString(new Date());
     }
 
     const created = await slipGajiRepository.create({
@@ -125,8 +126,8 @@ class SlipGajiService {
     });
 
     const secureUrl = uploadResult.secure_url || uploadResult.url;
-    // Tanggal is automatically stamped with new Date() formatted to YYYY-MM-DD
-    const tanggal = new Date().toISOString().split('T')[0];
+    // Tanggal is automatically stamped with current date in Asia/Jakarta timezone
+    const tanggal = getLocalDateString(new Date());
 
     // 4. Update repository with rollback if database write fails
     try {

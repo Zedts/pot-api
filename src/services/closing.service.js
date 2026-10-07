@@ -3,6 +3,7 @@ const lapakService = require('./lapak.service');
 const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const { ROLES } = require('../constants/roles');
+const { getLocalDateString } = require('../utils/timezone');
 const { BadRequestError, NotFoundError } = require('../errors/AppError');
 
 /**
@@ -38,8 +39,8 @@ class ClosingService {
       throw new BadRequestError('Field "spg_id" is required.');
     }
 
-    // 3. Resolve date: strictly current date formatted to YYYY-MM-DD
-    const tanggal = new Date().toISOString().split('T')[0];
+    // 3. Resolve date: strictly current date formatted to YYYY-MM-DD in Asia/Jakarta local time
+    const tanggal = getLocalDateString(new Date());
 
     // 4. Calculate discrepancies automatically
     const stokSistem = Number(data.stok_sistem || 0);

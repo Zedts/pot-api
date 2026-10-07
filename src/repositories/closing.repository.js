@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const Closing = require('../models/closing.model');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * Closing Repository
@@ -23,7 +24,7 @@ class ClosingRepository {
       id: docRef.id,
       spg_id: data.spg_id,
       lapak_id: data.lapak_id,
-      tanggal: data.tanggal || now.toISOString().split('T')[0],
+      tanggal: data.tanggal || getLocalDateString(now),
       stok_sistem: data.stok_sistem,
       stok_fisik: data.stok_fisik,
       total_omset: data.total_omset,

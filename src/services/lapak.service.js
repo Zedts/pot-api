@@ -44,7 +44,7 @@ class LapakService {
    * @param {Object} data { nama, lokasi, keterangan, spg_id }
    * @returns {Promise<Lapak>}
    */
-  async createLapak({ nama, lokasi, keterangan = '', spg_id = null }) {
+  async createLapak({ nama, lokasi, keterangan = '', spg_id = null, latitude = null, longitude = null, radius_meter = 25 }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
     }
@@ -70,6 +70,9 @@ class LapakService {
       nama: nama.trim(),
       lokasi: lokasi.trim(),
       keterangan: keterangan ? keterangan.trim() : '',
+      latitude: latitude !== null && latitude !== undefined ? Number(latitude) : null,
+      longitude: longitude !== null && longitude !== undefined ? Number(longitude) : null,
+      radius_meter: radius_meter !== null && radius_meter !== undefined ? Math.max(1, Number(radius_meter)) : 25,
       spg_id: cleanSpgId,
     });
 
@@ -171,6 +174,18 @@ class LapakService {
         }
         payload.spg_id = cleanSpgId;
       }
+    }
+
+    if (updateData.latitude !== undefined) {
+      payload.latitude = updateData.latitude !== null ? Number(updateData.latitude) : null;
+    }
+
+    if (updateData.longitude !== undefined) {
+      payload.longitude = updateData.longitude !== null ? Number(updateData.longitude) : null;
+    }
+
+    if (updateData.radius_meter !== undefined) {
+      payload.radius_meter = updateData.radius_meter !== null ? Math.max(1, Number(updateData.radius_meter)) : 25;
     }
 
     if (Object.keys(payload).length === 0) {

@@ -1,4 +1,5 @@
 const { ABSENSI_STATUS } = require('../constants/absensiStatus');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * OOP Absensi Entity
@@ -24,8 +25,11 @@ class Absensi {
     this.id = id;
     this.user_id = user_id ? user_id.trim() : '';
     this.lapak_id = lapak_id ? lapak_id.trim() : '';
-    this.tanggal = tanggal || new Date().toISOString().split('T')[0];
-    this.jam_masuk = jam_masuk ? (jam_masuk instanceof Date ? jam_masuk : new Date(jam_masuk)) : new Date();
+    this.tanggal = tanggal || getLocalDateString(new Date());
+    const isIzin = (status || '').toLowerCase() === ABSENSI_STATUS.IZIN;
+    this.jam_masuk = jam_masuk !== undefined
+      ? (jam_masuk ? (jam_masuk instanceof Date ? jam_masuk : new Date(jam_masuk)) : null)
+      : (isIzin ? null : new Date());
     this.jam_pulang = jam_pulang ? (jam_pulang instanceof Date ? jam_pulang : new Date(jam_pulang)) : null;
     this.lokasi_masuk = lokasi_masuk || null;
     this.foto_masuk_url = foto_masuk_url ? foto_masuk_url.trim() : null;
@@ -42,15 +46,15 @@ class Absensi {
    */
   toFirestore() {
     const data = {
-      user_id: this.user_id,
-      lapak_id: this.lapak_id,
-      tanggal: this.tanggal,
-      jam_masuk: this.jam_masuk,
-      jam_pulang: this.jam_pulang,
-      lokasi_masuk: this.lokasi_masuk,
-      foto_masuk_url: this.foto_masuk_url,
-      status: this.status,
-      keterangan: this.keterangan,
+      user_id: this.user_id || '',
+      lapak_id: this.lapak_id || '',
+      tanggal: this.tanggal || getLocalDateString(new Date()),
+      jam_masuk: this.jam_masuk ?? null,
+      jam_pulang: this.jam_pulang ?? null,
+      lokasi_masuk: this.lokasi_masuk ?? null,
+      foto_masuk_url: this.foto_masuk_url ?? null,
+      status: this.status || ABSENSI_STATUS.HADIR,
+      keterangan: this.keterangan || '',
       updatedAt: this.updatedAt || new Date(),
     };
 

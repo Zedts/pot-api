@@ -3,7 +3,9 @@ const lapakService = require('./lapak.service');
 const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const { ADMIN_ROLES } = require('../constants/roles');
+const { ABSENSI_STATUS } = require('../constants/absensiStatus');
 const { parseDateOrDefault } = require('../utils/validators');
+const { getLocalDateString, getLocalTimeParts } = require('../utils/timezone');
 const { BadRequestError, NotFoundError, ConflictError, ForbiddenError } = require('../errors/AppError');
 
 /**
@@ -29,32 +31,61 @@ class AbsensiService {
       throw new BadRequestError('Field "lapak_id" is required (user must have an assigned stall).');
     }
 
-    // 1. Verify target lapak exists
+    // 1. Verify target lapak exists and has valid coordinates set (exempt for izin)
+    const isIzin = (data.status || '').toLowerCase() === ABSENSI_STATUS.IZIN;
     const lapak = await lapakService.getLapakById(targetLapakId);
     if (!lapak) {
       throw new NotFoundError(`Lapak with ID '${targetLapakId}' was not found.`);
     }
+    if (!isIzin && (lapak.latitude === null || lapak.longitude === null)) {
+      throw new BadRequestError('Lokasi koordinat lapak belum ditentukan oleh Admin. Presensi dinonaktifkan.');
+    }
 
-    // 2. Resolve date (strictly normalized to YYYY-MM-DD)
-    const parsedDate = parseDateOrDefault(data.tanggal);
-    const tanggal = parsedDate.toISOString().split('T')[0];
+    // 2. Resolve check-in timestamp (accepting client device time with server sanity check)
+    let jamMasuk = new Date();
+    if (data.jam_masuk) {
+      const parsedClientTime = parseDateOrDefault(data.jam_masuk, false);
+      if (parsedClientTime) {
+        // Sanity check: allow within 15 minutes of server time
+        const diffMinutes = Math.abs(Date.now() - parsedClientTime.getTime()) / (1000 * 60);
+        if (diffMinutes <= 15) {
+          jamMasuk = parsedClientTime;
+        }
+      }
+    }
 
-    // 3. Prevent duplicate clock-in for the same user on the same date
+    // 3. Resolve date in Indonesian local time (Asia/Jakarta, WIB)
+    let tanggal;
+    if (data.tanggal && typeof data.tanggal === 'string' && data.tanggal.trim()) {
+      tanggal = data.tanggal.trim();
+    } else {
+      tanggal = getLocalDateString(jamMasuk);
+    }
+
+    // 4. Calculate attendance status (08:00 WIB late cutoff)
+    let finalStatus = isIzin ? ABSENSI_STATUS.IZIN : ABSENSI_STATUS.HADIR;
+    if (!isIzin) {
+      const { hour, minute } = getLocalTimeParts(jamMasuk);
+      const isLate = hour > 8 || (hour === 8 && minute > 0);
+      finalStatus = isLate ? ABSENSI_STATUS.TERLAMBAT : ABSENSI_STATUS.HADIR;
+    }
+
+    // 5. Prevent duplicate clock-in for the same user on the same date
     const existing = await absensiRepository.findByUserAndDate(userId, tanggal);
     if (existing) {
       throw new ConflictError(`User has already clocked in on date '${tanggal}'. Record ID: '${existing.id}'.`);
     }
 
-    // 4. Create attendance document
+    // 6. Create attendance document
     const created = await absensiRepository.create({
       user_id: userId,
       lapak_id: targetLapakId,
       tanggal,
-      jam_masuk: new Date(),
+      jam_masuk: isIzin ? null : jamMasuk,
       jam_pulang: null,
       lokasi_masuk: data.lokasi_masuk || null,
       foto_masuk_url: data.foto_masuk_url || null,
-      status: data.status,
+      status: finalStatus,
       keterangan: data.keterangan || '',
     });
 
@@ -67,7 +98,7 @@ class AbsensiService {
    * @param {Object} currentUser Authenticated caller
    * @returns {Promise<Object>} Enriched updated attendance record
    */
-  async clockOut(id, currentUser) {
+  async clockOut(id, currentUser, data = {}) {
     if (!id || typeof id !== 'string') {
       throw new BadRequestError('Attendance ID is required.');
     }
@@ -87,8 +118,19 @@ class AbsensiService {
       throw new BadRequestError(`Clock-out has already been recorded for this attendance entry at ${existing.jam_pulang}.`);
     }
 
+    let jamPulang = new Date();
+    if (data && data.jam_pulang) {
+      const parsedClientTime = parseDateOrDefault(data.jam_pulang, false);
+      if (parsedClientTime) {
+        const diffMinutes = Math.abs(Date.now() - parsedClientTime.getTime()) / (1000 * 60);
+        if (diffMinutes <= 15) {
+          jamPulang = parsedClientTime;
+        }
+      }
+    }
+
     await absensiRepository.update(id, {
-      jam_pulang: new Date(),
+      jam_pulang: jamPulang,
     });
 
     return await this.getAbsensiById(id);
@@ -104,7 +146,7 @@ class AbsensiService {
     if (normalizedFilters.tanggal) {
       const parsed = new Date(normalizedFilters.tanggal);
       if (!isNaN(parsed.getTime())) {
-        normalizedFilters.tanggal = parsed.toISOString().split('T')[0];
+        normalizedFilters.tanggal = getLocalDateString(parsed);
       }
     }
 
@@ -172,7 +214,7 @@ class AbsensiService {
     }
     if (updateData.tanggal !== undefined) {
       const parsed = parseDateOrDefault(updateData.tanggal, false);
-      if (parsed) payload.tanggal = parsed.toISOString().split('T')[0];
+      if (parsed) payload.tanggal = getLocalDateString(parsed);
     }
     if (updateData.lapak_id !== undefined) {
       const lapak = await lapakService.getLapakById(updateData.lapak_id);

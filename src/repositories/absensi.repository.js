@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const Absensi = require('../models/absensi.model');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * Absensi Repository
@@ -19,12 +20,13 @@ class AbsensiRepository {
     const docRef = this.collection.doc();
     const now = new Date();
 
+    const isIzin = (data.status || '').toLowerCase() === 'izin';
     const entity = new Absensi({
       id: docRef.id,
       user_id: data.user_id,
       lapak_id: data.lapak_id,
-      tanggal: data.tanggal || now.toISOString().split('T')[0],
-      jam_masuk: data.jam_masuk || now,
+      tanggal: data.tanggal || getLocalDateString(now),
+      jam_masuk: data.jam_masuk !== undefined ? data.jam_masuk : (isIzin ? null : now),
       jam_pulang: data.jam_pulang || null,
       lokasi_masuk: data.lokasi_masuk || null,
       foto_masuk_url: data.foto_masuk_url || null,
@@ -98,12 +100,24 @@ class AbsensiRepository {
       if (entity) list.push(entity);
     });
 
-    // Default sort by jam_masuk descending
-    list.sort((a, b) => {
-      const timeA = a.jam_masuk ? new Date(a.jam_masuk).getTime() : 0;
-      const timeB = b.jam_masuk ? new Date(b.jam_masuk).getTime() : 0;
-      return timeB - timeA;
-    });
+    // Default sort descending by jam_masuk, falling back to createdAt or tanggal for records without jam_masuk (e.g. izin)
+    const getRecordTime = (record) => {
+      if (record.jam_masuk) {
+        const t = new Date(record.jam_masuk).getTime();
+        if (!isNaN(t)) return t;
+      }
+      if (record.createdAt) {
+        const t = new Date(record.createdAt).getTime();
+        if (!isNaN(t)) return t;
+      }
+      if (record.tanggal) {
+        const t = new Date(record.tanggal).getTime();
+        if (!isNaN(t)) return t;
+      }
+      return 0;
+    };
+
+    list.sort((a, b) => getRecordTime(b) - getRecordTime(a));
 
     return list;
   }

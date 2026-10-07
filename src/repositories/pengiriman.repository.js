@@ -1,6 +1,7 @@
 const { db } = require('../firebase');
 const { Pengiriman } = require('../models/pengiriman.model');
 const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
+const { getLocalDateString } = require('../utils/timezone');
 const pengirimanDetailRepository = require('./pengirimanDetail.repository');
 
 /**
@@ -19,10 +20,7 @@ class PengirimanRepository {
    */
   async generateUniqueId(date = new Date()) {
     const d = date instanceof Date ? date : new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const dateStr = `${year}${month}${day}`;
+    const dateStr = getLocalDateString(d).replace(/-/g, '');
     const counterRef = db.collection('counters').doc(`pengiriman_${dateStr}`);
 
     const nextCounter = await db.runTransaction(async (transaction) => {

@@ -1,3 +1,5 @@
+const { getLocalDateString } = require('../utils/timezone');
+
 /**
  * OOP Slip Gaji Entity
  * Represents the salary slip document record linked to a monthly payroll record.
@@ -17,7 +19,7 @@ class SlipGaji {
     this.payroll_id = payroll_id ? payroll_id.trim() : '';
     this.file_url = file_url ? file_url.trim() : null;
     // Tanggal is optional, only populated if file_url is also provided
-    this.tanggal = tanggal || (this.file_url ? new Date().toISOString().split('T')[0] : null);
+    this.tanggal = tanggal || (this.file_url ? getLocalDateString(new Date()) : null);
     this.payroll = payroll || null;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;

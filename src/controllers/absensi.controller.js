@@ -55,7 +55,7 @@ class AbsensiController {
    */
   async clockOut(req, res) {
     const { id } = req.params;
-    const updated = await absensiService.clockOut(id, req.user);
+    const updated = await absensiService.clockOut(id, req.user, req.body);
     return res.status(200).json({
       success: true,
       message: 'Attendance updated (clock-out) successfully.',

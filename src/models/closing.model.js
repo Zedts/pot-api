@@ -1,4 +1,5 @@
 const { CLOSING_STATUS } = require('../constants/closingStatus');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * OOP Closing Entity
@@ -33,7 +34,7 @@ class Closing {
     this.spg_id = spg_id ? spg_id.trim() : '';
     this.lapak_id = lapak_id ? lapak_id.trim() : '';
     // Always format to year, month, and day (YYYY-MM-DD)
-    this.tanggal = tanggal || new Date().toISOString().split('T')[0];
+    this.tanggal = tanggal || getLocalDateString(new Date());
     this.stok_sistem = Number(stok_sistem || 0);
     this.stok_fisik = Number(stok_fisik || 0);
     this.total_omset = Number(total_omset || 0);
