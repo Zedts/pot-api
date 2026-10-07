@@ -33,6 +33,13 @@ async function authenticate(req, res, next) {
       return next(new UnauthorizedError('Account is inactive. Please contact support.'));
     }
 
+    // Token version check for session revocation support
+    if (decoded.tokenVersion !== undefined && user.token_version !== undefined) {
+      if (decoded.tokenVersion !== user.token_version) {
+        return next(new UnauthorizedError('Your session has been revoked. Please log in again.'));
+      }
+    }
+
     // Attach authenticated user to request context
     req.user = user;
     next();

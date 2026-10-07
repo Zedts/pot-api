@@ -202,8 +202,8 @@ class PenerimaanRepository {
    */
   async countBySpgId(spgId) {
     if (!spgId) return 0;
-    const snapshot = await this.collection.where('spg_id', '==', spgId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('spg_id', '==', spgId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -215,11 +215,11 @@ class PenerimaanRepository {
     if (!identifier) return 0;
     const clean = identifier.trim();
     if (clean.startsWith('#PG-')) {
-      const snapshot = await this.collection.where('unique_id', '==', clean).get();
-      return snapshot.size;
+      const snap = await this.collection.where('unique_id', '==', clean).count().get();
+      return snap.data().count;
     }
-    const snapshot = await this.collection.where('pengiriman_id', '==', clean).get();
-    return snapshot.size;
+    const snap = await this.collection.where('pengiriman_id', '==', clean).count().get();
+    return snap.data().count;
   }
 
   /**

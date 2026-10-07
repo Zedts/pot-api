@@ -183,16 +183,22 @@ class StokLapakRepository {
     }
 
     const docRef = snapshot.docs[0].ref;
-    const current = snapshot.docs[0].data();
-    const newStokMasuk = Number(current.stok_masuk || 0) + addQty;
-    const stokAwal = Number(current.stok_awal || 0);
-    const stokTerjual = Number(current.stok_terjual || 0);
-    const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
 
-    await docRef.update({
-      stok_masuk: newStokMasuk,
-      stok_akhir: stokAkhir,
-      updatedAt: now,
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokMasuk = Number(current.stok_masuk || 0) + addQty;
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokTerjual = Number(current.stok_terjual || 0);
+      const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
+
+      transaction.update(docRef, {
+        stok_masuk: newStokMasuk,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
     });
 
     const updatedDoc = await docRef.get();
@@ -220,16 +226,23 @@ class StokLapakRepository {
     if (snapshot.empty) return null;
 
     const docRef = snapshot.docs[0].ref;
-    const current = snapshot.docs[0].data();
-    const newStokMasuk = Math.max(0, Number(current.stok_masuk || 0) - subQty);
-    const stokAwal = Number(current.stok_awal || 0);
-    const stokTerjual = Number(current.stok_terjual || 0);
-    const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
+    const now = new Date();
 
-    await docRef.update({
-      stok_masuk: newStokMasuk,
-      stok_akhir: stokAkhir,
-      updatedAt: new Date(),
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokMasuk = Math.max(0, Number(current.stok_masuk || 0) - subQty);
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokTerjual = Number(current.stok_terjual || 0);
+      const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
+
+      transaction.update(docRef, {
+        stok_masuk: newStokMasuk,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
     });
 
     const updatedDoc = await docRef.get();
@@ -268,16 +281,22 @@ class StokLapakRepository {
     }
 
     const docRef = snapshot.docs[0].ref;
-    const current = snapshot.docs[0].data();
-    const newStokTerjual = Number(current.stok_terjual || 0) + addQty;
-    const stokAwal = Number(current.stok_awal || 0);
-    const stokMasuk = Number(current.stok_masuk || 0);
-    const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
 
-    await docRef.update({
-      stok_terjual: newStokTerjual,
-      stok_akhir: stokAkhir,
-      updatedAt: now,
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokTerjual = Number(current.stok_terjual || 0) + addQty;
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokMasuk = Number(current.stok_masuk || 0);
+      const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+      transaction.update(docRef, {
+        stok_terjual: newStokTerjual,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
     });
 
     const updatedDoc = await docRef.get();
@@ -305,16 +324,23 @@ class StokLapakRepository {
     if (snapshot.empty) return null;
 
     const docRef = snapshot.docs[0].ref;
-    const current = snapshot.docs[0].data();
-    const newStokTerjual = Math.max(0, Number(current.stok_terjual || 0) - subQty);
-    const stokAwal = Number(current.stok_awal || 0);
-    const stokMasuk = Number(current.stok_masuk || 0);
-    const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+    const now = new Date();
 
-    await docRef.update({
-      stok_terjual: newStokTerjual,
-      stok_akhir: stokAkhir,
-      updatedAt: new Date(),
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokTerjual = Math.max(0, Number(current.stok_terjual || 0) - subQty);
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokMasuk = Number(current.stok_masuk || 0);
+      const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+      transaction.update(docRef, {
+        stok_terjual: newStokTerjual,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
     });
 
     const updatedDoc = await docRef.get();
@@ -328,8 +354,8 @@ class StokLapakRepository {
    */
   async countByLapakId(lapakId) {
     if (!lapakId) return 0;
-    const snapshot = await this.collection.where('lapak_id', '==', lapakId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('lapak_id', '==', lapakId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -339,8 +365,8 @@ class StokLapakRepository {
    */
   async countByProdukId(produkId) {
     if (!produkId) return 0;
-    const snapshot = await this.collection.where('produk_id', '==', produkId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('produk_id', '==', produkId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**

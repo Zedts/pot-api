@@ -205,6 +205,19 @@ class PengirimanService {
       payload.tanggal = parseDateOrDefault(updateData.tanggal, false);
     }
 
+    if (updateData.status !== undefined) {
+      if (!updateData.status || typeof updateData.status !== 'string' || !updateData.status.trim()) {
+        throw new BadRequestError('Field "status" cannot be empty.');
+      }
+      const cleanStatus = updateData.status.trim().toLowerCase();
+      if (!VALID_PENGIRIMAN_STATUSES.includes(cleanStatus)) {
+        throw new BadRequestError(
+          `Invalid status '${cleanStatus}'. Allowed values are: ${VALID_PENGIRIMAN_STATUSES.join(', ')}.`
+        );
+      }
+      payload.status = cleanStatus;
+    }
+
     if (Object.keys(payload).length === 0) {
       return existing;
     }

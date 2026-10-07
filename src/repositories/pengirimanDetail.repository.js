@@ -99,8 +99,8 @@ class PengirimanDetailRepository {
    */
   async countByProdukId(produkId) {
     if (!produkId) return 0;
-    const snapshot = await this.collection.where('produk_id', '==', produkId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('produk_id', '==', produkId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**

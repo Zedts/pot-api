@@ -306,8 +306,8 @@ class PengirimanRepository {
    */
   async countByLapakId(lapakId) {
     if (!lapakId) return 0;
-    const snapshot = await this.collection.where('lapak_id', '==', lapakId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('lapak_id', '==', lapakId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -318,8 +318,8 @@ class PengirimanRepository {
    */
   async countByCreatedBy(userId) {
     if (!userId) return 0;
-    const snapshot = await this.collection.where('created_by', '==', userId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('created_by', '==', userId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -333,15 +333,15 @@ class PengirimanRepository {
     const cleanId = countersId.trim();
 
     // 1. Direct match on counters_id
-    const snapshot = await this.collection.where('counters_id', '==', cleanId).get();
-    if (!snapshot.empty) {
-      return snapshot.size;
+    const snap = await this.collection.where('counters_id', '==', cleanId).count().get();
+    if (snap.data().count > 0) {
+      return snap.data().count;
     }
 
     // 2. Direct match on legacy counter_id for backwards compatibility
-    const legacySnapshot = await this.collection.where('counter_id', '==', cleanId).get();
-    if (!legacySnapshot.empty) {
-      return legacySnapshot.size;
+    const legacySnap = await this.collection.where('counter_id', '==', cleanId).count().get();
+    if (legacySnap.data().count > 0) {
+      return legacySnap.data().count;
     }
 
     // 3. Fallback check by date in unique_id if older documents don't have counters_id explicitly
@@ -352,8 +352,9 @@ class PengirimanRepository {
       const prefixSnap = await this.collection
         .where('unique_id', '>=', prefix)
         .where('unique_id', '<=', prefix + '\uf8ff')
+        .count()
         .get();
-      return prefixSnap.size;
+      return prefixSnap.data().count;
     }
 
     return 0;

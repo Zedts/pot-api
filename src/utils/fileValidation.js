@@ -62,21 +62,25 @@ function isValidPdfBuffer(buffer) {
  * @param {Object} file Multer file object
  * @param {string} [fieldName='file'] Field name for error message
  */
-function assertValidImageFile(file, fieldName = 'image') {
-  if (!file || !file.buffer) {
+function assertValidImageFile(fileOrBuffer, fieldName = 'image') {
+  const buffer = Buffer.isBuffer(fileOrBuffer) ? fileOrBuffer : (fileOrBuffer ? fileOrBuffer.buffer : null);
+
+  if (!buffer || !Buffer.isBuffer(buffer)) {
     throw new BadRequestError(`Field "${fieldName}" is required and must contain a valid image file.`);
   }
 
-  const ext = path.extname(file.originalname || '').toLowerCase();
-  const mime = (file.mimetype || '').toLowerCase();
+  if (!Buffer.isBuffer(fileOrBuffer)) {
+    const ext = path.extname(fileOrBuffer.originalname || '').toLowerCase();
+    const mime = (fileOrBuffer.mimetype || '').toLowerCase();
 
-  if (!ALLOWED_IMAGE_EXTS.includes(ext) || !ALLOWED_IMAGE_MIMES.includes(mime)) {
-    throw new BadRequestError(
-      `Invalid image format for "${fieldName}". Only JPEG (.jpg, .jpeg), PNG (.png), and WebP (.webp) are allowed.`
-    );
+    if (!ALLOWED_IMAGE_EXTS.includes(ext) || !ALLOWED_IMAGE_MIMES.includes(mime)) {
+      throw new BadRequestError(
+        `Invalid image format for "${fieldName}". Only JPEG (.jpg, .jpeg), PNG (.png), and WebP (.webp) are allowed.`
+      );
+    }
   }
 
-  if (!isValidImageBuffer(file.buffer)) {
+  if (!isValidImageBuffer(buffer)) {
     throw new BadRequestError(
       `File content verification failed for "${fieldName}". The uploaded file is corrupted or not a valid JPEG, PNG, or WebP image.`
     );

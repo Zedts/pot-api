@@ -176,8 +176,8 @@ class PayrollRepository {
    */
   async countByUserId(userId) {
     if (!userId) return 0;
-    const snapshot = await this.collection.where('user_id', '==', userId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('user_id', '==', userId.trim()).count().get();
+    return snap.data().count;
   }
 }
 

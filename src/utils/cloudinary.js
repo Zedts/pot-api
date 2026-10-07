@@ -15,7 +15,7 @@ cloudinary.config({
  * @param {string} [options.public_id]
  * @returns {Promise<Object>} Cloudinary upload result
  */
-function uploadPdfBuffer(buffer, { folder = 'pot_nota_penerimaan', public_id } = {}) {
+function uploadPdfBuffer(buffer, { folder = 'pot_slip_gaji', public_id } = {}) {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {

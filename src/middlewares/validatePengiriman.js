@@ -55,11 +55,11 @@ function validateCreatePengiriman(req, res, next) {
  * Middleware: Validate shipment metadata update payload
  */
 function validateUpdatePengiriman(req, res, next) {
-  const { lapak_id, tanggal } = req.body;
+  const { lapak_id, tanggal, status } = req.body;
   const errors = [];
 
-  if (lapak_id === undefined && tanggal === undefined) {
-    return next(new BadRequestError('At least one field (lapak_id, tanggal) must be provided for update.'));
+  if (lapak_id === undefined && tanggal === undefined && status === undefined) {
+    return next(new BadRequestError('At least one field (lapak_id, tanggal, status) must be provided for update.'));
   }
 
   if (lapak_id !== undefined && (typeof lapak_id !== 'string' || !lapak_id.trim())) {
@@ -70,6 +70,19 @@ function validateUpdatePengiriman(req, res, next) {
     const dateErr = validateDateField(tanggal);
     if (dateErr) {
       errors.push(dateErr);
+    }
+  }
+
+  if (status !== undefined) {
+    if (!status || typeof status !== 'string' || !status.trim()) {
+      errors.push('Field "status" cannot be empty.');
+    } else {
+      const cleanStatus = status.trim().toLowerCase();
+      if (!VALID_PENGIRIMAN_STATUSES.includes(cleanStatus)) {
+        errors.push(
+          `Field "status" must be one of the allowed values: ${VALID_PENGIRIMAN_STATUSES.join(', ')}.`
+        );
+      }
     }
   }
 

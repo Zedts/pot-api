@@ -70,8 +70,8 @@ class PenjualanService {
       ? currentUser.id
       : (data.spg_id ? data.spg_id.trim() : (currentUser ? currentUser.id : lapak.spg_id));
 
-    // 5. Persist transaction header and details atomically
-    const { penjualan } = await penjualanRepository.createWithDetails(
+    // 5. Persist transaction header, details, and inventory stock atomically
+    const { penjualan } = await penjualanRepository.createWithDetailsAndStock(
       {
         spg_id: spgId,
         lapak_id: targetLapakId,
@@ -80,13 +80,9 @@ class PenjualanService {
         bukti_qris_url: bukti_qris_url || null,
         catatan: catatan ? catatan.trim() : '',
       },
-      snapshotItems
+      snapshotItems,
+      targetLapakId
     );
-
-    // 6. Update inventory: increment stok_terjual in stok_lapak for each item
-    for (const item of snapshotItems) {
-      await stokLapakRepository.incrementStokTerjual(targetLapakId, item.produk_id, item.qty);
-    }
 
     return await this.getPenjualanById(penjualan.id);
   }

@@ -8,8 +8,8 @@ const lapakService = require('./lapak.service');
 const { PENERIMAAN_STATUS } = require('../constants/penerimaanStatus');
 const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
-const { uploadPdfBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
-const { assertValidPdfFile } = require('../utils/fileValidation');
+const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { assertValidImageFile } = require('../utils/fileValidation');
 const { parseDateOrDefault } = require('../utils/validators');
 
 /**
@@ -242,14 +242,14 @@ class PenerimaanService {
     const existing = await this.getPenerimaanById(id);
 
     // 2. Strict format and magic bytes validation
-    assertValidPdfFile(fileBuffer, 'nota');
+    assertValidImageFile(fileBuffer, 'nota');
 
     const uniqueIdentifier = existing.unique_id || (existing.pengiriman && existing.pengiriman.unique_id) || id;
     const cleanIdentifier = uniqueIdentifier.replace(/[^a-zA-Z0-9_-]/g, '_');
     const publicId = `nota_${cleanIdentifier}_${Date.now()}`;
 
     // 3. Upload to Cloudinary
-    const uploadResult = await uploadPdfBuffer(fileBuffer, {
+    const uploadResult = await uploadImageBuffer(fileBuffer, {
       folder: 'pot_nota_penerimaan',
       public_id: publicId,
     });
@@ -261,7 +261,7 @@ class PenerimaanService {
       await penerimaanRepository.update(id, { nota_url: secureUrl });
     } catch (dbErr) {
       if (uploadResult && uploadResult.public_id) {
-        await deleteCloudinaryAsset(uploadResult.public_id, 'raw');
+        await deleteCloudinaryAsset(uploadResult.public_id, 'image');
       }
       throw dbErr;
     }

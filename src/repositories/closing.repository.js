@@ -137,8 +137,8 @@ class ClosingRepository {
    */
   async countByLapakId(lapakId) {
     if (!lapakId) return 0;
-    const snapshot = await this.collection.where('lapak_id', '==', lapakId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('lapak_id', '==', lapakId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -148,8 +148,8 @@ class ClosingRepository {
    */
   async countBySpgId(spgId) {
     if (!spgId) return 0;
-    const snapshot = await this.collection.where('spg_id', '==', spgId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('spg_id', '==', spgId.trim()).count().get();
+    return snap.data().count;
   }
 }
 

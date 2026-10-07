@@ -1,5 +1,5 @@
 const penerimaanService = require('../services/penerimaan.service');
-const { assertValidPdfFile } = require('../utils/fileValidation');
+const { assertValidImageFile } = require('../utils/fileValidation');
 
 /**
  * Penerimaan Controller
@@ -74,15 +74,15 @@ class PenerimaanController {
 
   /**
    * POST /api/v1/penerimaan/:id/nota
-   * Upload PDF nota and attach Cloudinary URL
+   * Upload image foto nota and attach Cloudinary URL
    */
   async uploadNota(req, res) {
     const { id } = req.params;
-    assertValidPdfFile(req.file, 'nota');
+    assertValidImageFile(req.file, 'nota');
     const updated = await penerimaanService.uploadNota(id, req.file.buffer);
     return res.status(200).json({
       success: true,
-      message: 'Nota PDF uploaded successfully to Cloudinary.',
+      message: 'Foto nota uploaded successfully to Cloudinary.',
       data: updated,
     });
   }

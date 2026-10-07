@@ -90,8 +90,8 @@ class ProdukRepository {
    */
   async countByKategoriId(kategoriId) {
     if (!kategoriId) return 0;
-    const snapshot = await this.collection.where('kategori_id', '==', kategoriId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('kategori_id', '==', kategoriId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -156,8 +156,8 @@ class ProdukRepository {
    */
   async countBySatuanId(satuanId) {
     if (!satuanId) return 0;
-    const snapshot = await this.collection.where('satuan_id', '==', satuanId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('satuan_id', '==', satuanId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**

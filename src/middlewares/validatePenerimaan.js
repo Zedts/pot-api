@@ -85,14 +85,14 @@ function validateUpdatePenerimaan(req, res, next) {
   next();
 }
 
-const { assertValidPdfFile } = require('../utils/fileValidation');
+const { assertValidImageFile } = require('../utils/fileValidation');
 
 /**
- * Middleware: Validate uploaded nota file
+ * Middleware: Validate uploaded nota image file
  */
 function validateUploadNota(req, res, next) {
   try {
-    assertValidPdfFile(req.file, 'nota');
+    assertValidImageFile(req.file, 'nota');
     next();
   } catch (err) {
     next(err);

@@ -11,7 +11,7 @@ const {
 
 const router = Router();
 
-const uploadPdf = require('../middlewares/uploadPdf.middleware');
+const uploadImage = require('../middlewares/uploadImage.middleware');
 
 // =========================================================================
 // Penerimaan Management Endpoints (Protected with 30-Day Bearer Token)
@@ -55,12 +55,12 @@ router.put(
   asyncWrapper((req, res) => penerimaanController.update(req, res))
 );
 
-// Upload PDF nota and attach Cloudinary raw URL
+// Upload foto nota and attach Cloudinary image URL
 router.post(
   '/:id/nota',
   authenticate,
   authorizePermission('PENERIMAAN', 'UPDATE'),
-  uploadPdf.single('nota'),
+  uploadImage.single('nota'),
   validateUploadNota,
   asyncWrapper((req, res) => penerimaanController.uploadNota(req, res))
 );

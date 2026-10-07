@@ -71,6 +71,113 @@ class PenjualanRepository {
   }
 
   /**
+   * Atomically create a penjualan header, details, and increment stok_terjual in a single transaction
+   * @param {Object} headerData
+   * @param {Array<Object>} itemsData
+   * @param {string} targetLapakId
+   * @returns {Promise<{ penjualan: Penjualan, items: Array<PenjualanDetail> }>}
+   */
+  async createWithDetailsAndStock(headerData, itemsData, targetLapakId) {
+    const now = new Date();
+    const headerRef = this.collection.doc();
+    const calculatedTotal = itemsData.reduce((sum, item) => sum + Number(item.subtotal || 0), 0);
+
+    const penjualanEntity = new Penjualan({
+      id: headerRef.id,
+      spg_id: headerData.spg_id,
+      lapak_id: headerData.lapak_id,
+      tanggal: headerData.tanggal || now,
+      total_harga: calculatedTotal,
+      metode_pembayaran: headerData.metode_pembayaran,
+      bukti_qris_url: headerData.bukti_qris_url || null,
+      catatan: headerData.catatan || '',
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const stokCollection = db.collection('stok_lapak');
+    const stokItems = [];
+
+    for (const item of itemsData) {
+      const snap = await stokCollection
+        .where('lapak_id', '==', targetLapakId.trim())
+        .where('produk_id', '==', item.produk_id.trim())
+        .limit(1)
+        .get();
+
+      const docRef = snap.empty ? stokCollection.doc() : snap.docs[0].ref;
+      stokItems.push({ item, docRef, isNew: snap.empty });
+    }
+
+    const createdDetails = [];
+
+    await db.runTransaction(async (transaction) => {
+      // 1. Transaction Read Phase: read all existing stock docs
+      const stockReadData = [];
+      for (const entry of stokItems) {
+        if (!entry.isNew) {
+          const doc = await transaction.get(entry.docRef);
+          stockReadData.push({ ...entry, docData: doc.exists ? doc.data() : null });
+        } else {
+          stockReadData.push({ ...entry, docData: null });
+        }
+      }
+
+      // 2. Transaction Write Phase: set header, line items, and update stock
+      transaction.set(headerRef, penjualanEntity.toFirestore());
+
+      for (const entry of stockReadData) {
+        const detailRef = this.detailsCollection.doc();
+        const detailEntity = new PenjualanDetail({
+          id: detailRef.id,
+          penjualan_id: headerRef.id,
+          produk_id: entry.item.produk_id,
+          nama_produk: entry.item.nama_produk,
+          qty: entry.item.qty,
+          harga_satuan: entry.item.harga_satuan,
+          subtotal: entry.item.subtotal,
+          createdAt: now,
+          updatedAt: now,
+        });
+        transaction.set(detailRef, detailEntity.toFirestore());
+        createdDetails.push(detailEntity);
+
+        if (entry.docData) {
+          const current = entry.docData;
+          const newStokTerjual = Number(current.stok_terjual || 0) + Number(entry.item.qty || 0);
+          const stokAwal = Number(current.stok_awal || 0);
+          const stokMasuk = Number(current.stok_masuk || 0);
+          const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+          transaction.update(entry.docRef, {
+            stok_terjual: newStokTerjual,
+            stok_akhir: stokAkhir,
+            updatedAt: now,
+          });
+        } else {
+          const qty = Number(entry.item.qty || 0);
+          transaction.set(entry.docRef, {
+            lapak_id: targetLapakId.trim(),
+            produk_id: entry.item.produk_id.trim(),
+            stok_awal: 0,
+            stok_masuk: 0,
+            stok_terjual: qty,
+            stok_akhir: -qty,
+            createdAt: now,
+            updatedAt: now,
+          });
+        }
+      }
+    });
+
+    penjualanEntity.items = createdDetails;
+    return {
+      penjualan: penjualanEntity,
+      items: createdDetails,
+    };
+  }
+
+  /**
    * Retrieve single sales transaction by document ID
    * @param {string} id
    * @returns {Promise<Penjualan|null>}
@@ -101,6 +208,13 @@ class PenjualanRepository {
 
     if (filters.metode_pembayaran) {
       query = query.where('metode_pembayaran', '==', filters.metode_pembayaran.trim().toLowerCase());
+    }
+
+    if (filters.limit) {
+      const limitVal = parseInt(filters.limit, 10);
+      if (!isNaN(limitVal) && limitVal > 0) {
+        query = query.limit(Math.min(limitVal, 100));
+      }
     }
 
     const snapshot = await query.get();
@@ -183,8 +297,8 @@ class PenjualanRepository {
    */
   async countByLapakId(lapakId) {
     if (!lapakId) return 0;
-    const snapshot = await this.collection.where('lapak_id', '==', lapakId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('lapak_id', '==', lapakId.trim()).count().get();
+    return snap.data().count;
   }
 
   /**
@@ -194,8 +308,8 @@ class PenjualanRepository {
    */
   async countBySpgId(spgId) {
     if (!spgId) return 0;
-    const snapshot = await this.collection.where('spg_id', '==', spgId.trim()).get();
-    return snapshot.size;
+    const snap = await this.collection.where('spg_id', '==', spgId.trim()).count().get();
+    return snap.data().count;
   }
 }
 

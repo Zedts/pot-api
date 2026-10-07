@@ -47,6 +47,31 @@ class CounterRepository {
     const counterDocId = `pengiriman_${dateStr}`;
     const counterRef = this.collection.doc(counterDocId);
 
+    // Initial check outside transaction boundary
+    const initialCheck = await counterRef.get();
+    let baselineCount = 0;
+
+    if (!initialCheck.exists) {
+      // Self-healing prefix query executed safely OUTSIDE transaction boundary
+      const prefix = `#PG-${dateStr}-`;
+      const existingDocs = await db.collection('pengiriman')
+        .where('unique_id', '>=', prefix)
+        .where('unique_id', '<=', prefix + '\uf8ff')
+        .get();
+
+      existingDocs.forEach((doc) => {
+        const data = doc.data();
+        if (data.unique_id) {
+          const parts = data.unique_id.split('-');
+          const num = parseInt(parts[2], 10);
+          if (!isNaN(num) && num > baselineCount) {
+            baselineCount = num;
+          }
+        }
+      });
+    }
+
+    // Atomic transaction using only transaction.get(docRef)
     const nextCounter = await db.runTransaction(async (transaction) => {
       const counterDoc = await transaction.get(counterRef);
       let count = 1;
@@ -55,26 +80,7 @@ class CounterRepository {
         const data = counterDoc.data();
         count = (data.last_counter || 0) + 1;
       } else {
-        // Self-healing: only query if counter document was deleted
-        // Uses targeted indexed prefix range query
-        const prefix = `#PG-${dateStr}-`;
-        const existingDocs = await db.collection('pengiriman')
-          .where('unique_id', '>=', prefix)
-          .where('unique_id', '<=', prefix + '\uf8ff')
-          .get();
-
-        let maxExistingCounter = 0;
-        existingDocs.forEach((doc) => {
-          const data = doc.data();
-          if (data.unique_id) {
-            const parts = data.unique_id.split('-');
-            const num = parseInt(parts[2], 10);
-            if (!isNaN(num) && num > maxExistingCounter) {
-              maxExistingCounter = num;
-            }
-          }
-        });
-        count = maxExistingCounter + 1;
+        count = baselineCount + 1;
       }
 
       transaction.set(
