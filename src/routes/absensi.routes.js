@@ -59,6 +59,15 @@ router.put(
   asyncWrapper((req, res) => absensiController.updateAbsensi(req, res))
 );
 
+// Protected: Upload / attach attendance photo to Cloudinary
+router.post(
+  '/:id/foto',
+  authenticate,
+  authorizePermission('ABSENSI', 'UPLOAD_FOTO'),
+  uploadImage.single('foto'),
+  asyncWrapper((req, res) => absensiController.uploadFoto(req, res))
+);
+
 // Protected: Delete attendance record (Admin only)
 router.delete(
   '/:id',

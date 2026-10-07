@@ -6601,7 +6601,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"lapak_id\": \"{{lapak_id}}\",\n  \"status\": \"hadir\", // \"hadir\", \"terlambat\", \"izin\" \n  \"lokasi_masuk\": {\n    \"latitude\": -6.2,\n    \"longitude\": 106.8\n  },\n  \"keterangan\": \"Pagi cerah siap melayani\",\n  \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\"\n}",
+              "raw": "{\n  \"lapak_id\": \"{{lapak_id}}\",\n  \"status\": \"hadir\", // \"hadir\", \"terlambat\", \"izin\" \n  \"lokasi_masuk\": {\n    \"latitude\": -6.2,\n    \"longitude\": 106.8\n  },\n  \"keterangan\": \"Pagi cerah siap melayani\"\n//   \"foto_masuk_url\": \"https://res.cloudinary.com/demo/image/upload/sample.jpg\" // Optional\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -7220,6 +7220,140 @@
               ],
               "cookie": [],
               "body": "{\n  \"success\": true,\n  \"message\": \"Attendance record deleted successfully.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "7. Upload Photo Absent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "foto",
+                  "type": "file",
+                  "description": "Upload photo attendance",
+                  "src": [
+                    "postman-cloud:///1f1c0ed9-8087-47f0-990e-0522492ea2cd"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/absensi/:id/foto",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absensi",
+                ":id",
+                "foto"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "absensi_id_here"
+                }
+              ]
+            },
+            "description": "Record daily staff clock-in at assigned stall."
+          },
+          "response": [
+            {
+              "name": "7. Upload Photo Absent",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "foto",
+                      "type": "file",
+                      "description": "Upload photo attendance",
+                      "src": [
+                        "postman-cloud:///1f1c0ed9-8087-47f0-990e-0522492ea2cd"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/absensi/:id/foto",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "absensi",
+                    ":id",
+                    "foto"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "br4PVcCyBo8lV2YK5NEW"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "x-powered-by",
+                  "value": "Express"
+                },
+                {
+                  "key": "access-control-allow-origin",
+                  "value": "*"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "content-length",
+                  "value": "1035"
+                },
+                {
+                  "key": "etag",
+                  "value": "W/\"40b-Z0NGCBWJyi8iCt73zwhxFW3b9nc\""
+                },
+                {
+                  "key": "date",
+                  "value": "Wed, 07 Oct 2026 05:59:20 GMT"
+                },
+                {
+                  "key": "connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "keep-alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Attendance photo uploaded successfully.\",\n  \"data\": {\n    \"id\": \"br4PVcCyBo8lV2YK5NEW\",\n    \"tanggal\": \"2026-10-07\",\n    \"jam_masuk\": \"2026-10-07T05:58:43.008Z\",\n    \"jam_pulang\": null,\n    \"lokasi_masuk\": {\n      \"latitude\": -6.2,\n      \"longitude\": 106.8\n    },\n    \"foto_masuk_url\": \"https://res.cloudinary.com/xfdgh246/image/upload/v1791352766/pot_absensi_foto/j5k1z0fgpqxzlfuoumwm.png\",\n    \"status\": \"hadir\",\n    \"keterangan\": \"Pagi cerah siap melayani\",\n    \"user\": {\n      \"id\": \"LLoptjbDSiSeX2HHpfKzFcJ0zyB2\",\n      \"nama\": \"Admin System\",\n      \"username\": \"\",\n      \"email\": \"admin@pot.com\",\n      \"no_hp\": \"081234567890\",\n      \"role\": \"admin\",\n      \"status\": \"active\"\n    },\n    \"lapak\": {\n      \"id\": \"adymChVi79hwhV9hfNM2\",\n      \"nama\": \"Lapak Test 1791219719017\",\n      \"lokasi\": \"Lokasi Test\",\n      \"keterangan\": \"\",\n      \"spg\": null,\n      \"users\": [\n        {\n          \"id\": \"mZKVFpgRUrY5b9LBUmijzCyzit52\",\n          \"nama\": \"SPG A\",\n          \"username\": \"spga_1791219719017\",\n          \"email\": \"spga_1791219719017@pot.com\",\n          \"no_hp\": \"\",\n          \"role\": \"unassigned\",\n          \"status\": \"active\"\n        }\n      ],\n      \"createdAt\": \"2026-10-05T17:02:01.441Z\",\n      \"updatedAt\": \"2026-10-05T17:02:01.441Z\"\n    },\n    \"createdAt\": \"2026-10-07T05:58:43.008Z\",\n    \"updatedAt\": \"2026-10-07T05:59:19.872Z\"\n  }\n}"
             }
           ]
         }

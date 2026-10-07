@@ -1,7 +1,8 @@
 const absensiService = require('../services/absensi.service');
 const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
 const { assertValidImageFile } = require('../utils/fileValidation');
-const { BadRequestError } = require('../errors/AppError');
+const { BadRequestError, ForbiddenError } = require('../errors/AppError');
+const { ADMIN_ROLES } = require('../constants/roles');
 
 /**
  * Absensi Controller
@@ -119,6 +120,52 @@ class AbsensiController {
       return res.status(200).json({
         success: true,
         message: 'Attendance record updated successfully.',
+        data: updated,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+      }
+      throw err;
+    }
+  }
+
+  /**
+   * POST /api/v1/absensi/:id/foto
+   * Dedicated file upload endpoint for attendance clock-in photo
+   */
+  async uploadFoto(req, res) {
+    const { id } = req.params;
+
+    // 1. Pre-validate attendance document existence BEFORE touching Cloudinary
+    const existing = await absensiService.getAbsensiById(id);
+
+    // 2. Ownership / authorization check
+    const currentUser = req.user;
+    const isPrivileged = currentUser && ((typeof currentUser.isAdmin === 'function' && currentUser.isAdmin()) || ADMIN_ROLES.includes(currentUser.role));
+    const recordUserId = existing.user ? existing.user.id : existing.user_id;
+    if (!isPrivileged && currentUser && recordUserId && currentUser.id !== recordUserId) {
+      throw new ForbiddenError('You can only upload an attendance photo for your own attendance record.');
+    }
+
+    // 3. Strict format and magic bytes validation
+    if (!req.file || !req.file.buffer) {
+      throw new BadRequestError('Valid image file is required.');
+    }
+    assertValidImageFile(req.file, 'foto');
+
+    // 4. Upload to Cloudinary
+    const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
+
+    // 5. Update attendance record with automatic rollback on error
+    try {
+      const updated = await absensiService.updateAbsensi(id, {
+        foto_masuk_url: uploadRes.secure_url,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Attendance photo uploaded successfully.',
         data: updated,
       });
     } catch (err) {
