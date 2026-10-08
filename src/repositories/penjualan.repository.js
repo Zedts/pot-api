@@ -2,6 +2,7 @@ const { db } = require('../firebase');
 const Penjualan = require('../models/penjualan.model');
 const PenjualanDetail = require('../models/penjualanDetail.model');
 const { getLocalDateString } = require('../utils/timezone');
+const { BadRequestError } = require('../errors/AppError');
 
 /**
  * Penjualan Repository
@@ -112,7 +113,7 @@ class PenjualanRepository {
     const createdDetails = [];
 
     await db.runTransaction(async (transaction) => {
-      // 1. Transaction Read Phase: read all existing stock docs
+      // 1. Transaction Read Phase: read all existing stock docs and validate stock availability
       const stockReadData = [];
       for (const entry of stokItems) {
         if (!entry.isNew) {
@@ -123,7 +124,29 @@ class PenjualanRepository {
         }
       }
 
-      // 2. Transaction Write Phase: set header, line items, and update stock
+      // Assert stock availability for all items before applying any writes
+      for (const entry of stockReadData) {
+        const requestedQty = Number(entry.item.qty || 0);
+        if (!entry.docData) {
+          throw new BadRequestError(
+            `Stok untuk produk "${entry.item.nama_produk}" belum tersedia di lapak ini.`
+          );
+        }
+
+        const current = entry.docData;
+        const stokAwal = Number(current.stok_awal || 0);
+        const stokMasuk = Number(current.stok_masuk || 0);
+        const stokTerjual = Number(current.stok_terjual || 0);
+        const availableStock = stokAwal + stokMasuk - stokTerjual;
+
+        if (requestedQty > availableStock) {
+          throw new BadRequestError(
+            `Stok produk "${entry.item.nama_produk}" tidak mencukupi (tersedia: ${availableStock} pcs, diminta: ${requestedQty} pcs).`
+          );
+        }
+      }
+
+      // 2. Transaction Write Phase: set header, line items, and increment stok_terjual
       transaction.set(headerRef, penjualanEntity.toFirestore());
 
       for (const entry of stockReadData) {
@@ -142,31 +165,17 @@ class PenjualanRepository {
         transaction.set(detailRef, detailEntity.toFirestore());
         createdDetails.push(detailEntity);
 
-        if (entry.docData) {
-          const current = entry.docData;
-          const newStokTerjual = Number(current.stok_terjual || 0) + Number(entry.item.qty || 0);
-          const stokAwal = Number(current.stok_awal || 0);
-          const stokMasuk = Number(current.stok_masuk || 0);
-          const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+        const current = entry.docData;
+        const newStokTerjual = Number(current.stok_terjual || 0) + Number(entry.item.qty || 0);
+        const stokAwal = Number(current.stok_awal || 0);
+        const stokMasuk = Number(current.stok_masuk || 0);
+        const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
 
-          transaction.update(entry.docRef, {
-            stok_terjual: newStokTerjual,
-            stok_akhir: stokAkhir,
-            updatedAt: now,
-          });
-        } else {
-          const qty = Number(entry.item.qty || 0);
-          transaction.set(entry.docRef, {
-            lapak_id: targetLapakId.trim(),
-            produk_id: entry.item.produk_id.trim(),
-            stok_awal: 0,
-            stok_masuk: 0,
-            stok_terjual: qty,
-            stok_akhir: -qty,
-            createdAt: now,
-            updatedAt: now,
-          });
-        }
+        transaction.update(entry.docRef, {
+          stok_terjual: newStokTerjual,
+          stok_akhir: stokAkhir,
+          updatedAt: now,
+        });
       }
     });
 
@@ -287,6 +296,85 @@ class PenjualanRepository {
     });
 
     await batch.commit();
+    return true;
+  }
+
+  /**
+   * Atomically delete a sales transaction, its line items, and rollback stock balances in a single Firestore transaction
+   * @param {string} id
+   * @param {string} lapakId
+   * @param {Array<PenjualanDetail>} items
+   * @returns {Promise<boolean>}
+   */
+  async deleteWithRollback(id, lapakId, items = []) {
+    const headerRef = this.collection.doc(id);
+    const detailsSnapshot = await this.detailsCollection.where('penjualan_id', '==', id).get();
+
+    // Pre-query stock doc refs for each item to be able to read them in the transaction
+    const cleanLapakId = (lapakId || '').trim();
+    const stockDocsMap = new Map();
+
+    for (const item of items) {
+      const pId = (item.produk_id || '').trim();
+      if (cleanLapakId && pId && !stockDocsMap.has(pId)) {
+        const snap = await db.collection('stok_lapak')
+          .where('lapak_id', '==', cleanLapakId)
+          .where('produk_id', '==', pId)
+          .limit(1)
+          .get();
+        if (!snap.empty) {
+          stockDocsMap.set(pId, snap.docs[0].ref);
+        }
+      }
+    }
+
+    const now = new Date();
+
+    await db.runTransaction(async (transaction) => {
+      // 1. Transaction READS
+      const headerDoc = await transaction.get(headerRef);
+      if (!headerDoc.exists) {
+        return;
+      }
+
+      const stockSnapshots = new Map();
+      for (const [pId, stockRef] of stockDocsMap.entries()) {
+        const stockDoc = await transaction.get(stockRef);
+        if (stockDoc.exists) {
+          stockSnapshots.set(pId, stockDoc);
+        }
+      }
+
+      // 2. Transaction WRITES
+      // 2a. Rollback inventory balances
+      for (const item of items) {
+        const pId = (item.produk_id || '').trim();
+        const stockDoc = stockSnapshots.get(pId);
+        if (stockDoc) {
+          const current = stockDoc.data();
+          const subQty = Number(item.qty || 0);
+          const newStokTerjual = Math.max(0, Number(current.stok_terjual || 0) - subQty);
+          const stokAwal = Number(current.stok_awal || 0);
+          const stokMasuk = Number(current.stok_masuk || 0);
+          const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+
+          transaction.update(stockDoc.ref, {
+            stok_terjual: newStokTerjual,
+            stok_akhir: stokAkhir,
+            updatedAt: now,
+          });
+        }
+      }
+
+      // 2b. Delete details
+      detailsSnapshot.forEach((doc) => {
+        transaction.delete(doc.ref);
+      });
+
+      // 2c. Delete header
+      transaction.delete(headerRef);
+    });
+
     return true;
   }
 

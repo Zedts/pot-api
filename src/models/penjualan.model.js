@@ -12,6 +12,7 @@ class Penjualan {
     tanggal = null,
     total_harga = 0,
     metode_pembayaran = METODE_PEMBAYARAN.TUNAI,
+    bukti_bayar_url = null,
     bukti_qris_url = null,
     catatan = '',
     spg = null,
@@ -26,7 +27,9 @@ class Penjualan {
     this.tanggal = tanggal ? (tanggal instanceof Date ? tanggal : new Date(tanggal)) : new Date();
     this.total_harga = typeof total_harga === 'number' ? total_harga : Number(total_harga || 0);
     this.metode_pembayaran = metode_pembayaran || METODE_PEMBAYARAN.TUNAI;
-    this.bukti_qris_url = bukti_qris_url ? bukti_qris_url.trim() : null;
+    const resolvedBukti = (bukti_bayar_url || bukti_qris_url || '').trim() || null;
+    this.bukti_bayar_url = resolvedBukti;
+    this.bukti_qris_url = resolvedBukti;
     this.catatan = catatan ? catatan.trim() : '';
     this.spg = spg || null;
     this.lapak = lapak || null;
@@ -45,6 +48,7 @@ class Penjualan {
       tanggal: this.tanggal,
       total_harga: this.total_harga,
       metode_pembayaran: this.metode_pembayaran,
+      bukti_bayar_url: this.bukti_bayar_url,
       bukti_qris_url: this.bukti_qris_url,
       catatan: this.catatan,
       updatedAt: this.updatedAt || new Date(),
@@ -67,6 +71,7 @@ class Penjualan {
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       total_harga: this.total_harga,
       metode_pembayaran: this.metode_pembayaran,
+      bukti_bayar_url: this.bukti_bayar_url,
       bukti_qris_url: this.bukti_qris_url,
       catatan: this.catatan,
       spg: this.spg
@@ -96,6 +101,7 @@ class Penjualan {
     }
 
     const data = doc.data();
+    const resolvedBukti = data.bukti_bayar_url || data.bukti_qris_url || null;
     return new Penjualan({
       id: doc.id,
       spg_id: data.spg_id || '',
@@ -103,7 +109,8 @@ class Penjualan {
       tanggal: data.tanggal ? (data.tanggal.toDate ? data.tanggal.toDate() : new Date(data.tanggal)) : null,
       total_harga: data.total_harga !== undefined ? data.total_harga : 0,
       metode_pembayaran: data.metode_pembayaran || METODE_PEMBAYARAN.TUNAI,
-      bukti_qris_url: data.bukti_qris_url || null,
+      bukti_bayar_url: resolvedBukti,
+      bukti_qris_url: resolvedBukti,
       catatan: data.catatan || '',
       spg: spg,
       lapak: lapak,

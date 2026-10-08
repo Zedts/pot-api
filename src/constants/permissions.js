@@ -21,7 +21,7 @@ const PERMISSIONS = Object.freeze({
   },
   PRODUK: {
     CREATE: ADMIN_ROLES,
-    READ: ADMIN_ROLES,
+    READ: Object.freeze([...ADMIN_ROLES, ROLES.SPG]),
     UPDATE: ADMIN_ROLES,
     UPDATE_STATUS: ADMIN_ROLES,
     DELETE: ADMIN_ROLES,

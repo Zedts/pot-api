@@ -1,7 +1,8 @@
 const penjualanService = require('../services/penjualan.service');
 const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
 const { assertValidImageFile } = require('../utils/fileValidation');
-const { BadRequestError } = require('../errors/AppError');
+const { BadRequestError, ForbiddenError } = require('../errors/AppError');
+const { ROLES } = require('../constants/roles');
 
 /**
  * Penjualan Controller
@@ -27,8 +28,9 @@ class PenjualanController {
     // 2. Pre-validate image file format & magic bytes BEFORE touching Cloudinary
     let uploadRes = null;
     if (req.file) {
-      assertValidImageFile(req.file, 'bukti_qris');
-      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
+      assertValidImageFile(req.file, req.file.fieldname || 'bukti_bayar');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_bukti' });
+      req.body.bukti_bayar_url = uploadRes.secure_url;
       req.body.bukti_qris_url = uploadRes.secure_url;
     }
 
@@ -54,8 +56,15 @@ class PenjualanController {
    */
   async getAllPenjualan(req, res) {
     const { lapak_id, spg_id, tanggal, metode_pembayaran } = req.query;
+
+    // Multi-tenant isolation: SPG is strictly scoped to their assigned stall
+    let targetLapakId = lapak_id;
+    if (req.user && req.user.role === ROLES.SPG) {
+      targetLapakId = req.user.lapak_id || '__NO_LAPAK__';
+    }
+
     const list = await penjualanService.getAllPenjualan({
-      lapak_id,
+      lapak_id: targetLapakId,
       spg_id,
       tanggal,
       metode_pembayaran,
@@ -95,8 +104,9 @@ class PenjualanController {
 
     let uploadRes = null;
     if (req.file) {
-      assertValidImageFile(req.file, 'bukti_qris');
-      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
+      assertValidImageFile(req.file, req.file.fieldname || 'bukti_bayar');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_bukti' });
+      req.body.bukti_bayar_url = uploadRes.secure_url;
       req.body.bukti_qris_url = uploadRes.secure_url;
     }
 
@@ -116,27 +126,35 @@ class PenjualanController {
   }
 
   /**
-   * POST /api/v1/penjualan/:id/bukti-qris
-   * Dedicated file upload endpoint for QRIS payment proof image
+   * POST /api/v1/penjualan/:id/bukti-bayar
+   * Dedicated file upload endpoint for payment proof image (bukti bayar)
    */
-  async uploadBuktiQris(req, res) {
+  async uploadBuktiBayar(req, res) {
     const { id } = req.params;
 
     // 1. Pre-validate sales document existence BEFORE touching Cloudinary
-    await penjualanService.getPenjualanById(id);
+    const existing = await penjualanService.getPenjualanById(id);
 
-    // 2. Strict format and magic bytes validation
+    // 2. Multi-tenant check: SPG can only upload proof for sales in their assigned stall
+    if (req.user && req.user.role === ROLES.SPG) {
+      if (!req.user.lapak_id || req.user.lapak_id !== existing.lapak_id) {
+        throw new ForbiddenError('Anda hanya dapat mengunggah bukti pembayaran untuk penjualan di lapak Anda.');
+      }
+    }
+
+    // 3. Strict format and magic bytes validation
     if (!req.file || !req.file.buffer) {
       throw new BadRequestError('Valid image file is required.');
     }
-    assertValidImageFile(req.file, 'bukti_qris');
+    assertValidImageFile(req.file, req.file.fieldname || 'bukti_bayar');
 
-    // 3. Upload to Cloudinary
-    const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_qris' });
+    // 4. Upload to Cloudinary
+    const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_bukti' });
 
-    // 4. Update sales record with automatic rollback on error
+    // 5. Update sales record with automatic rollback on error
     try {
       const updated = await penjualanService.updatePenjualan(id, {
+        bukti_bayar_url: uploadRes.secure_url,
         bukti_qris_url: uploadRes.secure_url,
       });
 
@@ -151,6 +169,11 @@ class PenjualanController {
       }
       throw err;
     }
+  }
+
+  // Backwards-compatible alias for previous uploadBuktiQris
+  async uploadBuktiQris(req, res) {
+    return this.uploadBuktiBayar(req, res);
   }
 
   /**

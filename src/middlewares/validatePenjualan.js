@@ -7,7 +7,16 @@ const { validateDateField, parseDateOrDefault } = require('../utils/validators')
  * Middleware: Validate payload for creating a sales transaction
  */
 function validateCreatePenjualan(req, res, next) {
-  const { tanggal, lapak_id, spg_id, metode_pembayaran, bukti_qris_url, catatan, items } = req.body;
+  // Support stringified items array in multipart/form-data
+  if (typeof req.body.items === 'string') {
+    try {
+      req.body.items = JSON.parse(req.body.items);
+    } catch {
+      return next(new BadRequestError('Field "items" must be a valid JSON array.'));
+    }
+  }
+
+  const { tanggal, lapak_id, spg_id, metode_pembayaran, bukti_bayar_url, bukti_qris_url, catatan, items } = req.body;
   const errors = [];
 
   // 1. Validate tanggal if provided (supports "2026-09-30", ISO string, or omitted defaulting to new Date())
@@ -53,12 +62,14 @@ function validateCreatePenjualan(req, res, next) {
     }
   }
 
-  // 5. Validate bukti_qris_url if provided
-  if (bukti_qris_url !== undefined && bukti_qris_url !== null) {
-    if (typeof bukti_qris_url !== 'string' || !bukti_qris_url.trim()) {
-      errors.push('Field "bukti_qris_url" must be a valid URL string or null.');
+  // 5. Validate bukti_bayar_url / bukti_qris_url if provided
+  const rawBuktiUrl = bukti_bayar_url || bukti_qris_url;
+  if (rawBuktiUrl !== undefined && rawBuktiUrl !== null) {
+    if (typeof rawBuktiUrl !== 'string' || !rawBuktiUrl.trim()) {
+      errors.push('Field "bukti_bayar_url" must be a valid URL string or null.');
     } else {
-      req.body.bukti_qris_url = bukti_qris_url.trim();
+      req.body.bukti_bayar_url = rawBuktiUrl.trim();
+      req.body.bukti_qris_url = rawBuktiUrl.trim();
     }
   }
 
@@ -103,13 +114,15 @@ function validateCreatePenjualan(req, res, next) {
  * Middleware: Validate payload for updating sales transaction metadata
  */
 function validateUpdatePenjualan(req, res, next) {
-  const { metode_pembayaran, bukti_qris_url, catatan } = req.body;
+  const { metode_pembayaran, bukti_bayar_url, bukti_qris_url, catatan } = req.body;
   const errors = [];
 
-  if (metode_pembayaran === undefined && bukti_qris_url === undefined && catatan === undefined) {
+  const rawBukti = bukti_bayar_url !== undefined ? bukti_bayar_url : bukti_qris_url;
+
+  if (metode_pembayaran === undefined && rawBukti === undefined && catatan === undefined) {
     return next(
       new BadRequestError(
-        'At least one field (metode_pembayaran, bukti_qris_url, catatan) must be provided for update.'
+        'At least one field (metode_pembayaran, bukti_bayar_url, catatan) must be provided for update.'
       )
     );
   }
@@ -127,11 +140,12 @@ function validateUpdatePenjualan(req, res, next) {
     }
   }
 
-  if (bukti_qris_url !== undefined && bukti_qris_url !== null) {
-    if (typeof bukti_qris_url !== 'string' || !bukti_qris_url.trim()) {
-      errors.push('Field "bukti_qris_url" must be a valid URL string or null.');
+  if (rawBukti !== undefined && rawBukti !== null) {
+    if (typeof rawBukti !== 'string' || !rawBukti.trim()) {
+      errors.push('Field "bukti_bayar_url" must be a valid URL string or null.');
     } else {
-      req.body.bukti_qris_url = bukti_qris_url.trim();
+      req.body.bukti_bayar_url = rawBukti.trim();
+      req.body.bukti_qris_url = rawBukti.trim();
     }
   }
 

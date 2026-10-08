@@ -6,7 +6,7 @@ const produkRepository = require('../repositories/produk.repository');
 const userRepository = require('../repositories/user.repository');
 const stokLapakRepository = require('../repositories/stokLapak.repository');
 const { ROLES } = require('../constants/roles');
-const { BadRequestError, NotFoundError } = require('../errors/AppError');
+const { BadRequestError, NotFoundError, ForbiddenError } = require('../errors/AppError');
 
 /**
  * Penjualan Service
@@ -23,7 +23,20 @@ class PenjualanService {
   async createPenjualan(data, currentUser) {
     const { parsedTanggal, lapak_id, metode_pembayaran, bukti_qris_url, catatan, items } = data;
 
-    const targetLapakId = lapak_id || (currentUser ? currentUser.lapak_id : null);
+    // Multi-tenant check: SPG can only create sales for their assigned stall
+    if (currentUser && currentUser.role === ROLES.SPG) {
+      if (!currentUser.lapak_id) {
+        throw new ForbiddenError('Akun SPG Anda belum ditugaskan ke lapak manapun.');
+      }
+      if (lapak_id && lapak_id.trim() !== currentUser.lapak_id) {
+        throw new ForbiddenError('Anda hanya diizinkan mencatat penjualan untuk lapak tempat Anda bertugas.');
+      }
+    }
+
+    const targetLapakId = (currentUser && currentUser.role === ROLES.SPG)
+      ? currentUser.lapak_id
+      : (lapak_id ? lapak_id.trim() : null);
+
     if (!targetLapakId) {
       throw new BadRequestError('Field "lapak_id" is required.');
     }
@@ -71,13 +84,15 @@ class PenjualanService {
       : (data.spg_id ? data.spg_id.trim() : (currentUser ? currentUser.id : lapak.spg_id));
 
     // 5. Persist transaction header, details, and inventory stock atomically
+    const rawBuktiUrl = (data.bukti_bayar_url || data.bukti_qris_url || '').trim() || null;
     const { penjualan } = await penjualanRepository.createWithDetailsAndStock(
       {
         spg_id: spgId,
         lapak_id: targetLapakId,
         tanggal: parsedTanggal || new Date(),
         metode_pembayaran: metode_pembayaran,
-        bukti_qris_url: bukti_qris_url || null,
+        bukti_bayar_url: rawBuktiUrl,
+        bukti_qris_url: rawBuktiUrl,
         catatan: catatan ? catatan.trim() : '',
       },
       snapshotItems,
@@ -157,8 +172,11 @@ class PenjualanService {
     if (updateData.metode_pembayaran !== undefined) {
       payload.metode_pembayaran = updateData.metode_pembayaran.toLowerCase().trim();
     }
-    if (updateData.bukti_qris_url !== undefined) {
-      payload.bukti_qris_url = updateData.bukti_qris_url ? updateData.bukti_qris_url.trim() : null;
+    const rawBukti = updateData.bukti_bayar_url !== undefined ? updateData.bukti_bayar_url : updateData.bukti_qris_url;
+    if (rawBukti !== undefined) {
+      const normalized = rawBukti ? rawBukti.trim() : null;
+      payload.bukti_bayar_url = normalized;
+      payload.bukti_qris_url = normalized;
     }
     if (updateData.catatan !== undefined) {
       payload.catatan = typeof updateData.catatan === 'string' ? updateData.catatan.trim() : '';
@@ -185,12 +203,8 @@ class PenjualanService {
 
     const items = await penjualanDetailRepository.findByPenjualanId(id);
 
-    // Rollback inventory: decrement stok_terjual for each line item
-    for (const item of items) {
-      await stokLapakRepository.decrementStokTerjual(existing.lapak_id, item.produk_id, item.qty);
-    }
-
-    await penjualanRepository.deleteWithDetails(id);
+    // Atomically rollback stock balances and delete transaction docs in a single Firestore transaction
+    await penjualanRepository.deleteWithRollback(id, existing.lapak_id, items);
     return true;
   }
 }

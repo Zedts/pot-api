@@ -15,12 +15,29 @@ const router = Router();
 // Penjualan Endpoints (Sales Transactions)
 // =========================================================================
 
+const uploadBuktiBayarMiddleware = (req, res, next) => {
+  uploadImage.fields([
+    { name: 'bukti_bayar', maxCount: 1 },
+    { name: 'bukti_qris', maxCount: 1 },
+  ])(req, res, (err) => {
+    if (err) return next(err);
+    if (req.files) {
+      if (req.files.bukti_bayar && req.files.bukti_bayar[0]) {
+        req.file = req.files.bukti_bayar[0];
+      } else if (req.files.bukti_qris && req.files.bukti_qris[0]) {
+        req.file = req.files.bukti_qris[0];
+      }
+    }
+    next();
+  });
+};
+
 // Protected: Record new sale (SPG / Admin)
 router.post(
   '/',
   authenticate,
   authorizePermission('PENJUALAN', 'CREATE'),
-  uploadImage.single('bukti_qris'),
+  uploadBuktiBayarMiddleware,
   validateCreatePenjualan,
   asyncWrapper((req, res) => penjualanController.createPenjualan(req, res))
 );
@@ -46,18 +63,27 @@ router.put(
   '/:id',
   authenticate,
   authorizePermission('PENJUALAN', 'UPDATE'),
-  uploadImage.single('bukti_qris'),
+  uploadBuktiBayarMiddleware,
   validateUpdatePenjualan,
   asyncWrapper((req, res) => penjualanController.updatePenjualan(req, res))
 );
 
-// Protected: Upload / attach QRIS payment proof image
+// Protected: Upload / attach payment proof image (bukti bayar)
+router.post(
+  '/:id/bukti-bayar',
+  authenticate,
+  authorizePermission('PENJUALAN', 'UPLOAD_BUKTI'),
+  uploadBuktiBayarMiddleware,
+  asyncWrapper((req, res) => penjualanController.uploadBuktiBayar(req, res))
+);
+
+// Backward-compatible alias for previous /bukti-qris
 router.post(
   '/:id/bukti-qris',
   authenticate,
   authorizePermission('PENJUALAN', 'UPLOAD_BUKTI'),
-  uploadImage.single('bukti_qris'),
-  asyncWrapper((req, res) => penjualanController.uploadBuktiQris(req, res))
+  uploadBuktiBayarMiddleware,
+  asyncWrapper((req, res) => penjualanController.uploadBuktiBayar(req, res))
 );
 
 // Protected: Delete sales transaction with atomic stock rollback (Admin only)

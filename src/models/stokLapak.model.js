@@ -64,6 +64,8 @@ class StokLapak {
   toJSON() {
     return {
       id: this.id,
+      lapak_id: this.lapak_id,
+      produk_id: this.produk_id,
       stok_awal: this.stok_awal,
       stok_masuk: this.stok_masuk,
       stok_terjual: this.stok_terjual,
