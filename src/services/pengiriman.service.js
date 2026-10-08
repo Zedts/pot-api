@@ -127,15 +127,29 @@ class PengirimanService {
       return [];
     }
 
-    // Populate lapak details efficiently in single batch
+    // Populate lapak and creator details efficiently in batch
     const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
-    const lapakMap = await lapakRepository.findByIds(uniqueLapakIds);
+    const uniqueCreatorIds = [...new Set(shipments.map((s) => s.created_by).filter(Boolean))];
+
+    const [lapakMap, usersMap] = await Promise.all([
+      lapakRepository.findByIds(uniqueLapakIds),
+      userRepository.findByIds(uniqueCreatorIds),
+    ]);
     await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
     return shipments.map((s) => {
       const json = s.toJSON();
       const lapak = lapakMap.get(s.lapak_id);
+      const creator = usersMap.get(s.created_by);
       json.lapak = lapak ? lapak.toJSON() : null;
+      json.creator = creator
+        ? {
+            id: creator.id,
+            nama: creator.nama,
+            email: creator.email,
+            role: creator.role,
+          }
+        : null;
       return json;
     });
   }

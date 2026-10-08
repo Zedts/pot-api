@@ -90,6 +90,7 @@ class Pengiriman {
       unique_id: this.unique_id,
       counters_id: this.counters_id,
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
+      lapak_id: this.lapak_id,
       created_by: this.created_by,
       status: this.status,
       total_items: this.total_items,
