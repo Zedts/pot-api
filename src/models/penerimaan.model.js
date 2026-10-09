@@ -12,6 +12,7 @@ class Penerimaan {
     pengiriman_id,
     unique_id = null,
     counters_id = null,
+    lapak_id = null,
     spg_id,
     tanggal = null,
     qty_terima = 0,
@@ -24,6 +25,7 @@ class Penerimaan {
     this.id = id;
     this.pengiriman_id = pengiriman_id ? pengiriman_id.trim() : '';
     this.unique_id = unique_id ? unique_id.trim() : null;
+    this.lapak_id = lapak_id ? lapak_id.trim() : null;
 
     this.tanggal = tanggal ? (tanggal instanceof Date ? tanggal : new Date(tanggal)) : null;
     this.createdAt = createdAt;
@@ -61,6 +63,7 @@ class Penerimaan {
       pengiriman_id: this.pengiriman_id,
       unique_id: this.unique_id,
       counters_id: this.counters_id,
+      lapak_id: this.lapak_id,
       spg_id: this.spg_id,
       tanggal: this.tanggal || new Date(),
       qty_terima: this.qty_terima,
@@ -86,6 +89,7 @@ class Penerimaan {
       pengiriman_id: this.pengiriman_id,
       unique_id: this.unique_id,
       counters_id: this.counters_id,
+      lapak_id: this.lapak_id,
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       qty_terima: this.qty_terima,
       nota_url: this.nota_url,
@@ -110,6 +114,7 @@ class Penerimaan {
       pengiriman_id: data.pengiriman_id || '',
       unique_id: data.unique_id || (typeof data.pengiriman_id === 'string' && data.pengiriman_id.startsWith('#PG-') ? data.pengiriman_id : null),
       counters_id: data.counters_id || data.counter_id || null,
+      lapak_id: data.lapak_id || null,
       spg_id: data.spg_id || '',
       tanggal: data.tanggal ? (data.tanggal.toDate ? data.tanggal.toDate() : new Date(data.tanggal)) : null,
       qty_terima: Number(data.qty_terima || 0),

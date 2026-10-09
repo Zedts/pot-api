@@ -93,12 +93,7 @@ class AbsensiRepository {
       query = query.where('status', '==', filters.status.trim().toLowerCase());
     }
 
-    if (filters.limit) {
-      const limitVal = parseInt(filters.limit, 10);
-      if (!isNaN(limitVal) && limitVal > 0) {
-        query = query.limit(Math.min(limitVal, 100));
-      }
-    }
+    const limitVal = filters.limit ? parseInt(filters.limit, 10) : null;
 
     const snapshot = await query.get();
     const list = [];
@@ -125,6 +120,10 @@ class AbsensiRepository {
     };
 
     list.sort((a, b) => getRecordTime(b) - getRecordTime(a));
+
+    if (limitVal && !isNaN(limitVal) && limitVal > 0) {
+      return list.slice(0, Math.min(limitVal, 100));
+    }
 
     return list;
   }

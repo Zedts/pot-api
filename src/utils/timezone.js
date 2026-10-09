@@ -13,6 +13,9 @@ const DEFAULT_TIMEZONE = 'Asia/Jakarta';
  * @returns {string} 'YYYY-MM-DD'
  */
 function getLocalDateString(date = new Date(), timeZone = DEFAULT_TIMEZONE) {
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date.trim())) {
+    return date.trim();
+  }
   const d = date instanceof Date ? date : new Date(date);
   if (isNaN(d.getTime())) {
     return new Date().toISOString().split('T')[0];

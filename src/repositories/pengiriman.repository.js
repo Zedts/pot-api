@@ -407,6 +407,18 @@ class PengirimanRepository {
       return timeB - timeA;
     });
 
+    if (filters.tanggal) {
+      const targetDateStr = typeof filters.tanggal === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(filters.tanggal.trim())
+        ? filters.tanggal.trim()
+        : getLocalDateString(filters.tanggal);
+
+      return list.filter((p) => {
+        if (!p.tanggal) return false;
+        const pDate = p.tanggal instanceof Date ? p.tanggal : new Date(p.tanggal);
+        return getLocalDateString(pDate) === targetDateStr;
+      });
+    }
+
     return list;
   }
 

@@ -1,4 +1,5 @@
 const closingService = require('../services/closing.service');
+const { ROLES } = require('../constants/roles');
 
 /**
  * Closing Controller
@@ -24,8 +25,14 @@ class ClosingController {
    */
   async getAll(req, res) {
     const { lapak_id, spg_id, tanggal, status } = req.query;
+
+    let targetLapakId = lapak_id;
+    if (req.user && req.user.role === ROLES.SPG) {
+      targetLapakId = req.user.lapak_id || '__NO_LAPAK__';
+    }
+
     const list = await closingService.getAllClosing({
-      lapak_id,
+      lapak_id: targetLapakId,
       spg_id,
       tanggal,
       status,

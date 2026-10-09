@@ -50,7 +50,7 @@ class Closing {
 
     this.selisih_uang = selisih_uang !== null && selisih_uang !== undefined
       ? Number(selisih_uang)
-      : (this.uang_tunai_fisik - this.tunai_sistem);
+      : (this.uang_tunai_fisik - this.total_omset);
 
     this.catatan = catatan ? catatan.trim() : '';
     this.status = status || CLOSING_STATUS.PENDING;

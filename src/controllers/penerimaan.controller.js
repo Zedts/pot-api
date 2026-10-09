@@ -26,12 +26,13 @@ class PenerimaanController {
    * Retrieve all receipts with optional filters (?pengiriman_id=...&unique_id=...&counters_id=...&spg_id=...&status=...)
    */
   async getAll(req, res) {
-    const { pengiriman_id, pengirimanId, unique_id, uniqueId, counter_id, counterId, counters_id, spg_id, spgId, tanggal, status } = req.query;
+    const { pengiriman_id, pengirimanId, unique_id, uniqueId, counter_id, counterId, counters_id, spg_id, spgId, lapak_id, lapakId, tanggal, status } = req.query;
     const list = await penerimaanService.getAllPenerimaan({
       pengiriman_id: pengiriman_id || pengirimanId,
       unique_id: unique_id || uniqueId,
       counters_id: counters_id || counter_id || counterId,
       spg_id: spg_id || spgId,
+      lapak_id: lapak_id || lapakId,
       tanggal,
       status,
     });

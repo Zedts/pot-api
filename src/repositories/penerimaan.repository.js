@@ -1,5 +1,6 @@
 const { db } = require('../firebase');
 const { Penerimaan } = require('../models/penerimaan.model');
+const { getLocalDateString } = require('../utils/timezone');
 
 /**
  * Penerimaan Repository
@@ -100,6 +101,11 @@ class PenerimaanRepository {
       query = query.where('counters_id', '==', countersId.trim());
     }
 
+    const lapakId = filters.lapak_id || filters.lapakId;
+    if (lapakId) {
+      query = query.where('lapak_id', '==', lapakId.trim());
+    }
+
     const snapshot = await query.get();
     const list = [];
 
@@ -115,17 +121,10 @@ class PenerimaanRepository {
     });
 
     if (filters.tanggal) {
-      const target = filters.tanggal.trim();
+      const targetDateStr = getLocalDateString(filters.tanggal);
       return list.filter((item) => {
         if (!item.tanggal) return false;
-        if (typeof item.tanggal === 'string') {
-          return item.tanggal.startsWith(target);
-        }
-        if (item.tanggal instanceof Date) {
-          const iso = item.tanggal.toISOString();
-          return iso.startsWith(target);
-        }
-        return false;
+        return getLocalDateString(item.tanggal) === targetDateStr;
       });
     }
 
@@ -163,6 +162,7 @@ class PenerimaanRepository {
       pengiriman_id: data.pengiriman_id, // Document ID of related shipment
       unique_id: data.unique_id,         // #PG-YYYYMMDD-COUNTER from related shipment
       counters_id: data.counters_id || data.counter_id, // Foreign key to counters collection
+      lapak_id: data.lapak_id,
       spg_id: data.spg_id,
       tanggal: data.tanggal,
       qty_terima: data.qty_terima,

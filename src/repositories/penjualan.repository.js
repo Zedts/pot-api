@@ -219,12 +219,7 @@ class PenjualanRepository {
       query = query.where('metode_pembayaran', '==', filters.metode_pembayaran.trim().toLowerCase());
     }
 
-    if (filters.limit) {
-      const limitVal = parseInt(filters.limit, 10);
-      if (!isNaN(limitVal) && limitVal > 0) {
-        query = query.limit(Math.min(limitVal, 100));
-      }
-    }
+    const limitVal = filters.limit ? parseInt(filters.limit, 10) : null;
 
     const snapshot = await query.get();
     let list = [];
@@ -235,15 +230,11 @@ class PenjualanRepository {
 
     // In-memory filter for tanggal to avoid Firestore composite index requirement
     if (filters.tanggal) {
-      const parsedDate = new Date(filters.tanggal);
-      if (!isNaN(parsedDate.getTime())) {
-        const targetDateStr = getLocalDateString(parsedDate);
-        list = list.filter((p) => {
-          if (!p.tanggal) return false;
-          const pDate = p.tanggal instanceof Date ? p.tanggal : new Date(p.tanggal);
-          return getLocalDateString(pDate) === targetDateStr;
-        });
-      }
+      const targetDateStr = getLocalDateString(filters.tanggal);
+      list = list.filter((p) => {
+        if (!p.tanggal) return false;
+        return getLocalDateString(p.tanggal) === targetDateStr;
+      });
     }
 
     // Default sort by tanggal descending
@@ -252,6 +243,10 @@ class PenjualanRepository {
       const timeB = b.tanggal ? new Date(b.tanggal).getTime() : 0;
       return timeB - timeA;
     });
+
+    if (limitVal && !isNaN(limitVal) && limitVal > 0) {
+      list = list.slice(0, Math.min(limitVal, 100));
+    }
 
     return list;
   }

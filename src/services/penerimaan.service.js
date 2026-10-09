@@ -151,6 +151,7 @@ class PenerimaanService {
       pengiriman_id: shipment.id,
       unique_id: shipmentUniqueId,
       counters_id: shipment.counters_id || counterId,
+      lapak_id: shipment.lapak_id || null,
       spg_id: spgId,
       tanggal: parsedTanggal,
       qty_terima: parsedQtyTerima,
@@ -183,8 +184,22 @@ class PenerimaanService {
    * @returns {Promise<Array<Object>>}
    */
   async getAllPenerimaan(filters = {}) {
-    const receipts = await penerimaanRepository.findAll(filters);
-    return await this.enrichReceipts(receipts);
+    let receipts = await penerimaanRepository.findAll(filters);
+    // Backward-compatibility fallback: if lapak_id was queried but returned 0 (e.g. legacy receipts without lapak_id field),
+    // query without lapak_id filter and let enrichment filter by lapak
+    if (filters.lapak_id && receipts.length === 0) {
+      const { lapak_id, lapakId, ...otherFilters } = filters;
+      const allReceipts = await penerimaanRepository.findAll(otherFilters);
+      if (allReceipts.length > 0) {
+        receipts = allReceipts;
+      }
+    }
+    const enriched = await this.enrichReceipts(receipts);
+    if (filters.lapak_id) {
+      const cleanLapakId = filters.lapak_id.trim();
+      return enriched.filter((r) => r.lapak && (r.lapak.id === cleanLapakId || r.lapak.lapak_id === cleanLapakId));
+    }
+    return enriched;
   }
 
   /**

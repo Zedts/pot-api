@@ -85,7 +85,7 @@ class ClosingRepository {
 
     // In-memory filter for tanggal to avoid Firestore composite index requirement
     if (filters.tanggal) {
-      const targetDate = filters.tanggal.trim();
+      const targetDate = getLocalDateString(filters.tanggal);
       list = list.filter((c) => c.tanggal === targetDate);
     }
 

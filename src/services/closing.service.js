@@ -39,17 +39,24 @@ class ClosingService {
       throw new BadRequestError('Field "spg_id" is required.');
     }
 
-    // 3. Resolve date: strictly current date formatted to YYYY-MM-DD in Asia/Jakarta local time
-    const tanggal = getLocalDateString(new Date());
+    // 3. Resolve date: format to YYYY-MM-DD in Asia/Jakarta local time
+    const tanggal = data.tanggal ? getLocalDateString(data.tanggal) : getLocalDateString(new Date());
 
     // 4. Calculate discrepancies automatically
     const stokSistem = Number(data.stok_sistem || 0);
     const stokFisik = Number(data.stok_fisik || 0);
+    const totalOmset = Number(data.total_omset || 0);
     const tunaiSistem = Number(data.tunai_sistem || 0);
+    const qrisSistem = Number(data.qris_sistem || 0);
+    const transferSistem = Number(data.transfer_sistem || 0);
     const uangTunaiFisik = Number(data.uang_tunai_fisik || 0);
 
-    const selisihStok = stokFisik - stokSistem;
-    const selisihUang = uangTunaiFisik - tunaiSistem;
+    const selisihStok = data.selisih_stok !== undefined
+      ? Number(data.selisih_stok)
+      : (stokFisik - stokSistem);
+    const selisihUang = data.selisih_uang !== undefined
+      ? Number(data.selisih_uang)
+      : (uangTunaiFisik - totalOmset);
 
     // 5. Persist closing document
     const created = await closingRepository.create({
@@ -58,10 +65,10 @@ class ClosingService {
       tanggal,
       stok_sistem: stokSistem,
       stok_fisik: stokFisik,
-      total_omset: Number(data.total_omset || 0),
+      total_omset: totalOmset,
       tunai_sistem: tunaiSistem,
-      qris_sistem: Number(data.qris_sistem || 0),
-      transfer_sistem: Number(data.transfer_sistem || 0),
+      qris_sistem: qrisSistem,
+      transfer_sistem: transferSistem,
       uang_tunai_fisik: uangTunaiFisik,
       selisih_stok: selisihStok,
       selisih_uang: selisihUang,
@@ -161,10 +168,10 @@ class ClosingService {
     const currentStokFisik = payload.stok_fisik !== undefined ? payload.stok_fisik : existing.stok_fisik;
     payload.selisih_stok = currentStokFisik - currentStokSistem;
 
-    // Recompute selisih_uang if either cash value changed
-    const currentTunaiSistem = payload.tunai_sistem !== undefined ? payload.tunai_sistem : existing.tunai_sistem;
+    // Recompute selisih_uang if either cash or total omset changed
+    const currentTotalOmset = payload.total_omset !== undefined ? payload.total_omset : existing.total_omset;
     const currentUangTunaiFisik = payload.uang_tunai_fisik !== undefined ? payload.uang_tunai_fisik : existing.uang_tunai_fisik;
-    payload.selisih_uang = currentUangTunaiFisik - currentTunaiSistem;
+    payload.selisih_uang = currentUangTunaiFisik - currentTotalOmset;
 
     if (Object.keys(payload).length === 0) {
       return await this.getClosingById(id);
