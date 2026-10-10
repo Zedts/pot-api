@@ -1,5 +1,6 @@
 const { ABSENSI_STATUS } = require('../constants/absensiStatus');
 const { getLocalDateString } = require('../utils/timezone');
+const { normalizeStorageUrl } = require('../utils/r2');
 
 /**
  * OOP Absensi Entity
@@ -76,7 +77,7 @@ class Absensi {
       jam_masuk: this.jam_masuk ? (this.jam_masuk.toISOString ? this.jam_masuk.toISOString() : this.jam_masuk) : null,
       jam_pulang: this.jam_pulang ? (this.jam_pulang.toISOString ? this.jam_pulang.toISOString() : this.jam_pulang) : null,
       lokasi_masuk: this.lokasi_masuk,
-      foto_masuk_url: this.foto_masuk_url,
+      foto_masuk_url: normalizeStorageUrl(this.foto_masuk_url),
       status: this.status,
       keterangan: this.keterangan,
       user: this.user

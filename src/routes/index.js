@@ -16,6 +16,7 @@ const absensiRoutes = require('./absensi.routes');
 const closingRoutes = require('./closing.routes');
 const payrollRoutes = require('./payroll.routes');
 const slipGajiRoutes = require('./slipGaji.routes');
+const storageRoutes = require('./storage.routes');
 
 const router = Router();
 
@@ -78,6 +79,9 @@ router.use('/payroll', payrollRoutes);
 
 // Slip Gaji module routes (Protected with 30-day Bearer token & RBAC)
 router.use('/slip-gaji', slipGajiRoutes);
+
+// Storage module routes (Public file delivery proxy for Cloudflare R2 storage)
+router.use('/storage', storageRoutes);
 
 module.exports = router;
 

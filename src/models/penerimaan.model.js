@@ -1,4 +1,5 @@
 const { PENERIMAAN_STATUS, VALID_PENERIMAAN_STATUSES } = require('../constants/penerimaanStatus');
+const { normalizeStorageUrl } = require('../utils/r2');
 
 /**
  * OOP Penerimaan Entity
@@ -92,7 +93,7 @@ class Penerimaan {
       lapak_id: this.lapak_id,
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       qty_terima: this.qty_terima,
-      nota_url: this.nota_url,
+      nota_url: normalizeStorageUrl(this.nota_url),
       catatan: this.catatan,
       status: this.status,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,

@@ -1,4 +1,5 @@
 const { METODE_PEMBAYARAN } = require('../constants/metodePembayaran');
+const { normalizeStorageUrl } = require('../utils/r2');
 
 /**
  * OOP Penjualan Entity
@@ -71,8 +72,8 @@ class Penjualan {
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       total_harga: this.total_harga,
       metode_pembayaran: this.metode_pembayaran,
-      bukti_bayar_url: this.bukti_bayar_url,
-      bukti_qris_url: this.bukti_qris_url,
+      bukti_bayar_url: normalizeStorageUrl(this.bukti_bayar_url),
+      bukti_qris_url: normalizeStorageUrl(this.bukti_qris_url),
       catatan: this.catatan,
       spg: this.spg
         ? {

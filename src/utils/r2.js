@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
 
 /**
@@ -15,17 +15,20 @@ const r2Client = new S3Client({
 
 /**
  * Helper to construct public URL for an R2 object key
+ * Uses proxy storage endpoint by default to guarantee accessibility across all networks/ISPs
  * @param {string} key
  * @returns {string}
  */
 function getPublicUrl(key) {
-  if (process.env.R2_PUBLIC_URL && process.env.R2_PUBLIC_URL.trim()) {
+  // If an explicit custom domain R2_PUBLIC_URL is configured (and not the blocked generic r2.dev domain)
+  if (process.env.R2_PUBLIC_URL && process.env.R2_PUBLIC_URL.trim() && !process.env.R2_PUBLIC_URL.includes('.r2.dev')) {
     const base = process.env.R2_PUBLIC_URL.trim().replace(/\/$/, '');
     return `${base}/${key}`;
   }
-  const endpoint = (process.env.R2_ENDPOINT || `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`).replace(/\/$/, '');
-  const bucket = process.env.R2_BUCKET_NAME || 'pot-storage';
-  return `${endpoint}/${bucket}/${key}`;
+
+  // Route through the server's public storage streaming endpoint (supports Render automatic URL)
+  const baseUrl = (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 3000}`).trim().replace(/\/$/, '');
+  return `${baseUrl}/api/v1/storage/${key}`;
 }
 
 /**
@@ -154,9 +157,56 @@ async function deleteR2Asset(key, resourceType) {
   }
 }
 
+/**
+ * Retrieves an object stream and metadata from Cloudflare R2
+ * @param {string} key
+ * @returns {Promise<{ stream: import('stream').Readable, contentType: string, contentLength: number, etag: string, lastModified: Date }>}
+ */
+async function getObjectStream(key) {
+  const command = new GetObjectCommand({
+    Bucket: process.env.R2_BUCKET_NAME || 'pot-storage',
+    Key: key,
+  });
+
+  const response = await r2Client.send(command);
+  return {
+    stream: response.Body,
+    contentType: response.ContentType || 'application/octet-stream',
+    contentLength: response.ContentLength,
+    etag: response.ETag,
+    lastModified: response.LastModified,
+  };
+}
+
+/**
+ * Normalizes any legacy or external R2 storage URL to the working proxy URL
+ * @param {string} url
+ * @returns {string}
+ */
+function normalizeStorageUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+
+  // Match https://...r2.cloudflarestorage.com/<bucket>/<key>
+  const s3Match = url.match(/r2\.cloudflarestorage\.com\/[^/]+\/(.+)$/);
+  if (s3Match) {
+    return getPublicUrl(s3Match[1]);
+  }
+
+  // Match https://pub-...r2.dev/<key>
+  const r2DevMatch = url.match(/pub-[a-zA-Z0-9]+\.r2\.dev\/(.+)$/);
+  if (r2DevMatch) {
+    return getPublicUrl(r2DevMatch[1]);
+  }
+
+  return url;
+}
+
 module.exports = {
   r2Client,
   uploadPdfBuffer,
   uploadImageBuffer,
   deleteR2Asset,
+  getObjectStream,
+  getPublicUrl,
+  normalizeStorageUrl,
 };

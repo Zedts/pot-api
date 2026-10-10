@@ -1,4 +1,5 @@
 const { getLocalDateString } = require('../utils/timezone');
+const { normalizeStorageUrl } = require('../utils/r2');
 
 /**
  * OOP Slip Gaji Entity
@@ -50,7 +51,7 @@ class SlipGaji {
   toJSON() {
     return {
       id: this.id,
-      file_url: this.file_url,
+      file_url: normalizeStorageUrl(this.file_url),
       tanggal: this.tanggal,
       payroll: this.payroll ? (this.payroll.toJSON ? this.payroll.toJSON() : this.payroll) : null,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
