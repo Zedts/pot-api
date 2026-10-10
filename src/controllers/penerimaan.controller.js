@@ -75,7 +75,7 @@ class PenerimaanController {
 
   /**
    * POST /api/v1/penerimaan/:id/nota
-   * Upload image foto nota and attach Cloudinary URL
+   * Upload image foto nota and attach storage URL
    */
   async uploadNota(req, res) {
     const { id } = req.params;
@@ -83,7 +83,7 @@ class PenerimaanController {
     const updated = await penerimaanService.uploadNota(id, req.file.buffer);
     return res.status(200).json({
       success: true,
-      message: 'Foto nota uploaded successfully to Cloudinary.',
+      message: 'Foto nota uploaded successfully.',
       data: updated,
     });
   }

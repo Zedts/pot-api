@@ -8,14 +8,14 @@ const lapakService = require('./lapak.service');
 const { PENERIMAAN_STATUS } = require('../constants/penerimaanStatus');
 const { PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
-const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { uploadImageBuffer, deleteR2Asset } = require('../utils/r2');
 const { assertValidImageFile } = require('../utils/fileValidation');
 const { parseDateOrDefault } = require('../utils/validators');
 
 /**
  * Penerimaan Service
  * Encapsulates receipt recording, quantity comparison (qty_terima vs qty_kirim),
- * shipment lifecycle transitions, automatic stock inflow to stok_lapak, and Cloudinary PDF storage.
+ * shipment lifecycle transitions, automatic stock inflow to stok_lapak, and Cloudflare R2 file storage.
  * - pengiriman_id strictly references the pengiriman document ID.
  * - unique_id strictly references the #PG-YYYYMMDD-COUNTER unique identifier.
  * - counters_id strictly references the counters collection document ID (pengiriman_YYYYMMDD).
@@ -247,7 +247,7 @@ class PenerimaanService {
   }
 
   /**
-   * Upload PDF nota for a specific penerimaan record and store to Cloudinary
+   * Upload image nota for a specific penerimaan record and store to Cloudflare R2
    * @param {string} id
    * @param {Buffer} fileBuffer
    * @returns {Promise<Object>}
@@ -263,7 +263,7 @@ class PenerimaanService {
     const cleanIdentifier = uniqueIdentifier.replace(/[^a-zA-Z0-9_-]/g, '_');
     const publicId = `nota_${cleanIdentifier}_${Date.now()}`;
 
-    // 3. Upload to Cloudinary
+    // 3. Upload to Cloudflare R2
     const uploadResult = await uploadImageBuffer(fileBuffer, {
       folder: 'pot_nota_penerimaan',
       public_id: publicId,
@@ -276,7 +276,7 @@ class PenerimaanService {
       await penerimaanRepository.update(id, { nota_url: secureUrl });
     } catch (dbErr) {
       if (uploadResult && uploadResult.public_id) {
-        await deleteCloudinaryAsset(uploadResult.public_id, 'image');
+        await deleteR2Asset(uploadResult.public_id, 'image');
       }
       throw dbErr;
     }

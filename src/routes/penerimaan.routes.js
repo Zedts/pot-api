@@ -55,7 +55,7 @@ router.put(
   asyncWrapper((req, res) => penerimaanController.update(req, res))
 );
 
-// Upload foto nota and attach Cloudinary image URL
+// Upload foto nota and attach Cloudflare R2 image URL
 router.post(
   '/:id/nota',
   authenticate,

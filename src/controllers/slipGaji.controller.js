@@ -3,7 +3,7 @@ const { assertValidPdfFile } = require('../utils/fileValidation');
 
 /**
  * Slip Gaji Controller
- * Handles HTTP requests for salary slip document management and Cloudinary PDF uploads.
+ * Handles HTTP requests for salary slip document management and Cloudflare R2 PDF uploads.
  */
 class SlipGajiController {
   /**
@@ -54,7 +54,7 @@ class SlipGajiController {
 
   /**
    * POST /api/v1/slip-gaji/:id/file
-   * Upload PDF document to Cloudinary and auto-patch file_url & tanggal
+   * Upload PDF document to Cloudflare R2 and auto-patch file_url & tanggal
    */
   async uploadFile(req, res) {
     const { id } = req.params;

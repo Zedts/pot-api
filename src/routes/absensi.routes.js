@@ -59,7 +59,7 @@ router.put(
   asyncWrapper((req, res) => absensiController.updateAbsensi(req, res))
 );
 
-// Protected: Upload / attach attendance photo to Cloudinary
+// Protected: Upload / attach attendance photo to Cloudflare R2
 router.post(
   '/:id/foto',
   authenticate,

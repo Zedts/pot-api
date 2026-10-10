@@ -3,7 +3,7 @@ const { getLocalDateString } = require('../utils/timezone');
 /**
  * OOP Slip Gaji Entity
  * Represents the salary slip document record linked to a monthly payroll record.
- * Contains Cloudinary file URL, issue date, and relational payroll enrichment.
+ * Contains Cloudflare R2 file URL, issue date, and relational payroll enrichment.
  */
 class SlipGaji {
   constructor({

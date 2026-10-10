@@ -2,14 +2,14 @@ const slipGajiRepository = require('../repositories/slipGaji.repository');
 const payrollRepository = require('../repositories/payroll.repository');
 const userRepository = require('../repositories/user.repository');
 const payrollService = require('./payroll.service');
-const { uploadPdfBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { uploadPdfBuffer, deleteR2Asset } = require('../utils/r2');
 const { assertValidPdfFile } = require('../utils/fileValidation');
 const { getLocalDateString } = require('../utils/timezone');
 const { BadRequestError, NotFoundError } = require('../errors/AppError');
 
 /**
  * Slip Gaji Service
- * Encapsulates salary slip document management, Cloudinary PDF uploads,
+ * Encapsulates salary slip document management, Cloudflare R2 PDF uploads,
  * automatic date stamping upon file upload, and relational payroll/user enrichment.
  */
 class SlipGajiService {
@@ -102,7 +102,7 @@ class SlipGajiService {
   }
 
   /**
-   * Upload PDF document to Cloudinary and patch file_url and tanggal automatically
+   * Upload PDF document to Cloudflare R2 and patch file_url and tanggal automatically
    * @param {string} id
    * @param {Buffer} fileBuffer
    * @returns {Promise<Object>} Updated slip gaji record
@@ -119,7 +119,7 @@ class SlipGajiService {
 
     const publicId = `slip_gaji_${id}_${Date.now()}`;
 
-    // 3. Upload to Cloudinary
+    // 3. Upload to Cloudflare R2
     const uploadResult = await uploadPdfBuffer(fileBuffer, {
       folder: 'pot_slip_gaji',
       public_id: publicId,
@@ -137,7 +137,7 @@ class SlipGajiService {
       });
     } catch (dbErr) {
       if (uploadResult && uploadResult.public_id) {
-        await deleteCloudinaryAsset(uploadResult.public_id, 'raw');
+        await deleteR2Asset(uploadResult.public_id, 'raw');
       }
       throw dbErr;
     }

@@ -39,7 +39,7 @@ router.get(
   asyncWrapper((req, res) => slipGajiController.getById(req, res))
 );
 
-// Protected: Upload PDF document to Cloudinary and auto-patch file_url & tanggal
+// Protected: Upload PDF document to Cloudflare R2 and auto-patch file_url & tanggal
 router.post(
   '/:id/file',
   authenticate,

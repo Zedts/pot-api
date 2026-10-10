@@ -1,5 +1,5 @@
 const absensiService = require('../services/absensi.service');
-const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { uploadImageBuffer, deleteR2Asset } = require('../utils/r2');
 const { assertValidImageFile } = require('../utils/fileValidation');
 const { BadRequestError, ForbiddenError } = require('../errors/AppError');
 const { ADMIN_ROLES } = require('../constants/roles');
@@ -7,8 +7,8 @@ const { ADMIN_ROLES } = require('../constants/roles');
 /**
  * Absensi Controller
  * Handles HTTP requests for staff attendance and delegates to AbsensiService.
- * Safely guards against orphaned Cloudinary uploads by pre-validating formats & resources
- * and rolling back Cloudinary assets if downstream database operations fail.
+ * Safely guards against orphaned Cloudflare R2 uploads by pre-validating formats & resources
+ * and rolling back R2 assets if downstream database operations fail.
  */
 class AbsensiController {
   /**
@@ -25,7 +25,7 @@ class AbsensiController {
       }
     }
 
-    // 2. Pre-validate image file format & magic bytes BEFORE touching Cloudinary
+    // 2. Pre-validate image file format & magic bytes BEFORE touching storage
     let uploadRes = null;
     if (req.file) {
       assertValidImageFile(req.file, 'foto');
@@ -41,9 +41,9 @@ class AbsensiController {
         data: created,
       });
     } catch (err) {
-      // Rollback Cloudinary asset if attendance creation failed
+      // Rollback R2 asset if attendance creation failed
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }
@@ -124,7 +124,7 @@ class AbsensiController {
       });
     } catch (err) {
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }
@@ -137,7 +137,7 @@ class AbsensiController {
   async uploadFoto(req, res) {
     const { id } = req.params;
 
-    // 1. Pre-validate attendance document existence BEFORE touching Cloudinary
+    // 1. Pre-validate attendance document existence BEFORE touching storage
     const existing = await absensiService.getAbsensiById(id);
 
     // 2. Ownership / authorization check
@@ -154,7 +154,7 @@ class AbsensiController {
     }
     assertValidImageFile(req.file, 'foto');
 
-    // 4. Upload to Cloudinary
+    // 4. Upload to Cloudflare R2
     const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_absensi_foto' });
 
     // 5. Update attendance record with automatic rollback on error
@@ -170,7 +170,7 @@ class AbsensiController {
       });
     } catch (err) {
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }

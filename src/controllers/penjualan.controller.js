@@ -1,5 +1,5 @@
 const penjualanService = require('../services/penjualan.service');
-const { uploadImageBuffer, deleteCloudinaryAsset } = require('../utils/cloudinary');
+const { uploadImageBuffer, deleteR2Asset } = require('../utils/r2');
 const { assertValidImageFile } = require('../utils/fileValidation');
 const { BadRequestError, ForbiddenError } = require('../errors/AppError');
 const { ROLES } = require('../constants/roles');
@@ -7,8 +7,8 @@ const { ROLES } = require('../constants/roles');
 /**
  * Penjualan Controller
  * Handles HTTP requests for sales transactions and delegates to PenjualanService.
- * Safely guards against orphaned Cloudinary uploads by pre-validating formats & resources
- * and rolling back Cloudinary assets if downstream database operations fail.
+ * Safely guards against orphaned Cloudflare R2 uploads by pre-validating formats & resources
+ * and rolling back R2 assets if downstream database operations fail.
  */
 class PenjualanController {
   /**
@@ -25,7 +25,7 @@ class PenjualanController {
       }
     }
 
-    // 2. Pre-validate image file format & magic bytes BEFORE touching Cloudinary
+    // 2. Pre-validate image file format & magic bytes BEFORE touching storage
     let uploadRes = null;
     if (req.file) {
       assertValidImageFile(req.file, req.file.fieldname || 'bukti_bayar');
@@ -42,9 +42,9 @@ class PenjualanController {
         data: created,
       });
     } catch (err) {
-      // Rollback Cloudinary asset if sales creation failed
+      // Rollback R2 asset if sales creation failed
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }
@@ -119,7 +119,7 @@ class PenjualanController {
       });
     } catch (err) {
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }
@@ -132,7 +132,7 @@ class PenjualanController {
   async uploadBuktiBayar(req, res) {
     const { id } = req.params;
 
-    // 1. Pre-validate sales document existence BEFORE touching Cloudinary
+    // 1. Pre-validate sales document existence BEFORE touching storage
     const existing = await penjualanService.getPenjualanById(id);
 
     // 2. Multi-tenant check: SPG can only upload proof for sales in their assigned stall
@@ -148,7 +148,7 @@ class PenjualanController {
     }
     assertValidImageFile(req.file, req.file.fieldname || 'bukti_bayar');
 
-    // 4. Upload to Cloudinary
+    // 4. Upload to Cloudflare R2
     const uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_penjualan_bukti' });
 
     // 5. Update sales record with automatic rollback on error
@@ -165,7 +165,7 @@ class PenjualanController {
       });
     } catch (err) {
       if (uploadRes && uploadRes.public_id) {
-        await deleteCloudinaryAsset(uploadRes.public_id, 'image');
+        await deleteR2Asset(uploadRes.public_id, 'image');
       }
       throw err;
     }
