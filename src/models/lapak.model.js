@@ -1,3 +1,5 @@
+const { DEFAULT_SHIFT_HOURS, SHIFTS } = require('../constants/shifts');
+
 /**
  * OOP Lapak Entity
  * Encapsulates Lapak (stall/booth) domain properties, serialization, and business rules.
@@ -14,6 +16,8 @@ class Lapak {
     spg_id = null,
     spg = null,
     users = [],
+    shift_pagi = null,
+    shift_siang = null,
     createdAt = null,
     updatedAt = null,
   }) {
@@ -27,13 +31,19 @@ class Lapak {
     this.spg_id = spg_id || null;
     this.spg = spg ? Lapak.formatSpg(spg) : null;
     this.users = Array.isArray(users) ? users.map((u) => Lapak.formatUser(u)).filter(Boolean) : [];
+    this.shift_pagi = Array.isArray(shift_pagi) && shift_pagi.length === 2
+      ? shift_pagi
+      : [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]];
+    this.shift_siang = Array.isArray(shift_siang) && shift_siang.length === 2
+      ? shift_siang
+      : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]];
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
   /**
    * Format an SPG user object into the standardized response structure:
-   * { spg_id, nama, username, email, no_hp, status }
+   * { spg_id, nama, username, email, no_hp, shift, status }
    * @param {Object|null} user
    * @returns {Object|null}
    */
@@ -45,13 +55,14 @@ class Lapak {
       username: user.username || '',
       email: user.email || '',
       no_hp: user.no_hp || '',
+      shift: user.shift || null,
       status: user.status || '',
     };
   }
 
   /**
    * Format an assigned staff/user object for the lapak.users array:
-   * { id, nama, username, email, no_hp, role, status }
+   * { id, nama, username, email, no_hp, role, shift, status }
    * @param {Object|null} user
    * @returns {Object|null}
    */
@@ -64,6 +75,7 @@ class Lapak {
       email: user.email || '',
       no_hp: user.no_hp || '',
       role: user.role || '',
+      shift: user.shift || null,
       status: user.status || '',
     };
   }
@@ -80,6 +92,8 @@ class Lapak {
       longitude: this.longitude,
       radius_meter: this.radius_meter,
       spg_id: this.spg_id,
+      shift_pagi: this.shift_pagi,
+      shift_siang: this.shift_siang,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -104,6 +118,8 @@ class Lapak {
       radius_meter: this.radius_meter,
       spg: this.spg ? Lapak.formatSpg(this.spg) : null,
       users: Array.isArray(this.users) ? this.users : [],
+      shift_pagi: this.shift_pagi,
+      shift_siang: this.shift_siang,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
       updatedAt: this.updatedAt ? (this.updatedAt.toISOString ? this.updatedAt.toISOString() : this.updatedAt) : null,
     };
@@ -129,6 +145,8 @@ class Lapak {
       spg_id: data.spg_id || null,
       spg: spgUser,
       users: users,
+      shift_pagi: data.shift_pagi || null,
+      shift_siang: data.shift_siang || null,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
       updatedAt: data.updatedAt ? (data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt)) : null,
     });

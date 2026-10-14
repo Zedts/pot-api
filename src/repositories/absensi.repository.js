@@ -32,6 +32,7 @@ class AbsensiRepository {
       foto_masuk_url: data.foto_masuk_url || null,
       status: data.status,
       keterangan: data.keterangan || '',
+      shift_spg: data.shift_spg || null,
       createdAt: now,
       updatedAt: now,
     });
@@ -91,6 +92,10 @@ class AbsensiRepository {
 
     if (filters.status) {
       query = query.where('status', '==', filters.status.trim().toLowerCase());
+    }
+
+    if (filters.shift_spg) {
+      query = query.where('shift_spg', '==', filters.shift_spg.trim().toLowerCase());
     }
 
     const limitVal = filters.limit ? parseInt(filters.limit, 10) : null;

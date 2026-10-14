@@ -68,12 +68,13 @@ class AbsensiController {
    * Retrieve all attendance records with filtering
    */
   async getAllAbsensi(req, res) {
-    const { user_id, lapak_id, tanggal, status } = req.query;
+    const { user_id, lapak_id, tanggal, status, shift_spg } = req.query;
     const list = await absensiService.getAllAbsensi({
       user_id,
       lapak_id,
       tanggal,
       status,
+      shift_spg,
     });
 
     return res.status(200).json({

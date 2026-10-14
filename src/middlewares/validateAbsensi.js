@@ -1,4 +1,5 @@
 const { VALID_ABSENSI_STATUSES, ABSENSI_STATUS } = require('../constants/absensiStatus');
+const { VALID_SHIFTS } = require('../constants/shifts');
 const { BadRequestError } = require('../errors/AppError');
 const { validateDateField, parseDateOrDefault } = require('../utils/validators');
 
@@ -92,7 +93,7 @@ function validateClockIn(req, res, next) {
  * Middleware: Validate payload for updating attendance records
  */
 function validateUpdateAbsensi(req, res, next) {
-  const { status, lokasi_masuk, foto_masuk_url, keterangan, jam_masuk, jam_pulang, lapak_id } = req.body;
+  const { status, lokasi_masuk, foto_masuk_url, keterangan, jam_masuk, jam_pulang, lapak_id, shift_spg } = req.body;
   const errors = [];
 
   if (
@@ -102,13 +103,22 @@ function validateUpdateAbsensi(req, res, next) {
     keterangan === undefined &&
     jam_masuk === undefined &&
     jam_pulang === undefined &&
-    lapak_id === undefined
+    lapak_id === undefined &&
+    shift_spg === undefined
   ) {
     return next(
       new BadRequestError(
-        'At least one field (status, lokasi_masuk, foto_masuk_url, keterangan, jam_masuk, jam_pulang, lapak_id) must be provided.'
+        'At least one field (status, lokasi_masuk, foto_masuk_url, keterangan, jam_masuk, jam_pulang, lapak_id, shift_spg) must be provided.'
       )
     );
+  }
+
+  if (shift_spg !== undefined && shift_spg !== null) {
+    if (typeof shift_spg !== 'string' || !VALID_SHIFTS.includes(shift_spg.toLowerCase().trim())) {
+      errors.push(`Invalid shift_spg "${shift_spg}". Allowed values: ${VALID_SHIFTS.join(', ')}.`);
+    } else {
+      req.body.shift_spg = shift_spg.toLowerCase().trim();
+    }
   }
 
   if (status !== undefined) {

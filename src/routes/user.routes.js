@@ -7,6 +7,7 @@ const {
   validateUpdateUser,
   validateUpdateRole,
   validateUpdateUserLapak,
+  validateUpdateUserShift,
 } = require('../middlewares/validateUser');
 
 const router = Router();
@@ -55,6 +56,15 @@ router.patch(
   authorizePermission('USER', 'UPDATE_LAPAK'),
   validateUpdateUserLapak,
   asyncWrapper((req, res) => userController.updateUserLapak(req, res))
+);
+
+// Protected: Update user shift assignment (Admin only)
+router.patch(
+  '/:id/shift',
+  authenticate,
+  authorizePermission('USER', 'UPDATE_SHIFT'),
+  validateUpdateUserShift,
+  asyncWrapper((req, res) => userController.updateUserShift(req, res))
 );
 
 // Protected: Delete user (Admin only)

@@ -4,6 +4,7 @@ const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const { ADMIN_ROLES } = require('../constants/roles');
 const { ABSENSI_STATUS } = require('../constants/absensiStatus');
+const { SHIFTS, DEFAULT_SHIFT_HOURS } = require('../constants/shifts');
 const { parseDateOrDefault } = require('../utils/validators');
 const { getLocalDateString, getLocalTimeParts } = require('../utils/timezone');
 const { BadRequestError, NotFoundError, ConflictError, ForbiddenError } = require('../errors/AppError');
@@ -62,11 +63,31 @@ class AbsensiService {
       tanggal = getLocalDateString(jamMasuk);
     }
 
-    // 4. Calculate attendance status (08:00 WIB late cutoff)
+    // 4. Resolve shift hours and evaluate late cutoff / shift expiration
+    const userShift = (currentUser && currentUser.shift ? currentUser.shift : SHIFTS.PAGI).toLowerCase().trim();
+    const activeShiftHours = userShift === SHIFTS.SIANG
+      ? (lapak.shift_siang || DEFAULT_SHIFT_HOURS[SHIFTS.SIANG])
+      : (lapak.shift_pagi || DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]);
+
+    const [startTimeStr, endTimeStr] = activeShiftHours;
+    const [startH, startM] = startTimeStr.split(':').map(Number);
+    const [endH, endM] = endTimeStr.split(':').map(Number);
+    const shiftStartMinutes = startH * 60 + startM;
+    const shiftEndMinutes = endH * 60 + endM;
+
+    const { hour, minute } = getLocalTimeParts(jamMasuk);
+    const clockInMinutes = hour * 60 + minute;
+
+    // Disallow clock-in if scheduled shift clock-out time has already passed (recorded as null / not present)
+    if (!isIzin && clockInMinutes > shiftEndMinutes) {
+      throw new BadRequestError(
+        `Jadwal kerja untuk shift ${userShift} telah berakhir pada pukul ${endTimeStr}. Presensi masuk tidak dapat dicatat.`
+      );
+    }
+
     let finalStatus = isIzin ? ABSENSI_STATUS.IZIN : ABSENSI_STATUS.HADIR;
     if (!isIzin) {
-      const { hour, minute } = getLocalTimeParts(jamMasuk);
-      const isLate = hour > 8 || (hour === 8 && minute > 0);
+      const isLate = clockInMinutes > shiftStartMinutes;
       finalStatus = isLate ? ABSENSI_STATUS.TERLAMBAT : ABSENSI_STATUS.HADIR;
     }
 
@@ -87,6 +108,7 @@ class AbsensiService {
       foto_masuk_url: data.foto_masuk_url || null,
       status: finalStatus,
       keterangan: data.keterangan || '',
+      shift_spg: userShift,
     });
 
     return await this.getAbsensiById(created.id);
@@ -112,6 +134,10 @@ class AbsensiService {
     const isPrivileged = currentUser && ((typeof currentUser.isAdmin === 'function' && currentUser.isAdmin()) || ADMIN_ROLES.includes(currentUser.role));
     if (!isPrivileged && currentUser.id !== existing.user_id) {
       throw new ForbiddenError('You can only record clock-out for your own attendance record.');
+    }
+
+    if (existing.status === ABSENSI_STATUS.IZIN) {
+      throw new BadRequestError('Tidak dapat melakukan presensi pulang untuk kehadiran bertipe izin.');
     }
 
     if (existing.jam_pulang) {
@@ -223,6 +249,7 @@ class AbsensiService {
     }
     if (updateData.jam_masuk !== undefined) payload.jam_masuk = new Date(updateData.jam_masuk);
     if (updateData.jam_pulang !== undefined) payload.jam_pulang = updateData.jam_pulang ? new Date(updateData.jam_pulang) : null;
+    if (updateData.shift_spg !== undefined) payload.shift_spg = updateData.shift_spg ? updateData.shift_spg.toLowerCase().trim() : null;
 
     if (Object.keys(payload).length === 0) {
       return existing;

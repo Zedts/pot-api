@@ -81,6 +81,21 @@ class UserController {
   }
 
   /**
+   * PATCH /api/v1/users/:id/shift
+   * Update a user's shift assignment
+   */
+  async updateUserShift(req, res) {
+    const { id } = req.params;
+    const { shift } = req.body;
+    const updatedUser = await userService.updateUserShift(id, shift, req.user);
+    return res.status(200).json({
+      success: true,
+      message: `User shift updated successfully to '${shift}'.`,
+      data: updatedUser.toJSON(),
+    });
+  }
+
+  /**
    * DELETE /api/v1/users/:id
    * Delete a user (Admin only)
    */

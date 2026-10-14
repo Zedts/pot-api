@@ -1,5 +1,6 @@
 const { VALID_ROLES } = require('../constants/roles');
 const { VALID_STATUSES } = require('../constants/status');
+const { VALID_SHIFTS } = require('../constants/shifts');
 const { BadRequestError } = require('../errors/AppError');
 const { isValidPhone, isValidEmail } = require('../utils/validators');
 
@@ -9,7 +10,7 @@ const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,30}$/;
  * Middleware: Validate user update payload
  */
 function validateUpdateUser(req, res, next) {
-  const { nama, username, email, role, lapak_id, no_hp, password, status } = req.body;
+  const { nama, username, email, role, lapak_id, no_hp, password, status, shift } = req.body;
   const errors = [];
 
   if (
@@ -20,11 +21,12 @@ function validateUpdateUser(req, res, next) {
     lapak_id === undefined &&
     no_hp === undefined &&
     password === undefined &&
-    status === undefined
+    status === undefined &&
+    shift === undefined
   ) {
     return next(
       new BadRequestError(
-        'At least one field (nama, username, email, role, lapak_id, no_hp, password, status) must be provided for update.'
+        'At least one field (nama, username, email, role, lapak_id, no_hp, password, status, shift) must be provided for update.'
       )
     );
   }
@@ -81,6 +83,14 @@ function validateUpdateUser(req, res, next) {
     }
   }
 
+  if (shift !== undefined && shift !== null && shift !== '') {
+    if (typeof shift !== 'string' || !VALID_SHIFTS.includes(shift.toLowerCase().trim())) {
+      errors.push(`Invalid shift "${shift}". Allowed values: ${VALID_SHIFTS.join(', ')}.`);
+    } else {
+      req.body.shift = shift.toLowerCase().trim();
+    }
+  }
+
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for update user request.', errors));
   }
@@ -132,8 +142,34 @@ function validateUpdateUserLapak(req, res, next) {
   next();
 }
 
+/**
+ * Middleware: Validate user shift update payload (Dedicated endpoint)
+ */
+function validateUpdateUserShift(req, res, next) {
+  const { shift } = req.body;
+
+  if (shift === undefined || shift === null || typeof shift !== 'string') {
+    return next(
+      new BadRequestError(`Field "shift" is required and must be one of: ${VALID_SHIFTS.join(', ')}.`)
+    );
+  }
+
+  const normalizedShift = shift.toLowerCase().trim();
+  if (!VALID_SHIFTS.includes(normalizedShift)) {
+    return next(
+      new BadRequestError(
+        `Invalid shift "${shift}". Allowed values: ${VALID_SHIFTS.join(', ')}.`
+      )
+    );
+  }
+
+  req.body.shift = normalizedShift;
+  next();
+}
+
 module.exports = {
   validateUpdateUser,
   validateUpdateRole,
   validateUpdateUserLapak,
+  validateUpdateUserShift,
 };

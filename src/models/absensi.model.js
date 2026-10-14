@@ -1,4 +1,5 @@
 const { ABSENSI_STATUS } = require('../constants/absensiStatus');
+const { DEFAULT_SHIFT_HOURS, SHIFTS } = require('../constants/shifts');
 const { getLocalDateString } = require('../utils/timezone');
 const { normalizeStorageUrl } = require('../utils/r2');
 
@@ -18,6 +19,7 @@ class Absensi {
     foto_masuk_url = null,
     status = ABSENSI_STATUS.HADIR,
     keterangan = '',
+    shift_spg = null,
     user = null,
     lapak = null,
     createdAt = null,
@@ -36,6 +38,7 @@ class Absensi {
     this.foto_masuk_url = foto_masuk_url ? foto_masuk_url.trim() : null;
     this.status = status || ABSENSI_STATUS.HADIR;
     this.keterangan = keterangan ? keterangan.trim() : '';
+    this.shift_spg = shift_spg ? shift_spg.toLowerCase().trim() : null;
     this.user = user || null;
     this.lapak = lapak || null;
     this.createdAt = createdAt;
@@ -56,6 +59,7 @@ class Absensi {
       foto_masuk_url: this.foto_masuk_url ?? null,
       status: this.status || ABSENSI_STATUS.HADIR,
       keterangan: this.keterangan || '',
+      shift_spg: this.shift_spg ?? null,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -80,6 +84,14 @@ class Absensi {
       foto_masuk_url: normalizeStorageUrl(this.foto_masuk_url),
       status: this.status,
       keterangan: this.keterangan,
+      shift_spg: this.shift_spg || null,
+      shift_lapak: this.lapak
+        ? {
+            lapak_id: this.lapak.id || this.lapak_id || '',
+            shift_pagi: this.lapak.shift_pagi || [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]],
+            shift_siang: this.lapak.shift_siang || [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]],
+          }
+        : null,
       user: this.user
         ? {
             id: this.user.id || this.user.spg_id || '',
@@ -88,6 +100,7 @@ class Absensi {
             email: this.user.email || '',
             no_hp: this.user.no_hp || '',
             role: this.user.role || '',
+            shift: this.user.shift || null,
             status: this.user.status || '',
           }
         : null,
@@ -117,6 +130,7 @@ class Absensi {
       foto_masuk_url: data.foto_masuk_url || null,
       status: data.status || ABSENSI_STATUS.HADIR,
       keterangan: data.keterangan || '',
+      shift_spg: data.shift_spg || null,
       user: user,
       lapak: lapak,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,

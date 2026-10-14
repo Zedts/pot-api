@@ -13,6 +13,7 @@ class User {
     email = '',
     role = ROLES.UNASSIGNED,
     lapak_id = null,
+    shift = null,
     no_hp = '',
     password = null,
     status = STATUS.ACTIVE,
@@ -26,6 +27,7 @@ class User {
     this.email = email ? email.toLowerCase().trim() : '';
     this.role = role || ROLES.UNASSIGNED;
     this.lapak_id = lapak_id || null;
+    this.shift = shift ? shift.toLowerCase().trim() : null;
     this.no_hp = no_hp ? no_hp.trim() : '';
     this.password = password;
     this.status = status;
@@ -93,6 +95,7 @@ class User {
       email: this.email,
       role: this.role,
       lapak_id: this.lapak_id,
+      shift: this.shift || null,
       no_hp: this.no_hp,
       password: this.password,
       status: this.status,
@@ -118,6 +121,7 @@ class User {
       email: this.email,
       role: this.role,
       lapak_id: this.lapak_id,
+      shift: this.shift || null,
       no_hp: this.no_hp,
       status: this.status,
       authProvider: this.authProvider,
@@ -142,6 +146,7 @@ class User {
       email: data.email || '',
       role: data.role || ROLES.UNASSIGNED,
       lapak_id: data.lapak_id || null,
+      shift: data.shift || null,
       no_hp: data.no_hp || '',
       password: data.password || null,
       status: data.status,

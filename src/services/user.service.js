@@ -10,6 +10,7 @@ const closingRepository = require('../repositories/closing.repository');
 const payrollRepository = require('../repositories/payroll.repository');
 const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
 const { VALID_STATUSES } = require('../constants/status');
+const { VALID_SHIFTS } = require('../constants/shifts');
 const { PERMISSIONS } = require('../constants/permissions');
 const { isValidEmail } = require('../utils/validators');
 const {
@@ -168,6 +169,20 @@ class UserService {
       }
     }
 
+    if (updateData.shift !== undefined) {
+      if (updateData.shift === null || updateData.shift === '') {
+        payload.shift = null;
+      } else if (typeof updateData.shift === 'string') {
+        const cleanShift = updateData.shift.toLowerCase().trim();
+        if (!VALID_SHIFTS.includes(cleanShift)) {
+          throw new BadRequestError(`Invalid shift '${updateData.shift}'. Allowed shifts are: ${VALID_SHIFTS.join(', ')}.`);
+        }
+        payload.shift = cleanShift;
+      } else {
+        throw new BadRequestError(`Field "shift" must be a string or null. Allowed values: ${VALID_SHIFTS.join(', ')}.`);
+      }
+    }
+
     if (updateData.no_hp !== undefined) {
       const cleanedPhone = updateData.no_hp.trim();
       if (cleanedPhone !== existingUser.no_hp) {
@@ -246,6 +261,17 @@ class UserService {
    */
   async updateUserLapak(id, lapakId, currentUser) {
     return await this.updateUser(id, { lapak_id: lapakId }, currentUser);
+  }
+
+  /**
+   * Update user shift assignment specifically (Dedicated operation)
+   * @param {string} id Target user ID
+   * @param {string} shift New shift ('pagi' or 'siang')
+   * @param {Object} currentUser Authenticated caller context
+   * @returns {Promise<User>}
+   */
+  async updateUserShift(id, shift, currentUser) {
+    return await this.updateUser(id, { shift }, currentUser);
   }
 
   /**

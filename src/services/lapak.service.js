@@ -7,6 +7,7 @@ const penjualanRepository = require('../repositories/penjualan.repository');
 const absensiRepository = require('../repositories/absensi.repository');
 const closingRepository = require('../repositories/closing.repository');
 const { ROLES } = require('../constants/roles');
+const { DEFAULT_SHIFT_HOURS, SHIFTS } = require('../constants/shifts');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
 /**
@@ -44,7 +45,17 @@ class LapakService {
    * @param {Object} data { nama, lokasi, keterangan, spg_id }
    * @returns {Promise<Lapak>}
    */
-  async createLapak({ nama, lokasi, keterangan = '', spg_id = null, latitude = null, longitude = null, radius_meter = 25 }) {
+  async createLapak({
+    nama,
+    lokasi,
+    keterangan = '',
+    spg_id = null,
+    latitude = null,
+    longitude = null,
+    radius_meter = 25,
+    shift_pagi = null,
+    shift_siang = null,
+  }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
     }
@@ -74,6 +85,8 @@ class LapakService {
       longitude: longitude !== null && longitude !== undefined ? Number(longitude) : null,
       radius_meter: radius_meter !== null && radius_meter !== undefined ? Math.max(1, Number(radius_meter)) : 25,
       spg_id: cleanSpgId,
+      shift_pagi: Array.isArray(shift_pagi) && shift_pagi.length === 2 ? shift_pagi : [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]],
+      shift_siang: Array.isArray(shift_siang) && shift_siang.length === 2 ? shift_siang : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]],
     });
 
     // Bidirectional sync: assign lapak_id on target user
@@ -186,6 +199,18 @@ class LapakService {
 
     if (updateData.radius_meter !== undefined) {
       payload.radius_meter = updateData.radius_meter !== null ? Math.max(1, Number(updateData.radius_meter)) : 25;
+    }
+
+    if (updateData.shift_pagi !== undefined) {
+      payload.shift_pagi = Array.isArray(updateData.shift_pagi) && updateData.shift_pagi.length === 2
+        ? updateData.shift_pagi
+        : [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]];
+    }
+
+    if (updateData.shift_siang !== undefined) {
+      payload.shift_siang = Array.isArray(updateData.shift_siang) && updateData.shift_siang.length === 2
+        ? updateData.shift_siang
+        : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]];
     }
 
     if (Object.keys(payload).length === 0) {

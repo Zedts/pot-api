@@ -3,7 +3,7 @@ const lapakController = require('../controllers/lapak.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const { authorizePermission } = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
-const { validateCreateLapak, validateUpdateLapak } = require('../middlewares/validateLapak');
+const { validateCreateLapak, validateUpdateLapak, validateUpdateLapakShift } = require('../middlewares/validateLapak');
 
 const router = Router();
 
@@ -37,12 +37,21 @@ router.get(
   asyncWrapper((req, res) => lapakController.getById(req, res))
 );
 
-// Update lapak by ID
+// Update lapak by ID (Full or partial update including shift hours)
 router.put(
   '/:id',
   authenticate,
   authorizePermission('LAPAK', 'UPDATE'),
   validateUpdateLapak,
+  asyncWrapper((req, res) => lapakController.update(req, res))
+);
+
+// Update lapak shift hours specifically
+router.patch(
+  '/:id/shift',
+  authenticate,
+  authorizePermission('LAPAK', 'UPDATE_SHIFT'),
+  validateUpdateLapakShift,
   asyncWrapper((req, res) => lapakController.update(req, res))
 );
 

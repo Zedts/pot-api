@@ -35,6 +35,37 @@ function validateCoordinateFields(body, errors) {
   }
 }
 
+const TIME_REGEX = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+function validateShiftHours(fieldName, value, errors) {
+  if (value === undefined || value === null) return;
+  if (!Array.isArray(value) || value.length !== 2) {
+    errors.push(`Field "${fieldName}" must be an array of exactly 2 time strings: ["HH:mm", "HH:mm"].`);
+    return;
+  }
+  const [start, end] = value;
+  const isStartValid = typeof start === 'string' && TIME_REGEX.test(start.trim());
+  const isEndValid = typeof end === 'string' && TIME_REGEX.test(end.trim());
+
+  if (!isStartValid) {
+    errors.push(`Start time in "${fieldName}" must be in "HH:mm" 24-hour format (e.g. "08:00").`);
+  }
+  if (!isEndValid) {
+    errors.push(`End time in "${fieldName}" must be in "HH:mm" 24-hour format (e.g. "16:00").`);
+  }
+
+  if (isStartValid && isEndValid) {
+    const [startH, startM] = start.trim().split(':').map(Number);
+    const [endH, endM] = end.trim().split(':').map(Number);
+    const startMinutes = startH * 60 + startM;
+    const endMinutes = endH * 60 + endM;
+
+    if (startMinutes >= endMinutes) {
+      errors.push(`Start time ("${start}") must be earlier than end time ("${end}") in "${fieldName}".`);
+    }
+  }
+}
+
 /**
  * Middleware: Validate lapak creation payload
  */
@@ -63,6 +94,8 @@ function validateCreateLapak(req, res, next) {
   }
 
   validateCoordinateFields(req.body, errors);
+  validateShiftHours('shift_pagi', req.body.shift_pagi, errors);
+  validateShiftHours('shift_siang', req.body.shift_siang, errors);
 
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for create lapak request.', errors));
@@ -75,7 +108,7 @@ function validateCreateLapak(req, res, next) {
  * Middleware: Validate lapak update payload
  */
 function validateUpdateLapak(req, res, next) {
-  const { nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter } = req.body;
+  const { nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang } = req.body;
   const errors = [];
 
   if (
@@ -85,11 +118,13 @@ function validateUpdateLapak(req, res, next) {
     spg_id === undefined &&
     latitude === undefined &&
     longitude === undefined &&
-    radius_meter === undefined
+    radius_meter === undefined &&
+    shift_pagi === undefined &&
+    shift_siang === undefined
   ) {
     return next(
       new BadRequestError(
-        'At least one field (nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter) must be provided for update.'
+        'At least one field (nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang) must be provided for update.'
       )
     );
   }
@@ -115,6 +150,8 @@ function validateUpdateLapak(req, res, next) {
   }
 
   validateCoordinateFields(req.body, errors);
+  validateShiftHours('shift_pagi', shift_pagi, errors);
+  validateShiftHours('shift_siang', shift_siang, errors);
 
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for update lapak request.', errors));
@@ -123,7 +160,36 @@ function validateUpdateLapak(req, res, next) {
   next();
 }
 
+/**
+ * Middleware: Validate lapak shift hours update payload
+ */
+function validateUpdateLapakShift(req, res, next) {
+  const { shift_pagi, shift_siang } = req.body;
+  const errors = [];
+
+  if (shift_pagi === undefined && shift_siang === undefined) {
+    return next(
+      new BadRequestError('At least one field ("shift_pagi" or "shift_siang") must be provided.')
+    );
+  }
+
+  if (shift_pagi !== undefined) {
+    validateShiftHours('shift_pagi', shift_pagi, errors);
+  }
+
+  if (shift_siang !== undefined) {
+    validateShiftHours('shift_siang', shift_siang, errors);
+  }
+
+  if (errors.length > 0) {
+    return next(new BadRequestError('Validation failed for lapak shift hours update.', errors));
+  }
+
+  next();
+}
+
 module.exports = {
   validateCreateLapak,
   validateUpdateLapak,
+  validateUpdateLapakShift,
 };
