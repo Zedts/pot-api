@@ -6,7 +6,8 @@ const stokLapakRepository = require('../repositories/stokLapak.repository');
 const penjualanRepository = require('../repositories/penjualan.repository');
 const absensiRepository = require('../repositories/absensi.repository');
 const closingRepository = require('../repositories/closing.repository');
-const { ROLES } = require('../constants/roles');
+const { ROLES, ADMIN_ROLES } = require('../constants/roles');
+const VALID_ASSIGNEE_ROLES = [ROLES.SPG, ...ADMIN_ROLES];
 const { DEFAULT_SHIFT_HOURS, SHIFTS } = require('../constants/shifts');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 
@@ -32,10 +33,14 @@ class LapakService {
     ]);
 
     return lapakList.map((lapak) => {
-      const spgUser = lapak.spg_id ? usersMap.get(lapak.spg_id) : null;
-      lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
       const assignedUsers = lapakUsersMap.get(lapak.id) || [];
-      lapak.users = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
+      const formattedUsers = assignedUsers.map((u) => Lapak.formatUser(u)).filter(Boolean);
+      const spgUser = lapak.spg_id ? usersMap.get(lapak.spg_id) : null;
+      if (spgUser && !formattedUsers.some((u) => u.id === spgUser.id)) {
+        formattedUsers.unshift(Lapak.formatUser(spgUser));
+      }
+      lapak.users = formattedUsers;
+      lapak.spg = formattedUsers;
       return lapak;
     });
   }
@@ -72,8 +77,8 @@ class LapakService {
       if (!spgUser) {
         throw new NotFoundError(`User with ID '${cleanSpgId}' was not found.`);
       }
-      if (spgUser.role !== ROLES.SPG) {
-        throw new BadRequestError(`Assigned user must have the 'spg' role. User '${spgUser.nama}' has role '${spgUser.role}'.`);
+      if (!VALID_ASSIGNEE_ROLES.includes(spgUser.role)) {
+        throw new BadRequestError(`Pengguna yang ditugaskan harus memiliki role SPG, Admin, atau Owner. Pengguna '${spgUser.nama}' memiliki role '${spgUser.role}'.`);
       }
     }
 
@@ -100,8 +105,9 @@ class LapakService {
       await userRepository.update(cleanSpgId, { lapak_id: newLapak.id });
     }
 
-    newLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-    newLapak.users = spgUser ? [Lapak.formatUser(spgUser)] : [];
+    const assigned = spgUser ? [Lapak.formatUser(spgUser)] : [];
+    newLapak.spg = assigned;
+    newLapak.users = assigned;
     return newLapak;
   }
 
@@ -134,8 +140,12 @@ class LapakService {
       userRepository.findByLapakId(id),
     ]);
 
-    lapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-    lapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
+    const formattedUsers = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
+    if (spgUser && !formattedUsers.some((u) => u.id === (spgUser.id || spgUser.spg_id))) {
+      formattedUsers.unshift(Lapak.formatUser(spgUser));
+    }
+    lapak.users = formattedUsers;
+    lapak.spg = formattedUsers;
 
     return lapak;
   }
@@ -179,9 +189,9 @@ class LapakService {
           if (!spgUser) {
             throw new NotFoundError(`User with ID '${cleanSpgId}' was not found.`);
           }
-          if (spgUser.role !== ROLES.SPG) {
+          if (!VALID_ASSIGNEE_ROLES.includes(spgUser.role)) {
             throw new BadRequestError(
-              `Assigned user must have the 'spg' role. User '${spgUser.nama}' has role '${spgUser.role}'.`
+              `Pengguna yang ditugaskan harus memiliki role SPG, Admin, atau Owner. Pengguna '${spgUser.nama}' memiliki role '${spgUser.role}'.`
             );
           }
         }
@@ -252,8 +262,12 @@ class LapakService {
       updatedLapak.spg_id ? userRepository.findById(updatedLapak.spg_id) : null,
       userRepository.findByLapakId(id),
     ]);
-    updatedLapak.spg = spgUser ? Lapak.formatSpg(spgUser) : null;
-    updatedLapak.users = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
+    const formattedUsers = (assignedUsers || []).map((u) => Lapak.formatUser(u)).filter(Boolean);
+    if (spgUser && !formattedUsers.some((u) => u.id === (spgUser.id || spgUser.spg_id))) {
+      formattedUsers.unshift(Lapak.formatUser(spgUser));
+    }
+    updatedLapak.users = formattedUsers;
+    updatedLapak.spg = formattedUsers;
 
     return updatedLapak;
   }

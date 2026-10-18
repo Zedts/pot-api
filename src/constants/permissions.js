@@ -1,4 +1,4 @@
-const { ROLES, ADMIN_ROLES } = require('./roles');
+const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('./roles');
 
 /**
  * Granular Permission Matrix for Resources and Operations
@@ -8,7 +8,7 @@ const { ROLES, ADMIN_ROLES } = require('./roles');
  */
 const PERMISSIONS = Object.freeze({
   USER: {
-    READ: ADMIN_ROLES,
+    READ: VALID_ROLES,
     UPDATE_ROLE: ADMIN_ROLES,
     UPDATE_LAPAK: ADMIN_ROLES,
     UPDATE_SHIFT: ADMIN_ROLES,

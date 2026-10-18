@@ -116,8 +116,9 @@ class Lapak {
       latitude: this.latitude,
       longitude: this.longitude,
       radius_meter: this.radius_meter,
-      spg: this.spg ? Lapak.formatSpg(this.spg) : null,
-      users: Array.isArray(this.users) ? this.users : [],
+      spg: Array.isArray(this.users) && this.users.length > 0
+        ? this.users
+        : (Array.isArray(this.spg) ? this.spg : (this.spg ? [Lapak.formatSpg(this.spg)] : [])),
       shift_pagi: this.shift_pagi,
       shift_siang: this.shift_siang,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,

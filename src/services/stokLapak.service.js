@@ -108,7 +108,7 @@ class StokLapakService {
     const existing = await stokLapakRepository.findByLapakAndProduk(cleanLapakId, cleanProdukId);
     if (existing) {
       throw new ConflictError(
-        `Stock tracking for Lapak '${cleanLapakId}' and Produk '${cleanProdukId}' already exists.`
+        `Pencatatan stok untuk Lapak "${lapak.nama}" dan Produk "${produk.nama}" sudah terdaftar di sistem.`
       );
     }
 
