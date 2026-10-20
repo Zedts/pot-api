@@ -21,9 +21,13 @@ class PengirimanService {
    * @param {Object} currentUser Authenticated user from auth middleware
    * @returns {Promise<Object>} Created shipment with populated lapak and items
    */
-  async createPengiriman({ tanggal, lapak_id, items }, currentUser) {
+  async createPengiriman({ tanggal, lapak_id, pengirim_id, items }, currentUser) {
     if (!lapak_id || typeof lapak_id !== 'string' || !lapak_id.trim()) {
       throw new BadRequestError('Field "lapak_id" is required.');
+    }
+
+    if (!pengirim_id || typeof pengirim_id !== 'string' || !pengirim_id.trim()) {
+      throw new BadRequestError('Field "pengirim_id" is required.');
     }
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -31,11 +35,20 @@ class PengirimanService {
     }
 
     const trimmedLapakId = lapak_id.trim();
+    const trimmedPengirimId = pengirim_id.trim();
 
-    // 1. Verify lapak existence
-    const lapak = await lapakRepository.findById(trimmedLapakId);
+    // 1. Verify lapak existence and pengirim existence in parallel
+    const [lapak, pengirimUser] = await Promise.all([
+      lapakRepository.findById(trimmedLapakId),
+      userRepository.findById(trimmedPengirimId),
+    ]);
+
     if (!lapak) {
       throw new NotFoundError(`Lapak with ID '${trimmedLapakId}' does not exist.`);
+    }
+
+    if (!pengirimUser) {
+      throw new NotFoundError(`Pengirim user with ID '${trimmedPengirimId}' does not exist.`);
     }
 
     // 2. Validate and parse tanggal (defaults to now if omitted or empty)
@@ -94,6 +107,7 @@ class PengirimanService {
         tanggal: parsedTanggal,
         lapak_id: trimmedLapakId,
         created_by: createdBy,
+        pengirim_id: trimmedPengirimId,
         status: PENGIRIMAN_STATUS.DRAFT,
       },
       snapshotItems
@@ -112,6 +126,14 @@ class PengirimanService {
             role: currentUser.role,
           }
         : null,
+      pengirim: {
+        id: pengirimUser.id,
+        nama: pengirimUser.nama,
+        username: pengirimUser.username,
+        email: pengirimUser.email,
+        role: pengirimUser.role,
+        no_hp: pengirimUser.no_hp,
+      },
       items: createdDetails.map((d) => d.toJSON()),
     };
   }
@@ -127,13 +149,15 @@ class PengirimanService {
       return [];
     }
 
-    // Populate lapak and creator details efficiently in batch
+    // Populate lapak, creator, and pengirim details efficiently in batch
     const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
     const uniqueCreatorIds = [...new Set(shipments.map((s) => s.created_by).filter(Boolean))];
+    const uniquePengirimIds = [...new Set(shipments.map((s) => s.pengirim_id).filter(Boolean))];
+    const allUserIds = [...new Set([...uniqueCreatorIds, ...uniquePengirimIds])];
 
     const [lapakMap, usersMap] = await Promise.all([
       lapakRepository.findByIds(uniqueLapakIds),
-      userRepository.findByIds(uniqueCreatorIds),
+      userRepository.findByIds(allUserIds),
     ]);
     await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
@@ -141,6 +165,8 @@ class PengirimanService {
       const json = s.toJSON();
       const lapak = lapakMap.get(s.lapak_id);
       const creator = usersMap.get(s.created_by);
+      const pengirimUser = s.pengirim_id ? usersMap.get(s.pengirim_id) : creator;
+
       json.lapak = lapak ? lapak.toJSON() : null;
       json.creator = creator
         ? {
@@ -150,12 +176,23 @@ class PengirimanService {
             role: creator.role,
           }
         : null;
+      json.pengirim = pengirimUser
+        ? {
+            id: pengirimUser.id,
+            nama: pengirimUser.nama,
+            username: pengirimUser.username,
+            email: pengirimUser.email,
+            role: pengirimUser.role,
+            no_hp: pengirimUser.no_hp,
+          }
+        : (json.creator ? { ...json.creator } : null);
+
       return json;
     });
   }
 
   /**
-   * Retrieve single shipment by ID with populated lapak, creator, and items
+   * Retrieve single shipment by ID with populated lapak, creator, pengirim, and items
    * @param {string} id
    * @returns {Promise<Object>}
    */
@@ -169,11 +206,14 @@ class PengirimanService {
       throw new NotFoundError(`Shipment with ID '${id}' was not found.`);
     }
 
-    const [items, lapak, creator] = await Promise.all([
+    const [items, lapak, creator, pengirimUser] = await Promise.all([
       pengirimanDetailRepository.findByPengirimanId(id),
       shipment.lapak_id ? lapakService.getLapakById(shipment.lapak_id) : null,
       shipment.created_by ? userRepository.findById(shipment.created_by) : null,
+      shipment.pengirim_id ? userRepository.findById(shipment.pengirim_id) : null,
     ]);
+
+    const resolvedPengirim = pengirimUser || creator;
 
     return {
       ...shipment.toJSON(),
@@ -186,12 +226,22 @@ class PengirimanService {
             role: creator.role,
           }
         : null,
+      pengirim: resolvedPengirim
+        ? {
+            id: resolvedPengirim.id,
+            nama: resolvedPengirim.nama,
+            username: resolvedPengirim.username,
+            email: resolvedPengirim.email,
+            role: resolvedPengirim.role,
+            no_hp: resolvedPengirim.no_hp,
+          }
+        : null,
       items: items.map((i) => i.toJSON()),
     };
   }
 
   /**
-   * Update shipment metadata (lapak_id, tanggal)
+   * Update shipment metadata (lapak_id, tanggal, pengirim_id)
    * @param {string} id
    * @param {Object} updateData
    * @returns {Promise<Object>}
@@ -213,6 +263,20 @@ class PengirimanService {
       }
 
       payload.lapak_id = trimmedLapakId;
+    }
+
+    if (updateData.pengirim_id !== undefined) {
+      if (!updateData.pengirim_id || typeof updateData.pengirim_id !== 'string' || !updateData.pengirim_id.trim()) {
+        throw new BadRequestError('Field "pengirim_id" cannot be empty.');
+      }
+
+      const trimmedPengirimId = updateData.pengirim_id.trim();
+      const pengirimUser = await userRepository.findById(trimmedPengirimId);
+      if (!pengirimUser) {
+        throw new NotFoundError(`Pengirim user with ID '${trimmedPengirimId}' does not exist.`);
+      }
+
+      payload.pengirim_id = trimmedPengirimId;
     }
 
     if (updateData.tanggal !== undefined) {

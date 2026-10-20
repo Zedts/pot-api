@@ -31,15 +31,19 @@ class PenerimaanService {
 
     const spgIds = [...new Set(receipts.map((r) => r.spg_id).filter(Boolean))];
     const shipmentDocIds = [...new Set(receipts.map((r) => r.pengiriman_id).filter(Boolean))];
-    const [usersMap, shipmentsMap] = await Promise.all([
-      userRepository.findByIds(spgIds),
-      pengirimanRepository.findByIds(shipmentDocIds),
-    ]);
+    const shipmentsMap = await pengirimanRepository.findByIds(shipmentDocIds);
 
-    const lapakIds = [
-      ...new Set(Array.from(shipmentsMap.values()).map((s) => s.lapak_id).filter(Boolean)),
-    ];
-    const lapakMap = await lapakRepository.findByIds(lapakIds);
+    const shipmentList = Array.from(shipmentsMap.values());
+    const pengirimIds = shipmentList.map((s) => s.pengirim_id).filter(Boolean);
+    const creatorIds = shipmentList.map((s) => s.created_by).filter(Boolean);
+    const allUserIds = [...new Set([...spgIds, ...pengirimIds, ...creatorIds])];
+
+    const [usersMap, lapakMap] = await Promise.all([
+      userRepository.findByIds(allUserIds),
+      lapakRepository.findByIds([
+        ...new Set(shipmentList.map((s) => s.lapak_id).filter(Boolean)),
+      ]),
+    ]);
     await lapakService.enrichLapakList(Array.from(lapakMap.values()));
 
     return receipts.map((r) => {
@@ -47,6 +51,9 @@ class PenerimaanService {
       const spgUser = usersMap.get(r.spg_id);
       const shipment = shipmentsMap.get(r.pengiriman_id);
       const lapak = shipment ? lapakMap.get(shipment.lapak_id) : null;
+      const pengirimUser = shipment
+        ? (shipment.pengirim_id ? usersMap.get(shipment.pengirim_id) : usersMap.get(shipment.created_by))
+        : null;
 
       json.spg = spgUser
         ? {
@@ -65,6 +72,16 @@ class PenerimaanService {
             status: shipment.status,
             qty_kirim: shipment.qty_kirim,
             total_items: shipment.total_items,
+            pengirim: pengirimUser
+              ? {
+                  id: pengirimUser.id,
+                  nama: pengirimUser.nama,
+                  username: pengirimUser.username,
+                  email: pengirimUser.email,
+                  role: pengirimUser.role,
+                  no_hp: pengirimUser.no_hp,
+                }
+              : null,
           }
         : null;
 

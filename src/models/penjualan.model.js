@@ -16,6 +16,8 @@ class Penjualan {
     bukti_bayar_url = null,
     bukti_qris_url = null,
     catatan = '',
+    kembalian_disimpan = 0,
+    keep_changes = 0,
     spg = null,
     lapak = null,
     items = [],
@@ -32,6 +34,11 @@ class Penjualan {
     this.bukti_bayar_url = resolvedBukti;
     this.bukti_qris_url = resolvedBukti;
     this.catatan = catatan ? catatan.trim() : '';
+    this.kembalian_disimpan = Number(
+      kembalian_disimpan !== undefined && kembalian_disimpan !== null
+        ? kembalian_disimpan
+        : (keep_changes || 0)
+    );
     this.spg = spg || null;
     this.lapak = lapak || null;
     this.items = Array.isArray(items) ? items : [];
@@ -52,6 +59,8 @@ class Penjualan {
       bukti_bayar_url: this.bukti_bayar_url,
       bukti_qris_url: this.bukti_qris_url,
       catatan: this.catatan,
+      kembalian_disimpan: this.kembalian_disimpan,
+      keep_changes: this.kembalian_disimpan,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -75,6 +84,8 @@ class Penjualan {
       bukti_bayar_url: normalizeStorageUrl(this.bukti_bayar_url),
       bukti_qris_url: normalizeStorageUrl(this.bukti_qris_url),
       catatan: this.catatan,
+      kembalian_disimpan: this.kembalian_disimpan,
+      keep_changes: this.kembalian_disimpan,
       spg: this.spg
         ? {
             id: this.spg.id || this.spg.spg_id || '',
@@ -103,6 +114,8 @@ class Penjualan {
 
     const data = doc.data();
     const resolvedBukti = data.bukti_bayar_url || data.bukti_qris_url || null;
+    const rawKembalian = data.kembalian_disimpan !== undefined ? data.kembalian_disimpan : (data.keep_changes || 0);
+
     return new Penjualan({
       id: doc.id,
       spg_id: data.spg_id || '',
@@ -113,6 +126,8 @@ class Penjualan {
       bukti_bayar_url: resolvedBukti,
       bukti_qris_url: resolvedBukti,
       catatan: data.catatan || '',
+      kembalian_disimpan: rawKembalian,
+      keep_changes: rawKembalian,
       spg: spg,
       lapak: lapak,
       items: items,

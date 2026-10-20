@@ -319,6 +319,13 @@ class UserService {
       );
     }
 
+    const referencingCourierCount = await pengirimanRepository.countByPengirimId(id);
+    if (referencingCourierCount > 0) {
+      throw new ConflictError(
+        `Cannot delete user: this user is assigned as courier for ${referencingCourierCount} shipment record(s). Please reassign or delete the associated shipments first.`
+      );
+    }
+
     const referencingReceiptsCount = await penerimaanRepository.countBySpgId(id);
     if (referencingReceiptsCount > 0) {
       throw new ConflictError(

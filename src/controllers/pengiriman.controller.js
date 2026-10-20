@@ -23,11 +23,12 @@ class PengirimanController {
    * Retrieve all shipments with optional filters (?status=...&lapak_id=...)
    */
   async getAll(req, res) {
-    const { status, lapak_id, lapakId, created_by, createdBy } = req.query;
+    const { status, lapak_id, lapakId, created_by, createdBy, pengirim_id, pengirimId } = req.query;
     const list = await pengirimanService.getAllPengiriman({
       status,
       lapak_id: lapak_id || lapakId,
       created_by: created_by || createdBy,
+      pengirim_id: pengirim_id || pengirimId,
     });
 
     return res.status(200).json({

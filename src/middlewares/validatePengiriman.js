@@ -6,11 +6,15 @@ const { validateDateField } = require('../utils/validators');
  * Middleware: Validate shipment creation payload
  */
 function validateCreatePengiriman(req, res, next) {
-  const { lapak_id, tanggal, items } = req.body;
+  const { lapak_id, tanggal, pengirim_id, items } = req.body;
   const errors = [];
 
   if (!lapak_id || typeof lapak_id !== 'string' || !lapak_id.trim()) {
     errors.push('Field "lapak_id" is required and cannot be empty.');
+  }
+
+  if (!pengirim_id || typeof pengirim_id !== 'string' || !pengirim_id.trim()) {
+    errors.push('Field "pengirim_id" is required and cannot be empty.');
   }
 
   if (tanggal !== undefined && tanggal !== null) {
@@ -55,15 +59,19 @@ function validateCreatePengiriman(req, res, next) {
  * Middleware: Validate shipment metadata update payload
  */
 function validateUpdatePengiriman(req, res, next) {
-  const { lapak_id, tanggal, status } = req.body;
+  const { lapak_id, tanggal, pengirim_id, status } = req.body;
   const errors = [];
 
-  if (lapak_id === undefined && tanggal === undefined && status === undefined) {
-    return next(new BadRequestError('At least one field (lapak_id, tanggal, status) must be provided for update.'));
+  if (lapak_id === undefined && tanggal === undefined && pengirim_id === undefined && status === undefined) {
+    return next(new BadRequestError('At least one field (lapak_id, tanggal, pengirim_id, status) must be provided for update.'));
   }
 
   if (lapak_id !== undefined && (typeof lapak_id !== 'string' || !lapak_id.trim())) {
     errors.push('Field "lapak_id" cannot be empty.');
+  }
+
+  if (pengirim_id !== undefined && (typeof pengirim_id !== 'string' || !pengirim_id.trim())) {
+    errors.push('Field "pengirim_id" cannot be empty.');
   }
 
   if (tanggal !== undefined && tanggal !== null) {

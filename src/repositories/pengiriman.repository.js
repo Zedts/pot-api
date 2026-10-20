@@ -176,6 +176,7 @@ class PengirimanRepository {
       tanggal: pengirimanData.tanggal || now,
       lapak_id: pengirimanData.lapak_id.trim(),
       created_by: pengirimanData.created_by.trim(),
+      pengirim_id: pengirimanData.pengirim_id ? pengirimanData.pengirim_id.trim() : null,
       status: pengirimanData.status || PENGIRIMAN_STATUS.DRAFT,
       total_items: itemsData.length,
       qty_kirim: calculatedQtyKirim,
@@ -323,6 +324,18 @@ class PengirimanRepository {
   }
 
   /**
+   * Count how many shipments reference a specific pengirim_id user ID (courier/dispatcher)
+   * Used for referential integrity enforcement on user deletion
+   * @param {string} userId
+   * @returns {Promise<number>}
+   */
+  async countByPengirimId(userId) {
+    if (!userId) return 0;
+    const snap = await this.collection.where('pengirim_id', '==', userId.trim()).count().get();
+    return snap.data().count;
+  }
+
+  /**
    * Count how many shipments reference a specific counter document
    * Used for referential integrity enforcement on counter deletion
    * @param {string} countersId e.g. 'pengiriman_20261004'
@@ -388,6 +401,11 @@ class PengirimanRepository {
     const createdBy = filters.created_by || filters.createdBy;
     if (createdBy) {
       query = query.where('created_by', '==', createdBy.trim());
+    }
+
+    const pengirimId = filters.pengirim_id || filters.pengirimId;
+    if (pengirimId) {
+      query = query.where('pengirim_id', '==', pengirimId.trim());
     }
 
     const snapshot = await query.get();

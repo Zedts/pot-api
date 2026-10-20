@@ -85,6 +85,12 @@ class PenjualanService {
 
     // 5. Persist transaction header, details, and inventory stock atomically
     const rawBuktiUrl = (data.bukti_bayar_url || data.bukti_qris_url || '').trim() || null;
+    const rawKembalian = Number(
+      data.kembalian_disimpan !== undefined
+        ? data.kembalian_disimpan
+        : (data.keep_changes || 0)
+    );
+
     const { penjualan } = await penjualanRepository.createWithDetailsAndStock(
       {
         spg_id: spgId,
@@ -94,6 +100,8 @@ class PenjualanService {
         bukti_bayar_url: rawBuktiUrl,
         bukti_qris_url: rawBuktiUrl,
         catatan: catatan ? catatan.trim() : '',
+        kembalian_disimpan: rawKembalian,
+        keep_changes: rawKembalian,
       },
       snapshotItems,
       targetLapakId
@@ -160,7 +168,7 @@ class PenjualanService {
   }
 
   /**
-   * Update sales transaction metadata (catatan, metode_pembayaran, bukti_qris_url)
+   * Update sales transaction metadata (catatan, metode_pembayaran, bukti_qris_url, kembalian_disimpan)
    * @param {string} id
    * @param {Object} updateData
    * @returns {Promise<Object>}
@@ -180,6 +188,17 @@ class PenjualanService {
     }
     if (updateData.catatan !== undefined) {
       payload.catatan = typeof updateData.catatan === 'string' ? updateData.catatan.trim() : '';
+    }
+    if (updateData.kembalian_disimpan !== undefined || updateData.keep_changes !== undefined) {
+      const val = Number(
+        updateData.kembalian_disimpan !== undefined
+          ? updateData.kembalian_disimpan
+          : updateData.keep_changes
+      );
+      if (!isNaN(val) && val >= 0) {
+        payload.kembalian_disimpan = val;
+        payload.keep_changes = val;
+      }
     }
 
     if (Object.keys(payload).length === 0) {

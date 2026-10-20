@@ -16,7 +16,18 @@ function validateCreatePenjualan(req, res, next) {
     }
   }
 
-  const { tanggal, lapak_id, spg_id, metode_pembayaran, bukti_bayar_url, bukti_qris_url, catatan, items } = req.body;
+  const {
+    tanggal,
+    lapak_id,
+    spg_id,
+    metode_pembayaran,
+    bukti_bayar_url,
+    bukti_qris_url,
+    catatan,
+    kembalian_disimpan,
+    keep_changes,
+    items,
+  } = req.body;
   const errors = [];
 
   // 1. Validate tanggal if provided (supports "2026-09-30", ISO string, or omitted defaulting to new Date())
@@ -78,6 +89,21 @@ function validateCreatePenjualan(req, res, next) {
     errors.push('Field "catatan" must be a string.');
   }
 
+  // 7. Validate kembalian_disimpan / keep_changes if provided
+  const rawKembalian = kembalian_disimpan !== undefined ? kembalian_disimpan : keep_changes;
+  if (rawKembalian !== undefined && rawKembalian !== null) {
+    const numKembalian = Number(rawKembalian);
+    if (isNaN(numKembalian) || numKembalian < 0) {
+      errors.push('Field "kembalian_disimpan" must be a non-negative number.');
+    } else {
+      req.body.kembalian_disimpan = numKembalian;
+      req.body.keep_changes = numKembalian;
+    }
+  } else {
+    req.body.kembalian_disimpan = 0;
+    req.body.keep_changes = 0;
+  }
+
   // 7. Validate items array
   if (!items || !Array.isArray(items) || items.length === 0) {
     errors.push('Field "items" must be a non-empty array of line items.');
@@ -114,15 +140,28 @@ function validateCreatePenjualan(req, res, next) {
  * Middleware: Validate payload for updating sales transaction metadata
  */
 function validateUpdatePenjualan(req, res, next) {
-  const { metode_pembayaran, bukti_bayar_url, bukti_qris_url, catatan } = req.body;
+  const {
+    metode_pembayaran,
+    bukti_bayar_url,
+    bukti_qris_url,
+    catatan,
+    kembalian_disimpan,
+    keep_changes,
+  } = req.body;
   const errors = [];
 
   const rawBukti = bukti_bayar_url !== undefined ? bukti_bayar_url : bukti_qris_url;
+  const rawKembalian = kembalian_disimpan !== undefined ? kembalian_disimpan : keep_changes;
 
-  if (metode_pembayaran === undefined && rawBukti === undefined && catatan === undefined) {
+  if (
+    metode_pembayaran === undefined &&
+    rawBukti === undefined &&
+    catatan === undefined &&
+    rawKembalian === undefined
+  ) {
     return next(
       new BadRequestError(
-        'At least one field (metode_pembayaran, bukti_bayar_url, catatan) must be provided for update.'
+        'At least one field (metode_pembayaran, bukti_bayar_url, catatan, kembalian_disimpan) must be provided for update.'
       )
     );
   }
@@ -151,6 +190,16 @@ function validateUpdatePenjualan(req, res, next) {
 
   if (catatan !== undefined && typeof catatan !== 'string') {
     errors.push('Field "catatan" must be a string.');
+  }
+
+  if (rawKembalian !== undefined && rawKembalian !== null) {
+    const numKembalian = Number(rawKembalian);
+    if (isNaN(numKembalian) || numKembalian < 0) {
+      errors.push('Field "kembalian_disimpan" must be a non-negative number.');
+    } else {
+      req.body.kembalian_disimpan = numKembalian;
+      req.body.keep_changes = numKembalian;
+    }
   }
 
   if (errors.length > 0) {

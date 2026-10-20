@@ -582,8 +582,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_penerimaanstatus",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "penerimaanstatus.js"
     },
     {
@@ -593,8 +593,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_constants_penerimaanstatus_penerimaan_status",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "penerimaan_status"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_constants_penerimaanstatus_valid_penerimaan_statuses",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "valid_penerimaan_statuses"
     },
     {
@@ -649,7 +649,7 @@
       "_origin": "ast",
       "id": "src_constants_permissions",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "permissions.js"
     },
     {
@@ -660,7 +660,7 @@
       "_origin": "ast",
       "id": "src_constants_permissions_roles_valid_roles_admin_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "{ roles, valid_roles, admin_roles }"
     },
     {
@@ -670,8 +670,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_constants_permissions_permissions",
-      "community": 45,
-      "community_name": "roles.js",
+      "community": 54,
+      "community_name": "rbac.middleware.js",
       "norm_label": "permissions"
     },
     {
@@ -682,7 +682,7 @@
       "_origin": "ast",
       "id": "src_constants_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "roles.js"
     },
     {
@@ -693,7 +693,7 @@
       "_origin": "ast",
       "id": "src_constants_roles_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "roles"
     },
     {
@@ -704,7 +704,7 @@
       "_origin": "ast",
       "id": "src_constants_roles_valid_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "valid_roles"
     },
     {
@@ -715,7 +715,7 @@
       "_origin": "ast",
       "id": "src_constants_roles_admin_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "admin_roles"
     },
     {
@@ -725,8 +725,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_constants_shifts",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "shifts.js"
     },
     {
@@ -736,31 +736,42 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_constants_shifts_shifts",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "shifts"
     },
     {
       "label": "VALID_SHIFTS",
       "file_type": "code",
       "source_file": "src/constants/shifts.js",
-      "source_location": "L11",
+      "source_location": "L12",
       "_origin": "ast",
       "id": "src_constants_shifts_valid_shifts",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "valid_shifts"
     },
     {
       "label": "DEFAULT_SHIFT_HOURS",
       "file_type": "code",
       "source_file": "src/constants/shifts.js",
-      "source_location": "L13",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "src_constants_shifts_default_shift_hours",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "default_shift_hours"
+    },
+    {
+      "label": "normalizeShift()",
+      "file_type": "code",
+      "source_file": "src/constants/shifts.js",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "src_constants_shifts_normalizeshift",
+      "community": 90,
+      "community_name": "UserService",
+      "norm_label": "normalizeshift()"
     },
     {
       "label": "status.js",
@@ -791,8 +802,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_constants_status_valid_statuses",
-      "community": 51,
-      "community_name": "produk.repository.js",
+      "community": 25,
+      "community_name": "produk.routes.js",
       "norm_label": "valid_statuses"
     },
     {
@@ -802,8 +813,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "absensi.controller.js"
     },
     {
@@ -813,8 +824,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensiservice",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "absensiservice"
     },
     {
@@ -824,8 +835,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_uploadimagebuffer_deleter2asset",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "{ uploadimagebuffer, deleter2asset }"
     },
     {
@@ -835,8 +846,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_assertvalidimagefile",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "{ assertvalidimagefile }"
     },
     {
@@ -846,8 +857,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_badrequesterror_forbiddenerror",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "{ badrequesterror, forbiddenerror }"
     },
     {
@@ -857,8 +868,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_admin_roles",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "{ admin_roles }"
     },
     {
@@ -869,7 +880,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "absensicontroller"
     },
     {
@@ -880,7 +891,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_clockin",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".clockin()"
     },
     {
@@ -891,7 +902,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_clockout",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".clockout()"
     },
     {
@@ -902,7 +913,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_getallabsensi",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".getallabsensi()"
     },
     {
@@ -913,7 +924,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_getabsensibyid",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".getabsensibyid()"
     },
     {
@@ -924,7 +935,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_updateabsensi",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".updateabsensi()"
     },
     {
@@ -935,7 +946,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_uploadfoto",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".uploadfoto()"
     },
     {
@@ -946,7 +957,7 @@
       "_origin": "ast",
       "id": "src_controllers_absensi_controller_absensicontroller_deleteabsensi",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".deleteabsensi()"
     },
     {
@@ -1034,7 +1045,7 @@
       "_origin": "ast",
       "id": "src_controllers_closing_controller",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "closing.controller.js"
     },
     {
@@ -1045,7 +1056,7 @@
       "_origin": "ast",
       "id": "src_controllers_closing_controller_closingservice",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "closingservice"
     },
     {
@@ -1056,7 +1067,7 @@
       "_origin": "ast",
       "id": "src_controllers_closing_controller_roles",
       "community": 45,
-      "community_name": "roles.js",
+      "community_name": "user.repository.js",
       "norm_label": "{ roles }"
     },
     {
@@ -1297,8 +1308,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": "lapak.controller.js"
     },
     {
@@ -1308,8 +1319,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakservice",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": "lapakservice"
     },
     {
@@ -1319,8 +1330,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": "lapakcontroller"
     },
     {
@@ -1330,8 +1341,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller_create",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": ".create()"
     },
     {
@@ -1341,8 +1352,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller_getall",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": ".getall()"
     },
     {
@@ -1352,8 +1363,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller_getbyid",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": ".getbyid()"
     },
     {
@@ -1363,8 +1374,8 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller_update",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": ".update()"
     },
     {
@@ -1374,8 +1385,8 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "src_controllers_lapak_controller_lapakcontroller_delete",
-      "community": 74,
-      "community_name": "LapakController",
+      "community": 10,
+      "community_name": "lapak.routes.js",
       "norm_label": ".delete()"
     },
     {
@@ -1484,8 +1495,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": "penerimaan.controller.js"
     },
     {
@@ -1495,8 +1506,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaanservice",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": "penerimaanservice"
     },
     {
@@ -1506,8 +1517,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_assertvalidimagefile",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": "{ assertvalidimagefile }"
     },
     {
@@ -1517,8 +1528,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": "penerimaancontroller"
     },
     {
@@ -1528,8 +1539,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_create",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".create()"
     },
     {
@@ -1539,8 +1550,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_getall",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".getall()"
     },
     {
@@ -1550,8 +1561,8 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_getbyid",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".getbyid()"
     },
     {
@@ -1561,8 +1572,8 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_update",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".update()"
     },
     {
@@ -1572,8 +1583,8 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_uploadnota",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".uploadnota()"
     },
     {
@@ -1583,8 +1594,8 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "src_controllers_penerimaan_controller_penerimaancontroller_delete",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 70,
+      "community_name": "penerimaan.controller.js",
       "norm_label": ".delete()"
     },
     {
@@ -1594,8 +1605,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": "pengiriman.controller.js"
     },
     {
@@ -1605,8 +1616,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimanservice",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": "pengirimanservice"
     },
     {
@@ -1616,8 +1627,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": "pengirimancontroller"
     },
     {
@@ -1627,8 +1638,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_create",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".create()"
     },
     {
@@ -1638,52 +1649,52 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_getall",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".getall()"
     },
     {
       "label": ".getById()",
       "file_type": "code",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L45",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_getbyid",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".getbyid()"
     },
     {
       "label": ".update()",
       "file_type": "code",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L59",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_update",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".update()"
     },
     {
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L73",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_updatestatus",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".updatestatus()"
     },
     {
       "label": ".delete()",
       "file_type": "code",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L88",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "src_controllers_pengiriman_controller_pengirimancontroller_delete",
-      "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community": 74,
+      "community_name": "PengirimanController",
       "norm_label": ".delete()"
     },
     {
@@ -1693,8 +1704,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_pengirimandetail_controller",
-      "community": 71,
-      "community_name": "pengirimanDetail.service.js",
+      "community": 91,
+      "community_name": "pengirimanDetail.controller.js",
       "norm_label": "pengirimandetail.controller.js"
     },
     {
@@ -1704,8 +1715,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_pengirimandetail_controller_pengirimandetailservice",
-      "community": 71,
-      "community_name": "pengirimanDetail.service.js",
+      "community": 91,
+      "community_name": "pengirimanDetail.controller.js",
       "norm_label": "pengirimandetailservice"
     },
     {
@@ -1715,8 +1726,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_controllers_pengirimandetail_controller_pengirimandetailcontroller",
-      "community": 71,
-      "community_name": "pengirimanDetail.service.js",
+      "community": 91,
+      "community_name": "pengirimanDetail.controller.js",
       "norm_label": "pengirimandetailcontroller"
     },
     {
@@ -1726,8 +1737,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_controllers_pengirimandetail_controller_pengirimandetailcontroller_getall",
-      "community": 71,
-      "community_name": "pengirimanDetail.service.js",
+      "community": 91,
+      "community_name": "pengirimanDetail.controller.js",
       "norm_label": ".getall()"
     },
     {
@@ -1737,8 +1748,8 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_controllers_pengirimandetail_controller_pengirimandetailcontroller_getbyid",
-      "community": 71,
-      "community_name": "pengirimanDetail.service.js",
+      "community": 91,
+      "community_name": "pengirimanDetail.controller.js",
       "norm_label": ".getbyid()"
     },
     {
@@ -1748,8 +1759,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "penjualan.controller.js"
     },
     {
@@ -1759,8 +1770,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualanservice",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "penjualanservice"
     },
     {
@@ -1770,8 +1781,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_uploadimagebuffer_deleter2asset",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "{ uploadimagebuffer, deleter2asset }"
     },
     {
@@ -1781,8 +1792,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_assertvalidimagefile",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "{ assertvalidimagefile }"
     },
     {
@@ -1792,8 +1803,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_badrequesterror_forbiddenerror",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "{ badrequesterror, forbiddenerror }"
     },
     {
@@ -1803,8 +1814,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_roles",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 89,
+      "community_name": "penjualan.controller.js",
       "norm_label": "{ roles }"
     },
     {
@@ -1815,7 +1826,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "penjualancontroller"
     },
     {
@@ -1826,7 +1837,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_createpenjualan",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".createpenjualan()"
     },
     {
@@ -1837,7 +1848,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_getallpenjualan",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".getallpenjualan()"
     },
     {
@@ -1848,7 +1859,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_getpenjualanbyid",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".getpenjualanbyid()"
     },
     {
@@ -1859,7 +1870,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_updatepenjualan",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".updatepenjualan()"
     },
     {
@@ -1870,7 +1881,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_uploadbuktibayar",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".uploadbuktibayar()"
     },
     {
@@ -1881,7 +1892,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_uploadbuktiqris",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".uploadbuktiqris()"
     },
     {
@@ -1892,7 +1903,7 @@
       "_origin": "ast",
       "id": "src_controllers_penjualan_controller_penjualancontroller_deletepenjualan",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": ".deletepenjualan()"
     },
     {
@@ -1902,7 +1913,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penjualandetail_controller",
-      "community": 83,
+      "community": 93,
       "community_name": "penjualanDetail.controller.js",
       "norm_label": "penjualandetail.controller.js"
     },
@@ -1913,7 +1924,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_controllers_penjualandetail_controller_penjualandetailservice",
-      "community": 83,
+      "community": 93,
       "community_name": "penjualanDetail.controller.js",
       "norm_label": "penjualandetailservice"
     },
@@ -1924,7 +1935,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_controllers_penjualandetail_controller_penjualandetailcontroller",
-      "community": 83,
+      "community": 93,
       "community_name": "penjualanDetail.controller.js",
       "norm_label": "penjualandetailcontroller"
     },
@@ -1935,7 +1946,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_controllers_penjualandetail_controller_penjualandetailcontroller_getall",
-      "community": 83,
+      "community": 93,
       "community_name": "penjualanDetail.controller.js",
       "norm_label": ".getall()"
     },
@@ -1946,7 +1957,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "src_controllers_penjualandetail_controller_penjualandetailcontroller_getbyid",
-      "community": 83,
+      "community": 93,
       "community_name": "penjualanDetail.controller.js",
       "norm_label": ".getbyid()"
     },
@@ -2573,8 +2584,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_errors_apperror_forbiddenerror",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": "forbiddenerror"
     },
     {
@@ -2584,8 +2595,8 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_errors_apperror_forbiddenerror_constructor",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 22,
+      "community_name": "absensi.controller.js",
       "norm_label": ".constructor()"
     },
     {
@@ -2815,7 +2826,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_middlewares_asyncwrapper",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "asyncwrapper.js"
     },
@@ -2826,7 +2837,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_middlewares_asyncwrapper_asyncwrapper",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "asyncwrapper()"
     },
@@ -2947,7 +2958,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "uploadimage.middleware.js"
     },
@@ -2958,7 +2969,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware_multer",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "multer"
     },
@@ -2969,7 +2980,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware_badrequesterror",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "{ badrequesterror }"
     },
@@ -2980,7 +2991,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware_path",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "path"
     },
@@ -2991,7 +3002,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware_allowed_image_exts_allowed_image_mimes",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "{ allowed_image_exts, allowed_image_mimes }"
     },
@@ -3002,7 +3013,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_middlewares_uploadimage_middleware_uploadimage",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "uploadimage"
     },
@@ -3384,7 +3395,7 @@
       "label": "validateUpdateLapak()",
       "file_type": "code",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L110",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "src_middlewares_validatelapak_validateupdatelapak",
       "community": 10,
@@ -3395,7 +3406,7 @@
       "label": "validateUpdateLapakShift()",
       "file_type": "code",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L166",
+      "source_location": "L169",
       "_origin": "ast",
       "id": "src_middlewares_validatelapak_validateupdatelapakshift",
       "community": 10,
@@ -3475,7 +3486,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "validatepenerimaan.js"
     },
@@ -3486,7 +3497,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_badrequesterror",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{ badrequesterror }"
     },
@@ -3497,7 +3508,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_validatedatefield",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{ validatedatefield }"
     },
@@ -3509,7 +3520,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_validatecreatepenerimaan",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validatecreatepenerimaan()"
     },
     {
@@ -3519,7 +3530,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_validateupdatepenerimaan",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "validateupdatepenerimaan()"
     },
@@ -3530,7 +3541,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_assertvalidimagefile",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{ assertvalidimagefile }"
     },
@@ -3541,7 +3552,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_middlewares_validatepenerimaan_validateuploadnota",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "validateuploadnota()"
     },
@@ -3553,7 +3564,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validatepengiriman.js"
     },
     {
@@ -3564,7 +3575,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_badrequesterror",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{ badrequesterror }"
     },
     {
@@ -3575,7 +3586,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_valid_pengiriman_statuses",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{ valid_pengiriman_statuses }"
     },
     {
@@ -3586,7 +3597,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_validatedatefield",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{ validatedatefield }"
     },
     {
@@ -3597,29 +3608,29 @@
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_validatecreatepengiriman",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validatecreatepengiriman()"
     },
     {
       "label": "validateUpdatePengiriman()",
       "file_type": "code",
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L57",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_validateupdatepengiriman",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validateupdatepengiriman()"
     },
     {
       "label": "validateUpdateStatus()",
       "file_type": "code",
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L99",
+      "source_location": "L107",
       "_origin": "ast",
       "id": "src_middlewares_validatepengiriman_validateupdatestatus",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validateupdatestatus()"
     },
     {
@@ -3692,7 +3703,7 @@
       "label": "validateUpdatePenjualan()",
       "file_type": "code",
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L116",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "src_middlewares_validatepenjualan_validateupdatepenjualan",
       "community": 12,
@@ -3817,7 +3828,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validateslipgaji",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "validateslipgaji.js"
     },
     {
@@ -3828,7 +3839,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validateslipgaji_badrequesterror",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "{ badrequesterror }"
     },
     {
@@ -3839,7 +3850,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validateslipgaji_uploadpdf",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "uploadpdf"
     },
     {
@@ -3850,7 +3861,7 @@
       "_origin": "ast",
       "id": "src_middlewares_validateslipgaji_validatecreateslipgaji",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "validatecreateslipgaji()"
     },
     {
@@ -4014,7 +4025,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_absensi_model",
-      "community": 48,
+      "community": 96,
       "community_name": "absensi.model.js",
       "norm_label": "absensi.model.js"
     },
@@ -4025,7 +4036,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi_status",
-      "community": 48,
+      "community": 96,
       "community_name": "absensi.model.js",
       "norm_label": "{ absensi_status }"
     },
@@ -4036,7 +4047,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_models_absensi_model_default_shift_hours_shifts",
-      "community": 48,
+      "community": 96,
       "community_name": "absensi.model.js",
       "norm_label": "{ default_shift_hours, shifts }"
     },
@@ -4047,7 +4058,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_models_absensi_model_getlocaldatestring",
-      "community": 48,
+      "community": 96,
       "community_name": "absensi.model.js",
       "norm_label": "{ getlocaldatestring }"
     },
@@ -4058,7 +4069,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_models_absensi_model_normalizestorageurl",
-      "community": 48,
+      "community": 96,
       "community_name": "absensi.model.js",
       "norm_label": "{ normalizestorageurl }"
     },
@@ -4069,7 +4080,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": "absensi"
     },
@@ -4080,7 +4091,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi_constructor",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": ".constructor()"
     },
@@ -4091,7 +4102,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi_tofirestore",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": ".tofirestore()"
     },
@@ -4102,18 +4113,18 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi_tojson",
-      "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community": 100,
+      "community_name": "getLocalDateString",
       "norm_label": ".tojson()"
     },
     {
       "label": ".fromFirestore()",
       "file_type": "code",
       "source_file": "src/models/absensi.model.js",
-      "source_location": "L116",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "src_models_absensi_model_absensi_fromfirestore",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": ".fromfirestore()"
     },
@@ -4124,8 +4135,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_closing_model",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": "closing.model.js"
     },
     {
@@ -4135,8 +4146,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_closing_model_closing_status",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": "{ closing_status }"
     },
     {
@@ -4146,8 +4157,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_models_closing_model_getlocaldatestring",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": "{ getlocaldatestring }"
     },
     {
@@ -4157,8 +4168,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_models_closing_model_closing",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": "closing"
     },
     {
@@ -4168,8 +4179,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_models_closing_model_closing_constructor",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": ".constructor()"
     },
     {
@@ -4179,8 +4190,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_models_closing_model_closing_tofirestore",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": ".tofirestore()"
     },
     {
@@ -4190,8 +4201,8 @@
       "source_location": "L103",
       "_origin": "ast",
       "id": "src_models_closing_model_closing_tojson",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": ".tojson()"
     },
     {
@@ -4201,8 +4212,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "src_models_closing_model_closing_fromfirestore",
-      "community": 32,
-      "community_name": "closing.routes.js",
+      "community": 31,
+      "community_name": "closing.model.js",
       "norm_label": ".fromfirestore()"
     },
     {
@@ -4212,8 +4223,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_kategori_model",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": "kategori.model.js"
     },
     {
@@ -4223,8 +4234,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_models_kategori_model_kategori",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": "kategori"
     },
     {
@@ -4234,8 +4245,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_models_kategori_model_kategori_constructor",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": ".constructor()"
     },
     {
@@ -4245,8 +4256,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_models_kategori_model_kategori_tofirestore",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": ".tofirestore()"
     },
     {
@@ -4256,8 +4267,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_models_kategori_model_kategori_tojson",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": ".tojson()"
     },
     {
@@ -4267,8 +4278,8 @@
       "source_location": "L49",
       "_origin": "ast",
       "id": "src_models_kategori_model_kategori_fromfirestore",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": ".fromfirestore()"
     },
     {
@@ -4278,8 +4289,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_lapak_model",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "lapak.model.js"
     },
     {
@@ -4289,8 +4300,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_lapak_model_default_shift_hours_shifts",
-      "community": 39,
-      "community_name": "lapak.service.js",
+      "community": 96,
+      "community_name": "absensi.model.js",
       "norm_label": "{ default_shift_hours, shifts }"
     },
     {
@@ -4300,7 +4311,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": "lapak"
     },
@@ -4311,7 +4322,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_constructor",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".constructor()"
     },
@@ -4319,10 +4330,10 @@
       "label": ".formatSpg()",
       "file_type": "code",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L50",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_formatspg",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".formatspg()"
     },
@@ -4330,10 +4341,10 @@
       "label": ".formatUser()",
       "file_type": "code",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L69",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_formatuser",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".formatuser()"
     },
@@ -4341,10 +4352,10 @@
       "label": ".toFirestore()",
       "file_type": "code",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L86",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_tofirestore",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".tofirestore()"
     },
@@ -4352,10 +4363,10 @@
       "label": ".toJSON()",
       "file_type": "code",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L110",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_tojson",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".tojson()"
     },
@@ -4363,10 +4374,10 @@
       "label": ".fromFirestore()",
       "file_type": "code",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L132",
+      "source_location": "L138",
       "_origin": "ast",
       "id": "src_models_lapak_model_lapak_fromfirestore",
-      "community": 96,
+      "community": 87,
       "community_name": "Lapak",
       "norm_label": ".fromfirestore()"
     },
@@ -4454,8 +4465,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_penerimaan_model",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "penerimaan.model.js"
     },
     {
@@ -4465,8 +4476,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_penerimaan_model_penerimaan_status_valid_penerimaan_statuses",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "{ penerimaan_status, valid_penerimaan_statuses }"
     },
     {
@@ -4476,8 +4487,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_models_penerimaan_model_normalizestorageurl",
-      "community": 52,
-      "community_name": "penerimaan.model.js",
+      "community": 2,
+      "community_name": "penerimaan.repository.js",
       "norm_label": "{ normalizestorageurl }"
     },
     {
@@ -4583,7 +4594,7 @@
       "label": ".toFirestore()",
       "file_type": "code",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L63",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "src_models_pengiriman_model_pengiriman_tofirestore",
       "community": 84,
@@ -4594,7 +4605,7 @@
       "label": ".toJSON()",
       "file_type": "code",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L87",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "src_models_pengiriman_model_pengiriman_tojson",
       "community": 84,
@@ -4605,7 +4616,7 @@
       "label": ".fromFirestore()",
       "file_type": "code",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L107",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "src_models_pengiriman_model_pengiriman_fromfirestore",
       "community": 84,
@@ -4737,7 +4748,7 @@
       "label": ".toFirestore()",
       "file_type": "code",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L45",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "src_models_penjualan_model_penjualan_tofirestore",
       "community": 12,
@@ -4748,7 +4759,7 @@
       "label": ".toJSON()",
       "file_type": "code",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L69",
+      "source_location": "L78",
       "_origin": "ast",
       "id": "src_models_penjualan_model_penjualan_tojson",
       "community": 12,
@@ -4759,7 +4770,7 @@
       "label": ".fromFirestore()",
       "file_type": "code",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L99",
+      "source_location": "L110",
       "_origin": "ast",
       "id": "src_models_penjualan_model_penjualan_fromfirestore",
       "community": 12,
@@ -4774,7 +4785,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": "penjualandetail.model.js"
     },
     {
@@ -4785,7 +4796,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model_penjualandetail",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": "penjualandetail"
     },
     {
@@ -4796,7 +4807,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model_penjualandetail_constructor",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": ".constructor()"
     },
     {
@@ -4807,7 +4818,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model_penjualandetail_tofirestore",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": ".tofirestore()"
     },
     {
@@ -4818,7 +4829,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model_penjualandetail_tojson",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": ".tojson()"
     },
     {
@@ -4829,7 +4840,7 @@
       "_origin": "ast",
       "id": "src_models_penjualandetail_model_penjualandetail_fromfirestore",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": ".fromfirestore()"
     },
     {
@@ -4928,7 +4939,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": "satuan.model.js"
     },
     {
@@ -4939,7 +4950,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model_satuan",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": "satuan"
     },
     {
@@ -4950,7 +4961,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model_satuan_constructor",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": ".constructor()"
     },
     {
@@ -4961,7 +4972,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model_satuan_tofirestore",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": ".tofirestore()"
     },
     {
@@ -4972,7 +4983,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model_satuan_tojson",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": ".tojson()"
     },
     {
@@ -4983,7 +4994,7 @@
       "_origin": "ast",
       "id": "src_models_satuan_model_satuan_fromfirestore",
       "community": 16,
-      "community_name": "satuan.repository.js",
+      "community_name": "SatuanRepository",
       "norm_label": ".fromfirestore()"
     },
     {
@@ -4994,7 +5005,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": "slipgaji.model.js"
     },
     {
@@ -5005,7 +5016,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_getlocaldatestring",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": "{ getlocaldatestring }"
     },
     {
@@ -5016,7 +5027,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_normalizestorageurl",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": "{ normalizestorageurl }"
     },
     {
@@ -5027,7 +5038,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_slipgaji",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": "slipgaji"
     },
     {
@@ -5038,7 +5049,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_slipgaji_constructor",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": ".constructor()"
     },
     {
@@ -5049,7 +5060,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_slipgaji_tofirestore",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": ".tofirestore()"
     },
     {
@@ -5060,7 +5071,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_slipgaji_tojson",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": ".tojson()"
     },
     {
@@ -5071,7 +5082,7 @@
       "_origin": "ast",
       "id": "src_models_slipgaji_model_slipgaji_fromfirestore",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": ".fromfirestore()"
     },
     {
@@ -5158,8 +5169,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_user_model",
-      "community": 51,
-      "community_name": "produk.repository.js",
+      "community": 45,
+      "community_name": "user.repository.js",
       "norm_label": "user.model.js"
     },
     {
@@ -5169,8 +5180,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_models_user_model_roles",
-      "community": 51,
-      "community_name": "produk.repository.js",
+      "community": 45,
+      "community_name": "user.repository.js",
       "norm_label": "{ roles }"
     },
     {
@@ -5180,8 +5191,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_models_user_model_status",
-      "community": 51,
-      "community_name": "produk.repository.js",
+      "community": 45,
+      "community_name": "user.repository.js",
       "norm_label": "{ status }"
     },
     {
@@ -5323,8 +5334,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_absensi_repository",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "absensi.repository.js"
     },
     {
@@ -5334,8 +5345,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_absensi_repository_db",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "{ db }"
     },
     {
@@ -5345,8 +5356,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_absensi_repository_absensi",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "absensi"
     },
     {
@@ -5356,8 +5367,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_repositories_absensi_repository_getlocaldatestring",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "{ getlocaldatestring }"
     },
     {
@@ -5477,8 +5488,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_closing_repository",
-      "community": 66,
-      "community_name": "closing.repository.js",
+      "community": 21,
+      "community_name": "closing.service.js",
       "norm_label": "closing.repository.js"
     },
     {
@@ -5488,8 +5499,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_closing_repository_db",
-      "community": 66,
-      "community_name": "closing.repository.js",
+      "community": 21,
+      "community_name": "closing.service.js",
       "norm_label": "{ db }"
     },
     {
@@ -5499,8 +5510,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closing",
-      "community": 66,
-      "community_name": "closing.repository.js",
+      "community": 21,
+      "community_name": "closing.service.js",
       "norm_label": "closing"
     },
     {
@@ -5510,8 +5521,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_repositories_closing_repository_getlocaldatestring",
-      "community": 66,
-      "community_name": "closing.repository.js",
+      "community": 21,
+      "community_name": "closing.service.js",
       "norm_label": "{ getlocaldatestring }"
     },
     {
@@ -5522,7 +5533,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": "closingrepository"
     },
     {
@@ -5533,7 +5544,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_constructor",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".constructor()"
     },
     {
@@ -5544,7 +5555,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_create",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".create()"
     },
     {
@@ -5555,7 +5566,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_findbyid",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".findbyid()"
     },
     {
@@ -5566,7 +5577,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_findall",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".findall()"
     },
     {
@@ -5577,7 +5588,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_update",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".update()"
     },
     {
@@ -5588,7 +5599,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_delete",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".delete()"
     },
     {
@@ -5599,7 +5610,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_countbylapakid",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".countbylapakid()"
     },
     {
@@ -5610,7 +5621,7 @@
       "_origin": "ast",
       "id": "src_repositories_closing_repository_closingrepository_countbyspgid",
       "community": 66,
-      "community_name": "closing.repository.js",
+      "community_name": "ClosingRepository",
       "norm_label": ".countbyspgid()"
     },
     {
@@ -5763,8 +5774,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_kategori_repository",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": "kategori.repository.js"
     },
     {
@@ -5774,8 +5785,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_kategori_repository_db",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": "{ db }"
     },
     {
@@ -5785,8 +5796,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_kategori_repository_kategori",
-      "community": 22,
-      "community_name": "kategori.repository.js",
+      "community": 78,
+      "community_name": "KategoriRepository",
       "norm_label": "kategori"
     },
     {
@@ -5895,8 +5906,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_lapak_repository",
-      "community": 13,
-      "community_name": "lapak.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "lapak.repository.js"
     },
     {
@@ -5906,8 +5917,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_db",
-      "community": 13,
-      "community_name": "lapak.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "{ db }"
     },
     {
@@ -5917,8 +5928,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapak",
-      "community": 13,
-      "community_name": "lapak.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "lapak"
     },
     {
@@ -5929,7 +5940,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": "lapakrepository"
     },
     {
@@ -5940,7 +5951,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_constructor",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".constructor()"
     },
     {
@@ -5951,7 +5962,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_create",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".create()"
     },
     {
@@ -5962,7 +5973,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_findbyid",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".findbyid()"
     },
     {
@@ -5973,7 +5984,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_findbyspgid",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".findbyspgid()"
     },
     {
@@ -5984,7 +5995,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_findbyids",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".findbyids()"
     },
     {
@@ -5995,7 +6006,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_findall",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".findall()"
     },
     {
@@ -6006,7 +6017,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_update",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".update()"
     },
     {
@@ -6017,7 +6028,7 @@
       "_origin": "ast",
       "id": "src_repositories_lapak_repository_lapakrepository_delete",
       "community": 13,
-      "community_name": "lapak.repository.js",
+      "community_name": "LapakRepository",
       "norm_label": ".delete()"
     },
     {
@@ -6497,7 +6508,7 @@
       "label": ".findByUniqueId()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L217",
+      "source_location": "L218",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_findbyuniqueid",
       "community": 20,
@@ -6508,7 +6519,7 @@
       "label": ".findById()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L230",
+      "source_location": "L231",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_findbyid",
       "community": 20,
@@ -6519,7 +6530,7 @@
       "label": ".findByIds()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L246",
+      "source_location": "L247",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_findbyids",
       "community": 20,
@@ -6530,7 +6541,7 @@
       "label": ".countByLapakId()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L307",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_countbylapakid",
       "community": 20,
@@ -6541,7 +6552,7 @@
       "label": ".countByCreatedBy()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L319",
+      "source_location": "L320",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_countbycreatedby",
       "community": 20,
@@ -6549,10 +6560,21 @@
       "norm_label": ".countbycreatedby()"
     },
     {
+      "label": ".countByPengirimId()",
+      "file_type": "code",
+      "source_file": "src/repositories/pengiriman.repository.js",
+      "source_location": "L332",
+      "_origin": "ast",
+      "id": "src_repositories_pengiriman_repository_pengirimanrepository_countbypengirimid",
+      "community": 20,
+      "community_name": "PengirimanRepository",
+      "norm_label": ".countbypengirimid()"
+    },
+    {
       "label": ".countByCountersId()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L331",
+      "source_location": "L344",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_countbycountersid",
       "community": 20,
@@ -6563,7 +6585,7 @@
       "label": ".countByCounterId()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L366",
+      "source_location": "L379",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_countbycounterid",
       "community": 20,
@@ -6574,7 +6596,7 @@
       "label": ".findAll()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L375",
+      "source_location": "L388",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_findall",
       "community": 20,
@@ -6585,7 +6607,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L431",
+      "source_location": "L449",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_update",
       "community": 20,
@@ -6596,7 +6618,7 @@
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L460",
+      "source_location": "L478",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_updatestatus",
       "community": 20,
@@ -6607,7 +6629,7 @@
       "label": ".delete()",
       "file_type": "code",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L480",
+      "source_location": "L498",
       "_origin": "ast",
       "id": "src_repositories_pengiriman_repository_pengirimanrepository_delete",
       "community": 20,
@@ -6742,7 +6764,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "penjualan.repository.js"
     },
@@ -6753,7 +6775,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_db",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "{ db }"
     },
@@ -6764,7 +6786,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualan",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "penjualan"
     },
@@ -6775,7 +6797,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualandetail",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "penjualandetail"
     },
@@ -6786,7 +6808,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_getlocaldatestring",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "{ getlocaldatestring }"
     },
@@ -6797,7 +6819,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_badrequesterror",
-      "community": 77,
+      "community": 29,
       "community_name": "penjualan.repository.js",
       "norm_label": "{ badrequesterror }"
     },
@@ -6838,7 +6860,7 @@
       "label": ".createWithDetailsAndStock()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L81",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_createwithdetailsandstock",
       "community": 68,
@@ -6849,7 +6871,7 @@
       "label": ".findById()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L194",
+      "source_location": "L213",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_findbyid",
       "community": 68,
@@ -6860,7 +6882,7 @@
       "label": ".findAll()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L205",
+      "source_location": "L224",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_findall",
       "community": 68,
@@ -6871,7 +6893,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L260",
+      "source_location": "L279",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_update",
       "community": 68,
@@ -6882,7 +6904,7 @@
       "label": ".deleteWithDetails()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L280",
+      "source_location": "L299",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_deletewithdetails",
       "community": 68,
@@ -6893,7 +6915,7 @@
       "label": ".deleteWithRollback()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L304",
+      "source_location": "L323",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_deletewithrollback",
       "community": 68,
@@ -6904,7 +6926,7 @@
       "label": ".countByLapakId()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L381",
+      "source_location": "L400",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_countbylapakid",
       "community": 68,
@@ -6915,7 +6937,7 @@
       "label": ".countBySpgId()",
       "file_type": "code",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L392",
+      "source_location": "L411",
       "_origin": "ast",
       "id": "src_repositories_penjualan_repository_penjualanrepository_countbyspgid",
       "community": 68,
@@ -6930,7 +6952,7 @@
       "_origin": "ast",
       "id": "src_repositories_penjualandetail_repository",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": "penjualandetail.repository.js"
     },
     {
@@ -6941,7 +6963,7 @@
       "_origin": "ast",
       "id": "src_repositories_penjualandetail_repository_db",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": "{ db }"
     },
     {
@@ -6952,7 +6974,7 @@
       "_origin": "ast",
       "id": "src_repositories_penjualandetail_repository_penjualandetail",
       "community": 29,
-      "community_name": "penjualanDetail.repository.js",
+      "community_name": "penjualan.repository.js",
       "norm_label": "penjualandetail"
     },
     {
@@ -7259,8 +7281,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository",
-      "community": 16,
-      "community_name": "satuan.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "satuan.repository.js"
     },
     {
@@ -7270,8 +7292,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_db",
-      "community": 16,
-      "community_name": "satuan.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "{ db }"
     },
     {
@@ -7281,8 +7303,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuan",
-      "community": 16,
-      "community_name": "satuan.repository.js",
+      "community": 19,
+      "community_name": "firebase.js",
       "norm_label": "satuan"
     },
     {
@@ -7292,7 +7314,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": "satuanrepository"
     },
@@ -7303,7 +7325,7 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_constructor",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".constructor()"
     },
@@ -7314,7 +7336,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_create",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".create()"
     },
@@ -7325,7 +7347,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_findbyid",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".findbyid()"
     },
@@ -7336,7 +7358,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_findbyids",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".findbyids()"
     },
@@ -7347,7 +7369,7 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_findbyjenis",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".findbyjenis()"
     },
@@ -7358,7 +7380,7 @@
       "source_location": "L101",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_findall",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".findall()"
     },
@@ -7369,7 +7391,7 @@
       "source_location": "L127",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_update",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".update()"
     },
@@ -7380,7 +7402,7 @@
       "source_location": "L144",
       "_origin": "ast",
       "id": "src_repositories_satuan_repository_satuanrepository_delete",
-      "community": 35,
+      "community": 16,
       "community_name": "SatuanRepository",
       "norm_label": ".delete()"
     },
@@ -7391,8 +7413,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_slipgaji_repository",
-      "community": 19,
-      "community_name": "firebase.js",
+      "community": 46,
+      "community_name": "SlipGajiRepository",
       "norm_label": "slipgaji.repository.js"
     },
     {
@@ -7402,8 +7424,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_slipgaji_repository_db",
-      "community": 19,
-      "community_name": "firebase.js",
+      "community": 46,
+      "community_name": "SlipGajiRepository",
       "norm_label": "{ db }"
     },
     {
@@ -7413,8 +7435,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_slipgaji_repository_slipgaji",
-      "community": 19,
-      "community_name": "firebase.js",
+      "community": 46,
+      "community_name": "SlipGajiRepository",
       "norm_label": "slipgaji"
     },
     {
@@ -7721,7 +7743,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_user_repository",
-      "community": 91,
+      "community": 45,
       "community_name": "user.repository.js",
       "norm_label": "user.repository.js"
     },
@@ -7732,7 +7754,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_repositories_user_repository_db",
-      "community": 91,
+      "community": 45,
       "community_name": "user.repository.js",
       "norm_label": "{ db }"
     },
@@ -7743,7 +7765,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_repositories_user_repository_user",
-      "community": 91,
+      "community": 45,
       "community_name": "user.repository.js",
       "norm_label": "user"
     },
@@ -7754,7 +7776,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_repositories_user_repository_roles",
-      "community": 91,
+      "community": 45,
       "community_name": "user.repository.js",
       "norm_label": "{ roles }"
     },
@@ -7765,7 +7787,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_repositories_user_repository_status",
-      "community": 91,
+      "community": 45,
       "community_name": "user.repository.js",
       "norm_label": "{ status }"
     },
@@ -8150,8 +8172,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_counter_routes",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "counter.routes.js"
     },
     {
@@ -8161,8 +8183,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_counter_routes_router",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "{ router }"
     },
     {
@@ -8172,8 +8194,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_routes_counter_routes_countercontroller",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "countercontroller"
     },
     {
@@ -8183,8 +8205,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_routes_counter_routes_authenticate",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "authenticate"
     },
     {
@@ -8194,8 +8216,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_routes_counter_routes_authorizepermission",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "{ authorizepermission }"
     },
     {
@@ -8205,8 +8227,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_routes_counter_routes_asyncwrapper",
-      "community": 37,
-      "community_name": "auth.middleware.js",
+      "community": 48,
+      "community_name": "asyncWrapper.js",
       "norm_label": "asyncwrapper"
     },
     {
@@ -8667,7 +8689,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "penerimaan.routes.js"
     },
@@ -8678,7 +8700,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_router",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{ router }"
     },
@@ -8689,7 +8711,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_penerimaancontroller",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "penerimaancontroller"
     },
@@ -8700,7 +8722,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_authenticate",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "authenticate"
     },
@@ -8711,7 +8733,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_authorizepermission",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{ authorizepermission }"
     },
@@ -8722,7 +8744,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_asyncwrapper",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "asyncwrapper"
     },
@@ -8733,7 +8755,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_validatecreatepenerimaan_validateupdatepenerimaan_validateuploadnota",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "{\r\n  validatecreatepenerimaan,\r\n  validateupdatepenerimaan,\r\n  validateuploadnota,\r\n}"
     },
@@ -8744,7 +8766,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_routes_penerimaan_routes_uploadimage",
-      "community": 5,
+      "community": 35,
       "community_name": "penerimaan.routes.js",
       "norm_label": "uploadimage"
     },
@@ -8756,7 +8778,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "pengiriman.routes.js"
     },
     {
@@ -8767,7 +8789,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_router",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{ router }"
     },
     {
@@ -8778,7 +8800,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_pengirimancontroller",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "pengirimancontroller"
     },
     {
@@ -8789,7 +8811,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_authenticate",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "authenticate"
     },
     {
@@ -8800,7 +8822,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_authorizepermission",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{ authorizepermission }"
     },
     {
@@ -8811,7 +8833,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_asyncwrapper",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "asyncwrapper"
     },
     {
@@ -8822,7 +8844,7 @@
       "_origin": "ast",
       "id": "src_routes_pengiriman_routes_validatecreatepengiriman_validateupdatepengiriman_validateupdatestatus",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "{\r\n  validatecreatepengiriman,\r\n  validateupdatepengiriman,\r\n  validateupdatestatus,\r\n}"
     },
     {
@@ -9218,7 +9240,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "slipgaji.routes.js"
     },
     {
@@ -9229,7 +9251,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_router",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "{ router }"
     },
     {
@@ -9240,7 +9262,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_slipgajicontroller",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "slipgajicontroller"
     },
     {
@@ -9251,7 +9273,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_authenticate",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "authenticate"
     },
     {
@@ -9262,7 +9284,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_authorizepermission",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "{ authorizepermission }"
     },
     {
@@ -9273,7 +9295,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_asyncwrapper",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "asyncwrapper"
     },
     {
@@ -9284,7 +9306,7 @@
       "_origin": "ast",
       "id": "src_routes_slipgaji_routes_validatecreateslipgaji_uploadpdf",
       "community": 57,
-      "community_name": "asyncWrapper.js",
+      "community_name": "slipGaji.routes.js",
       "norm_label": "{\r\n  validatecreateslipgaji,\r\n  uploadpdf,\r\n}"
     },
     {
@@ -9371,7 +9393,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_storage_routes",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "storage.routes.js"
     },
@@ -9382,7 +9404,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_routes_storage_routes_router",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "{ router }"
     },
@@ -9393,7 +9415,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_routes_storage_routes_storagecontroller",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "storagecontroller"
     },
@@ -9404,7 +9426,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_routes_storage_routes_asyncwrapper",
-      "community": 57,
+      "community": 48,
       "community_name": "asyncWrapper.js",
       "norm_label": "asyncwrapper"
     },
@@ -9563,15 +9585,15 @@
       "norm_label": "{ absensi_status }"
     },
     {
-      "label": "{ SHIFTS, DEFAULT_SHIFT_HOURS }",
+      "label": "{ SHIFTS, DEFAULT_SHIFT_HOURS, EARLY_CLOCK_IN_WINDOW_MINUTES, normalizeShift }",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "src_services_absensi_service_shifts_default_shift_hours",
+      "id": "src_services_absensi_service_shifts_default_shift_hours_early_clock_in_window_minutes_normalizeshift",
       "community": 64,
       "community_name": "absensi.service.js",
-      "norm_label": "{ shifts, default_shift_hours }"
+      "norm_label": "{ shifts, default_shift_hours, early_clock_in_window_minutes, normalizeshift }"
     },
     {
       "label": "{ parseDateOrDefault }",
@@ -9632,7 +9654,7 @@
       "label": ".clockOut()",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L123",
+      "source_location": "L162",
       "_origin": "ast",
       "id": "src_services_absensi_service_absensiservice_clockout",
       "community": 86,
@@ -9643,10 +9665,10 @@
       "label": ".getAllAbsensi()",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L170",
+      "source_location": "L209",
       "_origin": "ast",
       "id": "src_services_absensi_service_absensiservice_getallabsensi",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": ".getallabsensi()"
     },
@@ -9654,7 +9676,7 @@
       "label": ".getAbsensiById()",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L204",
+      "source_location": "L243",
       "_origin": "ast",
       "id": "src_services_absensi_service_absensiservice_getabsensibyid",
       "community": 86,
@@ -9665,7 +9687,7 @@
       "label": ".updateAbsensi()",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L231",
+      "source_location": "L270",
       "_origin": "ast",
       "id": "src_services_absensi_service_absensiservice_updateabsensi",
       "community": 86,
@@ -9676,7 +9698,7 @@
       "label": ".deleteAbsensi()",
       "file_type": "code",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L267",
+      "source_location": "L306",
       "_origin": "ast",
       "id": "src_services_absensi_service_absensiservice_deleteabsensi",
       "community": 86,
@@ -10380,7 +10402,7 @@
       "label": ".getAllLapak()",
       "file_type": "code",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L118",
+      "source_location": "L120",
       "_origin": "ast",
       "id": "src_services_lapak_service_lapakservice_getalllapak",
       "community": 33,
@@ -10391,7 +10413,7 @@
       "label": ".getLapakById()",
       "file_type": "code",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L128",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "src_services_lapak_service_lapakservice_getlapakbyid",
       "community": 33,
@@ -10402,7 +10424,7 @@
       "label": ".updateLapak()",
       "file_type": "code",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L159",
+      "source_location": "L161",
       "_origin": "ast",
       "id": "src_services_lapak_service_lapakservice_updatelapak",
       "community": 33,
@@ -10413,7 +10435,7 @@
       "label": ".deleteLapak()",
       "file_type": "code",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L281",
+      "source_location": "L289",
       "_origin": "ast",
       "id": "src_services_lapak_service_lapakservice_deletelapak",
       "community": 33,
@@ -10724,8 +10746,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": "penerimaanservice"
     },
     {
@@ -10735,74 +10757,74 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_enrichreceipts",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".enrichreceipts()"
     },
     {
       "label": ".createPenerimaan()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L83",
+      "source_location": "L100",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_createpenerimaan",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".createpenerimaan()"
     },
     {
       "label": ".getAllPenerimaan()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L186",
+      "source_location": "L203",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_getallpenerimaan",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".getallpenerimaan()"
     },
     {
       "label": ".getPenerimaanById()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L210",
+      "source_location": "L227",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_getpenerimaanbyid",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".getpenerimaanbyid()"
     },
     {
       "label": ".updatePenerimaan()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L230",
+      "source_location": "L247",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_updatepenerimaan",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".updatepenerimaan()"
     },
     {
       "label": ".uploadNota()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L255",
+      "source_location": "L272",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_uploadnota",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".uploadnota()"
     },
     {
       "label": ".deletePenerimaan()",
       "file_type": "code",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L293",
+      "source_location": "L310",
       "_origin": "ast",
       "id": "src_services_penerimaan_service_penerimaanservice_deletepenerimaan",
-      "community": 38,
-      "community_name": "r2.js",
+      "community": 77,
+      "community_name": "PenerimaanService",
       "norm_label": ".deletepenerimaan()"
     },
     {
@@ -10933,8 +10955,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": "pengirimanservice"
     },
     {
@@ -10944,63 +10966,63 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_createpengiriman",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".createpengiriman()"
     },
     {
       "label": ".getAllPengiriman()",
       "file_type": "code",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L124",
+      "source_location": "L146",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_getallpengiriman",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".getallpengiriman()"
     },
     {
       "label": ".getPengirimanById()",
       "file_type": "code",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L162",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_getpengirimanbyid",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".getpengirimanbyid()"
     },
     {
       "label": ".updatePengiriman()",
       "file_type": "code",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L199",
+      "source_location": "L249",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_updatepengiriman",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".updatepengiriman()"
     },
     {
       "label": ".updateStatus()",
       "file_type": "code",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L249",
+      "source_location": "L313",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_updatestatus",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".updatestatus()"
     },
     {
       "label": ".deletePengiriman()",
       "file_type": "code",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L275",
+      "source_location": "L339",
       "_origin": "ast",
       "id": "src_services_pengiriman_service_pengirimanservice_deletepengiriman",
-      "community": 87,
-      "community_name": "PengirimanService",
+      "community": 86,
+      "community_name": "parseDateOrDefault",
       "norm_label": ".deletepengiriman()"
     },
     {
@@ -11260,7 +11282,7 @@
       "label": ".getAllPenjualan()",
       "file_type": "code",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L110",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "src_services_penjualan_service_penjualanservice_getallpenjualan",
       "community": 80,
@@ -11271,7 +11293,7 @@
       "label": ".getPenjualanById()",
       "file_type": "code",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L139",
+      "source_location": "L147",
       "_origin": "ast",
       "id": "src_services_penjualan_service_penjualanservice_getpenjualanbyid",
       "community": 80,
@@ -11282,7 +11304,7 @@
       "label": ".updatePenjualan()",
       "file_type": "code",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L168",
+      "source_location": "L176",
       "_origin": "ast",
       "id": "src_services_penjualan_service_penjualanservice_updatepenjualan",
       "community": 80,
@@ -11293,7 +11315,7 @@
       "label": ".deletePenjualan()",
       "file_type": "code",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L198",
+      "source_location": "L217",
       "_origin": "ast",
       "id": "src_services_penjualan_service_penjualanservice_deletepenjualan",
       "community": 80,
@@ -11560,8 +11582,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_satuan_service",
-      "community": 50,
-      "community_name": "AppError.js",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": "satuan.service.js"
     },
     {
@@ -11571,8 +11593,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanrepository",
-      "community": 50,
-      "community_name": "AppError.js",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": "satuanrepository"
     },
     {
@@ -11582,8 +11604,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_services_satuan_service_produkrepository",
-      "community": 50,
-      "community_name": "AppError.js",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": "produkrepository"
     },
     {
@@ -11593,8 +11615,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_services_satuan_service_badrequesterror_notfounderror_conflicterror",
-      "community": 50,
-      "community_name": "AppError.js",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": "{ badrequesterror, notfounderror, conflicterror }"
     },
     {
@@ -11604,8 +11626,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": "satuanservice"
     },
     {
@@ -11615,8 +11637,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice_createsatuan",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": ".createsatuan()"
     },
     {
@@ -11626,8 +11648,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice_getallsatuan",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": ".getallsatuan()"
     },
     {
@@ -11637,8 +11659,8 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice_getsatuanbyid",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": ".getsatuanbyid()"
     },
     {
@@ -11648,8 +11670,8 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice_updatesatuan",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": ".updatesatuan()"
     },
     {
@@ -11659,8 +11681,8 @@
       "source_location": "L102",
       "_origin": "ast",
       "id": "src_services_satuan_service_satuanservice_deletesatuan",
-      "community": 70,
-      "community_name": "SatuanService",
+      "community": 52,
+      "community_name": "satuan.service.js",
       "norm_label": ".deletesatuan()"
     },
     {
@@ -11770,7 +11792,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": "slipgajiservice"
     },
     {
@@ -11781,7 +11803,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice_createslipgaji",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": ".createslipgaji()"
     },
     {
@@ -11792,7 +11814,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice_getallslipgaji",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": ".getallslipgaji()"
     },
     {
@@ -11803,7 +11825,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice_getslipgajibyid",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": ".getslipgajibyid()"
     },
     {
@@ -11814,7 +11836,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice_uploadfile",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": ".uploadfile()"
     },
     {
@@ -11825,7 +11847,7 @@
       "_origin": "ast",
       "id": "src_services_slipgaji_service_slipgajiservice_deleteslipgaji",
       "community": 100,
-      "community_name": "SlipGajiService",
+      "community_name": "getLocalDateString",
       "norm_label": ".deleteslipgaji()"
     },
     {
@@ -12115,15 +12137,15 @@
       "norm_label": "{ valid_statuses }"
     },
     {
-      "label": "{ VALID_SHIFTS }",
+      "label": "{ VALID_SHIFTS, normalizeShift }",
       "file_type": "code",
       "source_file": "src/services/user.service.js",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "src_services_user_service_valid_shifts",
+      "id": "src_services_user_service_valid_shifts_normalizeshift",
       "community": 1,
       "community_name": "user.service.js",
-      "norm_label": "{ valid_shifts }"
+      "norm_label": "{ valid_shifts, normalizeshift }"
     },
     {
       "label": "{ PERMISSIONS }",
@@ -12286,7 +12308,7 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_utils_filevalidation_allowed_image_exts",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "allowed_image_exts"
     },
@@ -12297,7 +12319,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_utils_filevalidation_allowed_image_mimes",
-      "community": 89,
+      "community": 83,
       "community_name": "uploadImage.middleware.js",
       "norm_label": "allowed_image_mimes"
     },
@@ -12331,7 +12353,7 @@
       "_origin": "ast",
       "id": "src_utils_filevalidation_isvalidimagebuffer",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "isvalidimagebuffer()"
     },
     {
@@ -12353,7 +12375,7 @@
       "_origin": "ast",
       "id": "src_utils_filevalidation_assertvalidimagefile",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "assertvalidimagefile()"
     },
     {
@@ -12374,7 +12396,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_r2",
-      "community": 38,
+      "community": 82,
       "community_name": "r2.js",
       "norm_label": "r2.js"
     },
@@ -12385,7 +12407,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_r2_s3client_putobjectcommand_deleteobjectcommand_getobjectcommand",
-      "community": 38,
+      "community": 82,
       "community_name": "r2.js",
       "norm_label": "{ s3client, putobjectcommand, deleteobjectcommand, getobjectcommand }"
     },
@@ -12396,7 +12418,7 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "src_utils_r2_crypto",
-      "community": 38,
+      "community": 82,
       "community_name": "r2.js",
       "norm_label": "crypto"
     },
@@ -12407,7 +12429,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_utils_r2_r2client",
-      "community": 38,
+      "community": 82,
       "community_name": "r2.js",
       "norm_label": "r2client"
     },
@@ -12418,8 +12440,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_utils_r2_getpublicurl",
-      "community": 100,
-      "community_name": "SlipGajiService",
+      "community": 82,
+      "community_name": "r2.js",
       "norm_label": "getpublicurl()"
     },
     {
@@ -12430,7 +12452,7 @@
       "_origin": "ast",
       "id": "src_utils_r2_detectimagemeta",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "detectimagemeta()"
     },
     {
@@ -12440,8 +12462,8 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_utils_r2_uploadpdfbuffer",
-      "community": 100,
-      "community_name": "SlipGajiService",
+      "community": 82,
+      "community_name": "r2.js",
       "norm_label": "uploadpdfbuffer()"
     },
     {
@@ -12452,7 +12474,7 @@
       "_origin": "ast",
       "id": "src_utils_r2_uploadimagebuffer",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "uploadimagebuffer()"
     },
     {
@@ -12463,7 +12485,7 @@
       "_origin": "ast",
       "id": "src_utils_r2_deleter2asset",
       "community": 38,
-      "community_name": "r2.js",
+      "community_name": "assertValidImageFile",
       "norm_label": "deleter2asset()"
     },
     {
@@ -12485,7 +12507,7 @@
       "_origin": "ast",
       "id": "src_utils_r2_normalizestorageurl",
       "community": 82,
-      "community_name": "normalizeStorageUrl",
+      "community_name": "r2.js",
       "norm_label": "normalizestorageurl()"
     },
     {
@@ -12495,8 +12517,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_utils_timezone",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "timezone.js"
     },
     {
@@ -12506,7 +12528,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_utils_timezone_getlocaldatestring",
-      "community": 31,
+      "community": 100,
       "community_name": "getLocalDateString",
       "norm_label": "getlocaldatestring()"
     },
@@ -12517,8 +12539,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_utils_timezone_getlocaltimeparts",
-      "community": 48,
-      "community_name": "absensi.model.js",
+      "community": 64,
+      "community_name": "absensi.service.js",
       "norm_label": "getlocaltimeparts()"
     },
     {
@@ -12562,7 +12584,7 @@
       "_origin": "ast",
       "id": "src_utils_validators_validatedatefield",
       "community": 5,
-      "community_name": "penerimaan.routes.js",
+      "community_name": "pengiriman.routes.js",
       "norm_label": "validatedatefield()"
     },
     {
@@ -13378,7 +13400,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L55",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepenjualan_validatecreatepenjualan",
@@ -13390,7 +13412,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L135",
+      "source_location": "L174",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepenjualan_validateupdatepenjualan",
@@ -14277,12 +14299,24 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/constants/shifts.js",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_constants_shifts",
       "target": "src_constants_shifts_default_shift_hours",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "confidence": "INFERRED",
+      "source_file": "src/constants/shifts.js",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast",
+      "context": "collection",
+      "source": "src_constants_shifts",
+      "target": "src_constants_shifts_normalizeshift",
+      "confidence_score": 0.5
     },
     {
       "relation": "contains",
@@ -14299,7 +14333,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/constants/shifts.js",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_constants_shifts",
@@ -14521,6 +14555,54 @@
       "source": "src_services_lapak_service",
       "target": "src_constants_shifts_default_shift_hours",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/absensi.service.js",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_absensi_service",
+      "target": "src_constants_shifts_normalizeshift",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/absensi.service.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_absensi_service_absensiservice_clockin",
+      "target": "src_constants_shifts_normalizeshift"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/user.service.js",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_user_service",
+      "target": "src_constants_shifts_normalizeshift",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/services/user.service.js",
+      "source_location": "L176",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_services_user_service_userservice_updateuser",
+      "target": "src_constants_shifts_normalizeshift"
     },
     {
       "relation": "contains",
@@ -16005,7 +16087,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L88",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_controllers_pengiriman_controller_pengirimancontroller",
@@ -16027,7 +16109,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L45",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_controllers_pengiriman_controller_pengirimancontroller",
@@ -16038,7 +16120,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L59",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_controllers_pengiriman_controller_pengirimancontroller",
@@ -16049,7 +16131,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/controllers/pengiriman.controller.js",
-      "source_location": "L73",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_controllers_pengiriman_controller_pengirimancontroller",
@@ -21105,7 +21187,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L192",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21128,7 +21210,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L193",
+      "source_location": "L200",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21140,7 +21222,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L194",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21177,7 +21259,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L152",
+      "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatelapak_validateupdatelapak",
@@ -21201,7 +21283,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L153",
+      "source_location": "L155",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatelapak_validateupdatelapak",
@@ -21213,7 +21295,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/middlewares/validateLapak.js",
-      "source_location": "L177",
+      "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatelapak_validateupdatelapakshift",
@@ -21577,7 +21659,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L122",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21600,7 +21682,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L123",
+      "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21612,7 +21694,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L124",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21662,7 +21744,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L20",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepengiriman_validatecreatepengiriman",
@@ -21686,7 +21768,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePengiriman.js",
-      "source_location": "L70",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepengiriman_validateupdatepengiriman",
@@ -21753,7 +21835,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L164",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21776,7 +21858,7 @@
       "relation": "indirect_call",
       "confidence": "INFERRED",
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L165",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
       "context": "collection",
@@ -21838,7 +21920,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L27",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepenjualan_validatecreatepenjualan",
@@ -21850,7 +21932,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/middlewares/validatePenjualan.js",
-      "source_location": "L23",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_middlewares_validatepenjualan_validatecreatepenjualan",
@@ -22551,7 +22633,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/absensi.model.js",
-      "source_location": "L116",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_absensi_model_absensi",
@@ -22869,7 +22951,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L50",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_lapak_model_lapak",
@@ -22880,7 +22962,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L69",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_lapak_model_lapak",
@@ -22891,7 +22973,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L132",
+      "source_location": "L138",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_lapak_model_lapak",
@@ -22902,7 +22984,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L86",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_lapak_model_lapak",
@@ -22913,7 +22995,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/lapak.model.js",
-      "source_location": "L110",
+      "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_lapak_model_lapak",
@@ -23184,7 +23266,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L107",
+      "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_pengiriman_model_pengiriman",
@@ -23195,7 +23277,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L63",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_pengiriman_model_pengiriman",
@@ -23206,7 +23288,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/pengiriman.model.js",
-      "source_location": "L87",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_pengiriman_model_pengiriman",
@@ -23376,7 +23458,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L99",
+      "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_penjualan_model_penjualan",
@@ -23387,7 +23469,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L45",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_penjualan_model_penjualan",
@@ -23398,7 +23480,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L69",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_penjualan_model_penjualan",
@@ -23411,7 +23493,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/models/penjualan.model.js",
-      "source_location": "L75",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_models_penjualan_model_penjualan_tojson",
@@ -25719,7 +25801,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L366",
+      "source_location": "L379",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25730,7 +25812,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L331",
+      "source_location": "L344",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25741,7 +25823,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L319",
+      "source_location": "L320",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25752,11 +25834,22 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L307",
+      "source_location": "L308",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
       "target": "src_repositories_pengiriman_repository_pengirimanrepository_countbylapakid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/repositories/pengiriman.repository.js",
+      "source_location": "L332",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_repositories_pengiriman_repository_pengirimanrepository",
+      "target": "src_repositories_pengiriman_repository_pengirimanrepository_countbypengirimid",
       "confidence_score": 1.0
     },
     {
@@ -25774,7 +25867,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L480",
+      "source_location": "L498",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25796,7 +25889,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L375",
+      "source_location": "L388",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25807,7 +25900,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L230",
+      "source_location": "L231",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25818,7 +25911,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L246",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25829,7 +25922,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L217",
+      "source_location": "L218",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25851,7 +25944,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L431",
+      "source_location": "L449",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25862,7 +25955,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L460",
+      "source_location": "L478",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository",
@@ -25968,7 +26061,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L234",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_findbyid",
@@ -25980,7 +26073,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L289",
+      "source_location": "L290",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_findbyids",
@@ -25992,7 +26085,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L481",
+      "source_location": "L499",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_delete",
@@ -26004,7 +26097,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L432",
+      "source_location": "L450",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_update",
@@ -26016,7 +26109,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L461",
+      "source_location": "L479",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_updatestatus",
@@ -26028,7 +26121,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L367",
+      "source_location": "L380",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_countbycounterid",
@@ -26041,7 +26134,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L413",
+      "source_location": "L431",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_findall",
@@ -26052,7 +26145,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/pengiriman.repository.js",
-      "source_location": "L470",
+      "source_location": "L488",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_pengiriman_repository_pengirimanrepository_updatestatus",
@@ -26358,7 +26451,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L381",
+      "source_location": "L400",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26369,7 +26462,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L392",
+      "source_location": "L411",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26391,7 +26484,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L81",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26402,7 +26495,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L280",
+      "source_location": "L299",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26413,7 +26506,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L304",
+      "source_location": "L323",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26424,7 +26517,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L205",
+      "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26435,7 +26528,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L194",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26446,7 +26539,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L260",
+      "source_location": "L279",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository",
@@ -26458,7 +26551,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L174",
+      "source_location": "L193",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository_createwithdetailsandstock",
@@ -26471,7 +26564,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L233",
+      "source_location": "L252",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository_findall",
@@ -26482,7 +26575,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/repositories/penjualan.repository.js",
-      "source_location": "L356",
+      "source_location": "L375",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_repositories_penjualan_repository_penjualanrepository_deletewithrollback",
@@ -29581,7 +29674,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service",
-      "target": "src_services_absensi_service_shifts_default_shift_hours",
+      "target": "src_services_absensi_service_shifts_default_shift_hours_early_clock_in_window_minutes_normalizeshift",
       "confidence_score": 1.0
     },
     {
@@ -29682,7 +29775,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L123",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice",
@@ -29693,7 +29786,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L267",
+      "source_location": "L306",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice",
@@ -29704,7 +29797,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L204",
+      "source_location": "L243",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice",
@@ -29715,7 +29808,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L170",
+      "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice",
@@ -29726,7 +29819,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L231",
+      "source_location": "L270",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice",
@@ -29738,7 +29831,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L114",
+      "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockin",
@@ -29751,7 +29844,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L63",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockin",
@@ -29763,7 +29856,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L78",
+      "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockin",
@@ -29775,7 +29868,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L48",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockin",
@@ -29786,7 +29879,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L162",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockout",
@@ -29799,7 +29892,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L149",
+      "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_clockout",
@@ -29811,7 +29904,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L175",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_getallabsensi",
@@ -29822,7 +29915,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L232",
+      "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_updateabsensi",
@@ -29835,7 +29928,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L243",
+      "source_location": "L282",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_updateabsensi",
@@ -29847,7 +29940,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/absensi.service.js",
-      "source_location": "L242",
+      "source_location": "L281",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_absensi_service_absensiservice_updateabsensi",
@@ -30679,7 +30772,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L80",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice_createlapak",
@@ -30691,7 +30784,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L192",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice_updatelapak",
@@ -30712,7 +30805,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L281",
+      "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice",
@@ -30734,7 +30827,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L118",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice",
@@ -30745,7 +30838,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L128",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice",
@@ -30756,7 +30849,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L159",
+      "source_location": "L161",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice",
@@ -30768,7 +30861,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L120",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice_getalllapak",
@@ -30780,7 +30873,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L282",
+      "source_location": "L290",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice_deletelapak",
@@ -30792,7 +30885,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/lapak.service.js",
-      "source_location": "L160",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_lapak_service_lapakservice_updatelapak",
@@ -31221,7 +31314,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L83",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31232,7 +31325,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L293",
+      "source_location": "L310",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31254,7 +31347,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L186",
+      "source_location": "L203",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31265,7 +31358,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L210",
+      "source_location": "L227",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31276,7 +31369,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L230",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31287,7 +31380,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L255",
+      "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice",
@@ -31299,7 +31392,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L197",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_getallpenerimaan",
@@ -31311,7 +31404,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L220",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_getpenerimaanbyid",
@@ -31323,7 +31416,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L178",
+      "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_createpenerimaan",
@@ -31336,7 +31429,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L137",
+      "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_createpenerimaan",
@@ -31347,7 +31440,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L231",
+      "source_location": "L248",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_updatepenerimaan",
@@ -31359,7 +31452,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L257",
+      "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_uploadnota",
@@ -31372,7 +31465,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L260",
+      "source_location": "L277",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_uploadnota",
@@ -31384,7 +31477,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L279",
+      "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_uploadnota",
@@ -31396,7 +31489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/penerimaan.service.js",
-      "source_location": "L267",
+      "source_location": "L284",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penerimaan_service_penerimaanservice_uploadnota",
@@ -31562,7 +31655,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L275",
+      "source_location": "L339",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice",
@@ -31573,7 +31666,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L124",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice",
@@ -31584,7 +31677,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L162",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice",
@@ -31595,7 +31688,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L199",
+      "source_location": "L249",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice",
@@ -31606,7 +31699,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L249",
+      "source_location": "L313",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice",
@@ -31619,7 +31712,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L42",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice_createpengiriman",
@@ -31630,7 +31723,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L200",
+      "source_location": "L250",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice_updatepengiriman",
@@ -31642,7 +31735,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L267",
+      "source_location": "L331",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice_updatestatus",
@@ -31655,7 +31748,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/services/pengiriman.service.js",
-      "source_location": "L219",
+      "source_location": "L283",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_pengiriman_service_pengirimanservice_updatepengiriman",
@@ -31908,7 +32001,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L198",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice",
@@ -31919,7 +32012,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L110",
+      "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice",
@@ -31930,7 +32023,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L139",
+      "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice",
@@ -31941,7 +32034,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L168",
+      "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice",
@@ -31953,7 +32046,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L102",
+      "source_location": "L110",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice_createpenjualan",
@@ -31965,7 +32058,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/services/penjualan.service.js",
-      "source_location": "L169",
+      "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_penjualan_service_penjualanservice_updatepenjualan",
@@ -33025,7 +33118,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_services_user_service",
-      "target": "src_services_user_service_valid_shifts",
+      "target": "src_services_user_service_valid_shifts_normalizeshift",
       "confidence_score": 1.0
     },
     {
@@ -33636,5 +33729,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d9bb580ffbea6bb5e8a431ecf4bcbdda7b2d1226"
+  "built_at_commit": "40fb173a182f11ce6721bd867b6d429928daabae"
 }

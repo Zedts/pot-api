@@ -16,6 +16,7 @@ class Pengiriman {
     tanggal = null,
     lapak_id,
     created_by,
+    pengirim_id = null,
     status = PENGIRIMAN_STATUS.DRAFT,
     total_items = 0,
     qty_kirim = 0,
@@ -49,6 +50,7 @@ class Pengiriman {
     this.counters_id = resolvedCountersId ? resolvedCountersId.trim() : null;
     this.lapak_id = lapak_id ? lapak_id.trim() : '';
     this.created_by = created_by ? created_by.trim() : '';
+    this.pengirim_id = pengirim_id ? pengirim_id.trim() : null;
     this.status = status || PENGIRIMAN_STATUS.DRAFT;
     this.total_items = Number(total_items || 0);
     this.qty_kirim = Number(qty_kirim !== undefined && qty_kirim !== null ? qty_kirim : (total_qty || 0));
@@ -67,6 +69,7 @@ class Pengiriman {
       tanggal: this.tanggal || new Date(),
       lapak_id: this.lapak_id,
       created_by: this.created_by,
+      pengirim_id: this.pengirim_id,
       status: this.status,
       total_items: this.total_items,
       qty_kirim: this.qty_kirim,
@@ -92,6 +95,7 @@ class Pengiriman {
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       lapak_id: this.lapak_id,
       created_by: this.created_by,
+      pengirim_id: this.pengirim_id,
       status: this.status,
       total_items: this.total_items,
       qty_kirim: this.qty_kirim,
@@ -119,6 +123,7 @@ class Pengiriman {
       tanggal: data.tanggal ? (data.tanggal.toDate ? data.tanggal.toDate() : new Date(data.tanggal)) : null,
       lapak_id: data.lapak_id || '',
       created_by: data.created_by || '',
+      pengirim_id: data.pengirim_id || null,
       status: data.status || PENGIRIMAN_STATUS.DRAFT,
       total_items: data.total_items || 0,
       qty_kirim: qtyKirimVal,
