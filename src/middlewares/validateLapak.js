@@ -96,6 +96,7 @@ function validateCreateLapak(req, res, next) {
   validateCoordinateFields(req.body, errors);
   validateShiftHours('shift_pagi', req.body.shift_pagi, errors);
   validateShiftHours('shift_siang', req.body.shift_siang, errors);
+  validateShiftHours('shift_long', req.body.shift_long, errors);
 
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for create lapak request.', errors));
@@ -108,7 +109,7 @@ function validateCreateLapak(req, res, next) {
  * Middleware: Validate lapak update payload
  */
 function validateUpdateLapak(req, res, next) {
-  const { nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang } = req.body;
+  const { nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang, shift_long } = req.body;
   const errors = [];
 
   if (
@@ -120,11 +121,12 @@ function validateUpdateLapak(req, res, next) {
     longitude === undefined &&
     radius_meter === undefined &&
     shift_pagi === undefined &&
-    shift_siang === undefined
+    shift_siang === undefined &&
+    shift_long === undefined
   ) {
     return next(
       new BadRequestError(
-        'At least one field (nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang) must be provided for update.'
+        'At least one field (nama, lokasi, keterangan, spg_id, latitude, longitude, radius_meter, shift_pagi, shift_siang, shift_long) must be provided for update.'
       )
     );
   }
@@ -152,6 +154,7 @@ function validateUpdateLapak(req, res, next) {
   validateCoordinateFields(req.body, errors);
   validateShiftHours('shift_pagi', shift_pagi, errors);
   validateShiftHours('shift_siang', shift_siang, errors);
+  validateShiftHours('shift_long', shift_long, errors);
 
   if (errors.length > 0) {
     return next(new BadRequestError('Validation failed for update lapak request.', errors));
@@ -164,12 +167,12 @@ function validateUpdateLapak(req, res, next) {
  * Middleware: Validate lapak shift hours update payload
  */
 function validateUpdateLapakShift(req, res, next) {
-  const { shift_pagi, shift_siang } = req.body;
+  const { shift_pagi, shift_siang, shift_long } = req.body;
   const errors = [];
 
-  if (shift_pagi === undefined && shift_siang === undefined) {
+  if (shift_pagi === undefined && shift_siang === undefined && shift_long === undefined) {
     return next(
-      new BadRequestError('At least one field ("shift_pagi" or "shift_siang") must be provided.')
+      new BadRequestError('At least one field ("shift_pagi", "shift_siang", or "shift_long") must be provided.')
     );
   }
 
@@ -179,6 +182,10 @@ function validateUpdateLapakShift(req, res, next) {
 
   if (shift_siang !== undefined) {
     validateShiftHours('shift_siang', shift_siang, errors);
+  }
+
+  if (shift_long !== undefined) {
+    validateShiftHours('shift_long', shift_long, errors);
   }
 
   if (errors.length > 0) {

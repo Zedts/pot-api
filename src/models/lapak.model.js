@@ -18,6 +18,7 @@ class Lapak {
     users = [],
     shift_pagi = null,
     shift_siang = null,
+    shift_long = null,
     createdAt = null,
     updatedAt = null,
   }) {
@@ -37,6 +38,9 @@ class Lapak {
     this.shift_siang = Array.isArray(shift_siang) && shift_siang.length === 2
       ? shift_siang
       : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]];
+    this.shift_long = Array.isArray(shift_long) && shift_long.length === 2
+      ? shift_long
+      : [...DEFAULT_SHIFT_HOURS[SHIFTS.LONG]];
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -94,6 +98,7 @@ class Lapak {
       spg_id: this.spg_id,
       shift_pagi: this.shift_pagi,
       shift_siang: this.shift_siang,
+      shift_long: this.shift_long,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -121,6 +126,7 @@ class Lapak {
         : (Array.isArray(this.spg) ? this.spg : (this.spg ? [Lapak.formatSpg(this.spg)] : [])),
       shift_pagi: this.shift_pagi,
       shift_siang: this.shift_siang,
+      shift_long: this.shift_long,
       createdAt: this.createdAt ? (this.createdAt.toISOString ? this.createdAt.toISOString() : this.createdAt) : null,
       updatedAt: this.updatedAt ? (this.updatedAt.toISOString ? this.updatedAt.toISOString() : this.updatedAt) : null,
     };
@@ -148,6 +154,7 @@ class Lapak {
       users: users,
       shift_pagi: data.shift_pagi || null,
       shift_siang: data.shift_siang || null,
+      shift_long: data.shift_long || null,
       createdAt: data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : null,
       updatedAt: data.updatedAt ? (data.updatedAt.toDate ? data.updatedAt.toDate() : new Date(data.updatedAt)) : null,
     });

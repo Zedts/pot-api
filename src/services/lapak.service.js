@@ -60,6 +60,7 @@ class LapakService {
     radius_meter = 25,
     shift_pagi = null,
     shift_siang = null,
+    shift_long = null,
   }) {
     if (!nama || typeof nama !== 'string' || nama.trim().length < 2) {
       throw new BadRequestError('Field "nama" is required and must be at least 2 characters long.');
@@ -92,6 +93,7 @@ class LapakService {
       spg_id: cleanSpgId,
       shift_pagi: Array.isArray(shift_pagi) && shift_pagi.length === 2 ? shift_pagi : [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]],
       shift_siang: Array.isArray(shift_siang) && shift_siang.length === 2 ? shift_siang : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]],
+      shift_long: Array.isArray(shift_long) && shift_long.length === 2 ? shift_long : [...DEFAULT_SHIFT_HOURS[SHIFTS.LONG]],
     });
 
     // Bidirectional sync: assign lapak_id on target user
@@ -221,6 +223,12 @@ class LapakService {
       payload.shift_siang = Array.isArray(updateData.shift_siang) && updateData.shift_siang.length === 2
         ? updateData.shift_siang
         : [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]];
+    }
+
+    if (updateData.shift_long !== undefined) {
+      payload.shift_long = Array.isArray(updateData.shift_long) && updateData.shift_long.length === 2
+        ? updateData.shift_long
+        : [...DEFAULT_SHIFT_HOURS[SHIFTS.LONG]];
     }
 
     if (Object.keys(payload).length === 0) {

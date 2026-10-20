@@ -4,7 +4,7 @@ const lapakRepository = require('../repositories/lapak.repository');
 const userRepository = require('../repositories/user.repository');
 const { ADMIN_ROLES } = require('../constants/roles');
 const { ABSENSI_STATUS } = require('../constants/absensiStatus');
-const { SHIFTS, DEFAULT_SHIFT_HOURS } = require('../constants/shifts');
+const { SHIFTS, DEFAULT_SHIFT_HOURS, EARLY_CLOCK_IN_WINDOW_MINUTES, normalizeShift } = require('../constants/shifts');
 const { parseDateOrDefault } = require('../utils/validators');
 const { getLocalDateString, getLocalTimeParts } = require('../utils/timezone');
 const { BadRequestError, NotFoundError, ConflictError, ForbiddenError } = require('../errors/AppError');
@@ -27,6 +27,15 @@ class AbsensiService {
       throw new BadRequestError('Authenticated user is required for attendance recording.');
     }
 
+    // 0. Strict Shift Requirement: user can ONLY submit attendance if assigned a shift
+    const rawShift = currentUser ? currentUser.shift : null;
+    const userShift = normalizeShift(rawShift);
+    if (!userShift) {
+      throw new BadRequestError(
+        'Pengguna tidak memiliki jadwal shift yang ditentukan. Hubungi Admin untuk menentukan shift terlebih dahulu.'
+      );
+    }
+
     const targetLapakId = data.lapak_id || (currentUser ? currentUser.lapak_id : null);
     if (!targetLapakId) {
       throw new BadRequestError('Field "lapak_id" is required (user must have an assigned stall).');
@@ -40,6 +49,17 @@ class AbsensiService {
     }
     if (!isIzin && (lapak.latitude === null || lapak.longitude === null)) {
       throw new BadRequestError('Lokasi koordinat lapak belum ditentukan oleh Admin. Presensi dinonaktifkan.');
+    }
+
+    // 1b. Check for active unclosed attendance sessions to prevent conflict
+    const recentRecords = await absensiRepository.findAll({ user_id: userId, limit: 5 });
+    const unclosedSession = (recentRecords || []).find(
+      (rec) => rec.jam_masuk && !rec.jam_pulang && rec.status !== ABSENSI_STATUS.IZIN
+    );
+    if (unclosedSession) {
+      throw new ConflictError(
+        `Pengguna masih memiliki sesi presensi yang belum selesai (tanggal: ${unclosedSession.tanggal}). Silakan lakukan Absen Pulang terlebih dahulu.`
+      );
     }
 
     // 2. Resolve check-in timestamp (accepting client device time with server sanity check)
@@ -63,30 +83,49 @@ class AbsensiService {
       tanggal = getLocalDateString(jamMasuk);
     }
 
-    // 4. Resolve shift hours and evaluate late cutoff / shift expiration
-    const userShift = (currentUser && currentUser.shift ? currentUser.shift : SHIFTS.PAGI).toLowerCase().trim();
-    const activeShiftHours = userShift === SHIFTS.SIANG
-      ? (lapak.shift_siang || DEFAULT_SHIFT_HOURS[SHIFTS.SIANG])
-      : (lapak.shift_pagi || DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]);
+    // 4. Resolve shift hours and evaluate early arrival window, late status, & cutoff
+    let activeShiftHours;
+    if (userShift === SHIFTS.SIANG) {
+      activeShiftHours = lapak.shift_siang || DEFAULT_SHIFT_HOURS[SHIFTS.SIANG];
+    } else if (userShift === SHIFTS.LONG) {
+      activeShiftHours = lapak.shift_long || DEFAULT_SHIFT_HOURS[SHIFTS.LONG];
+    } else {
+      activeShiftHours = lapak.shift_pagi || DEFAULT_SHIFT_HOURS[SHIFTS.PAGI];
+    }
 
     const [startTimeStr, endTimeStr] = activeShiftHours;
     const [startH, startM] = startTimeStr.split(':').map(Number);
     const [endH, endM] = endTimeStr.split(':').map(Number);
     const shiftStartMinutes = startH * 60 + startM;
     const shiftEndMinutes = endH * 60 + endM;
+    const windowOpenMinutes = shiftStartMinutes - EARLY_CLOCK_IN_WINDOW_MINUTES;
 
     const { hour, minute } = getLocalTimeParts(jamMasuk);
     const clockInMinutes = hour * 60 + minute;
 
-    // Disallow clock-in if scheduled shift clock-out time has already passed (recorded as null / not present)
-    if (!isIzin && clockInMinutes > shiftEndMinutes) {
-      throw new BadRequestError(
-        `Jadwal kerja untuk shift ${userShift} telah berakhir pada pukul ${endTimeStr}. Presensi masuk tidak dapat dicatat.`
-      );
+    if (!isIzin) {
+      // Disallow clock-in before the early window opens (< T_start - 180 min)
+      if (clockInMinutes < windowOpenMinutes) {
+        const safeWindowOpen = Math.max(0, windowOpenMinutes);
+        const openH = String(Math.floor(safeWindowOpen / 60)).padStart(2, '0');
+        const openM = String(safeWindowOpen % 60).padStart(2, '0');
+        const windowOpenStr = `${openH}:${openM}`;
+        throw new BadRequestError(
+          `Presensi masuk untuk shift ${userShift} belum dibuka. Presensi dibuka mulai pukul ${windowOpenStr} (3 jam sebelum jam operasional).`
+        );
+      }
+
+      // Disallow clock-in if scheduled shift clock-out time has already passed (> T_end)
+      if (clockInMinutes > shiftEndMinutes) {
+        throw new BadRequestError(
+          `Jadwal kerja untuk shift ${userShift} telah berakhir pada pukul ${endTimeStr}. Presensi masuk tidak dapat dicatat.`
+        );
+      }
     }
 
     let finalStatus = isIzin ? ABSENSI_STATUS.IZIN : ABSENSI_STATUS.HADIR;
     if (!isIzin) {
+      // Early submissions within [T_start - 180, T_start] are accepted and marked as HADIR (on time)
       const isLate = clockInMinutes > shiftStartMinutes;
       finalStatus = isLate ? ABSENSI_STATUS.TERLAMBAT : ABSENSI_STATUS.HADIR;
     }

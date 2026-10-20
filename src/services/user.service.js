@@ -10,7 +10,7 @@ const closingRepository = require('../repositories/closing.repository');
 const payrollRepository = require('../repositories/payroll.repository');
 const { ROLES, VALID_ROLES, ADMIN_ROLES } = require('../constants/roles');
 const { VALID_STATUSES } = require('../constants/status');
-const { VALID_SHIFTS } = require('../constants/shifts');
+const { VALID_SHIFTS, normalizeShift } = require('../constants/shifts');
 const { PERMISSIONS } = require('../constants/permissions');
 const { isValidEmail } = require('../utils/validators');
 const {
@@ -173,8 +173,8 @@ class UserService {
       if (updateData.shift === null || updateData.shift === '') {
         payload.shift = null;
       } else if (typeof updateData.shift === 'string') {
-        const cleanShift = updateData.shift.toLowerCase().trim();
-        if (!VALID_SHIFTS.includes(cleanShift)) {
+        const cleanShift = normalizeShift(updateData.shift);
+        if (!cleanShift) {
           throw new BadRequestError(`Invalid shift '${updateData.shift}'. Allowed shifts are: ${VALID_SHIFTS.join(', ')}.`);
         }
         payload.shift = cleanShift;

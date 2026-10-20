@@ -90,6 +90,7 @@ class Absensi {
             lapak_id: this.lapak.id || this.lapak_id || '',
             shift_pagi: this.lapak.shift_pagi || [...DEFAULT_SHIFT_HOURS[SHIFTS.PAGI]],
             shift_siang: this.lapak.shift_siang || [...DEFAULT_SHIFT_HOURS[SHIFTS.SIANG]],
+            shift_long: this.lapak.shift_long || [...DEFAULT_SHIFT_HOURS[SHIFTS.LONG]],
           }
         : null,
       user: this.user
