@@ -15,9 +15,11 @@ class Pengiriman {
     counters_id = null,
     tanggal = null,
     lapak_id,
+    asal_lapak_id = null,
     created_by,
     pengirim_id = null,
     status = PENGIRIMAN_STATUS.DRAFT,
+    ttd_pengirim_url = null,
     total_items = 0,
     qty_kirim = 0,
     total_qty = 0,
@@ -49,9 +51,11 @@ class Pengiriman {
     }
     this.counters_id = resolvedCountersId ? resolvedCountersId.trim() : null;
     this.lapak_id = lapak_id ? lapak_id.trim() : '';
+    this.asal_lapak_id = asal_lapak_id ? asal_lapak_id.trim() : null;
     this.created_by = created_by ? created_by.trim() : '';
     this.pengirim_id = pengirim_id ? pengirim_id.trim() : null;
     this.status = status || PENGIRIMAN_STATUS.DRAFT;
+    this.ttd_pengirim_url = ttd_pengirim_url ? ttd_pengirim_url.trim() : null;
     this.total_items = Number(total_items || 0);
     this.qty_kirim = Number(qty_kirim !== undefined && qty_kirim !== null ? qty_kirim : (total_qty || 0));
     this.total_qty = this.qty_kirim; // Backwards-compatible alias
@@ -68,9 +72,11 @@ class Pengiriman {
       counters_id: this.counters_id,
       tanggal: this.tanggal || new Date(),
       lapak_id: this.lapak_id,
+      asal_lapak_id: this.asal_lapak_id,
       created_by: this.created_by,
       pengirim_id: this.pengirim_id,
       status: this.status,
+      ttd_pengirim_url: this.ttd_pengirim_url,
       total_items: this.total_items,
       qty_kirim: this.qty_kirim,
       total_qty: this.qty_kirim,
@@ -94,9 +100,11 @@ class Pengiriman {
       counters_id: this.counters_id,
       tanggal: this.tanggal ? (this.tanggal.toISOString ? this.tanggal.toISOString() : this.tanggal) : null,
       lapak_id: this.lapak_id,
+      asal_lapak_id: this.asal_lapak_id,
       created_by: this.created_by,
       pengirim_id: this.pengirim_id,
       status: this.status,
+      ttd_pengirim_url: this.ttd_pengirim_url,
       total_items: this.total_items,
       qty_kirim: this.qty_kirim,
       total_qty: this.qty_kirim,
@@ -122,9 +130,11 @@ class Pengiriman {
       counters_id: data.counters_id || data.counter_id || null,
       tanggal: data.tanggal ? (data.tanggal.toDate ? data.tanggal.toDate() : new Date(data.tanggal)) : null,
       lapak_id: data.lapak_id || '',
+      asal_lapak_id: data.asal_lapak_id || null,
       created_by: data.created_by || '',
       pengirim_id: data.pengirim_id || null,
       status: data.status || PENGIRIMAN_STATUS.DRAFT,
+      ttd_pengirim_url: data.ttd_pengirim_url || null,
       total_items: data.total_items || 0,
       qty_kirim: qtyKirimVal,
       total_qty: qtyKirimVal,

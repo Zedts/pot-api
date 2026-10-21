@@ -10,6 +10,7 @@ function validateCreateClosing(req, res, next) {
     spg_id,
     stok_sistem,
     stok_fisik,
+    stok_transfer,
     total_omset,
     tunai_sistem,
     qris_sistem,
@@ -68,6 +69,18 @@ function validateCreateClosing(req, res, next) {
     }
   });
 
+  // 3b. Optional stok_transfer validation
+  if (stok_transfer !== undefined && stok_transfer !== null && stok_transfer !== '') {
+    const numTransfer = Number(stok_transfer);
+    if (isNaN(numTransfer) || numTransfer < 0) {
+      errors.push('Field "stok_transfer" must be a non-negative number.');
+    } else {
+      req.body.stok_transfer = Math.round(numTransfer);
+    }
+  } else {
+    req.body.stok_transfer = 0;
+  }
+
   // 4. Catatan validation
   if (catatan !== undefined && typeof catatan !== 'string') {
     errors.push('Field "catatan" must be a string.');
@@ -103,6 +116,7 @@ function validateUpdateClosing(req, res, next) {
   const {
     stok_sistem,
     stok_fisik,
+    stok_transfer,
     total_omset,
     tunai_sistem,
     qris_sistem,
@@ -116,6 +130,7 @@ function validateUpdateClosing(req, res, next) {
   if (
     stok_sistem === undefined &&
     stok_fisik === undefined &&
+    stok_transfer === undefined &&
     total_omset === undefined &&
     tunai_sistem === undefined &&
     qris_sistem === undefined &&
@@ -125,7 +140,7 @@ function validateUpdateClosing(req, res, next) {
   ) {
     return next(
       new BadRequestError(
-        'At least one field (stok_sistem, stok_fisik, total_omset, tunai_sistem, qris_sistem, transfer_sistem, uang_tunai_fisik, catatan) must be provided.'
+        'At least one field (stok_sistem, stok_fisik, stok_transfer, total_omset, tunai_sistem, qris_sistem, transfer_sistem, uang_tunai_fisik, catatan) must be provided.'
       )
     );
   }
@@ -133,6 +148,7 @@ function validateUpdateClosing(req, res, next) {
   const numericFields = [
     { name: 'stok_sistem', val: stok_sistem },
     { name: 'stok_fisik', val: stok_fisik },
+    { name: 'stok_transfer', val: stok_transfer },
     { name: 'total_omset', val: total_omset },
     { name: 'tunai_sistem', val: tunai_sistem },
     { name: 'qris_sistem', val: qris_sistem },

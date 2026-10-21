@@ -27,6 +27,7 @@ class ClosingRepository {
       tanggal: data.tanggal || getLocalDateString(now),
       stok_sistem: data.stok_sistem,
       stok_fisik: data.stok_fisik,
+      stok_transfer: data.stok_transfer || 0,
       total_omset: data.total_omset,
       tunai_sistem: data.tunai_sistem,
       qris_sistem: data.qris_sistem,

@@ -112,6 +112,7 @@ class StokLapakRepository {
       stok_awal: data.stok_awal || 0,
       stok_masuk: data.stok_masuk || 0,
       stok_terjual: data.stok_terjual || 0,
+      stok_transfer: data.stok_transfer || 0,
       createdAt: now,
       updatedAt: now,
     });
@@ -135,12 +136,14 @@ class StokLapakRepository {
     const stokAwal = updateData.stok_awal !== undefined ? Number(updateData.stok_awal) : (current.stok_awal || 0);
     const stokMasuk = updateData.stok_masuk !== undefined ? Number(updateData.stok_masuk) : (current.stok_masuk || 0);
     const stokTerjual = updateData.stok_terjual !== undefined ? Number(updateData.stok_terjual) : (current.stok_terjual || 0);
-    const stokAkhir = stokAwal + stokMasuk - stokTerjual;
+    const stokTransfer = updateData.stok_transfer !== undefined ? Number(updateData.stok_transfer) : (current.stok_transfer || 0);
+    const stokAkhir = stokAwal + stokMasuk - stokTerjual - stokTransfer;
 
     const dataToSave = {
       stok_awal: stokAwal,
       stok_masuk: stokMasuk,
       stok_terjual: stokTerjual,
+      stok_transfer: stokTransfer,
       stok_akhir: stokAkhir,
       updatedAt: new Date(),
     };
@@ -179,6 +182,7 @@ class StokLapakRepository {
         stok_awal: 0,
         stok_masuk: addQty,
         stok_terjual: 0,
+        stok_transfer: 0,
       });
     }
 
@@ -192,7 +196,8 @@ class StokLapakRepository {
       const newStokMasuk = Number(current.stok_masuk || 0) + addQty;
       const stokAwal = Number(current.stok_awal || 0);
       const stokTerjual = Number(current.stok_terjual || 0);
-      const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
+      const stokTransfer = Number(current.stok_transfer || 0);
+      const stokAkhir = stokAwal + newStokMasuk - stokTerjual - stokTransfer;
 
       transaction.update(docRef, {
         stok_masuk: newStokMasuk,
@@ -236,7 +241,8 @@ class StokLapakRepository {
       const newStokMasuk = Math.max(0, Number(current.stok_masuk || 0) - subQty);
       const stokAwal = Number(current.stok_awal || 0);
       const stokTerjual = Number(current.stok_terjual || 0);
-      const stokAkhir = stokAwal + newStokMasuk - stokTerjual;
+      const stokTransfer = Number(current.stok_transfer || 0);
+      const stokAkhir = stokAwal + newStokMasuk - stokTerjual - stokTransfer;
 
       transaction.update(docRef, {
         stok_masuk: newStokMasuk,
@@ -277,6 +283,7 @@ class StokLapakRepository {
         stok_awal: 0,
         stok_masuk: 0,
         stok_terjual: addQty,
+        stok_transfer: 0,
       });
     }
 
@@ -290,7 +297,8 @@ class StokLapakRepository {
       const newStokTerjual = Number(current.stok_terjual || 0) + addQty;
       const stokAwal = Number(current.stok_awal || 0);
       const stokMasuk = Number(current.stok_masuk || 0);
-      const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+      const stokTransfer = Number(current.stok_transfer || 0);
+      const stokAkhir = stokAwal + stokMasuk - newStokTerjual - stokTransfer;
 
       transaction.update(docRef, {
         stok_terjual: newStokTerjual,
@@ -334,10 +342,111 @@ class StokLapakRepository {
       const newStokTerjual = Math.max(0, Number(current.stok_terjual || 0) - subQty);
       const stokAwal = Number(current.stok_awal || 0);
       const stokMasuk = Number(current.stok_masuk || 0);
-      const stokAkhir = stokAwal + stokMasuk - newStokTerjual;
+      const stokTransfer = Number(current.stok_transfer || 0);
+      const stokAkhir = stokAwal + stokMasuk - newStokTerjual - stokTransfer;
 
       transaction.update(docRef, {
         stok_terjual: newStokTerjual,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
+    });
+
+    const updatedDoc = await docRef.get();
+    return StokLapak.fromFirestore(updatedDoc);
+  }
+
+  /**
+   * Atomically increment stok_transfer for a specific lapak and product (used when transferring out to another lapak)
+   * @param {string} lapakId
+   * @param {string} produkId
+   * @param {number} qty
+   * @returns {Promise<StokLapak>}
+   */
+  async incrementStokTransfer(lapakId, produkId, qty) {
+    const cleanLapakId = lapakId.trim();
+    const cleanProdukId = produkId.trim();
+    const addQty = Number(qty || 0);
+
+    const snapshot = await this.collection
+      .where('lapak_id', '==', cleanLapakId)
+      .where('produk_id', '==', cleanProdukId)
+      .limit(1)
+      .get();
+
+    const now = new Date();
+
+    if (snapshot.empty) {
+      return await this.create({
+        lapak_id: cleanLapakId,
+        produk_id: cleanProdukId,
+        stok_awal: 0,
+        stok_masuk: 0,
+        stok_terjual: 0,
+        stok_transfer: addQty,
+      });
+    }
+
+    const docRef = snapshot.docs[0].ref;
+
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokTransfer = Number(current.stok_transfer || 0) + addQty;
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokMasuk = Number(current.stok_masuk || 0);
+      const stokTerjual = Number(current.stok_terjual || 0);
+      const stokAkhir = stokAwal + stokMasuk - stokTerjual - newStokTransfer;
+
+      transaction.update(docRef, {
+        stok_transfer: newStokTransfer,
+        stok_akhir: stokAkhir,
+        updatedAt: now,
+      });
+    });
+
+    const updatedDoc = await docRef.get();
+    return StokLapak.fromFirestore(updatedDoc);
+  }
+
+  /**
+   * Atomically decrement stok_transfer for a specific lapak and product (used on transfer rollback / deletion)
+   * @param {string} lapakId
+   * @param {string} produkId
+   * @param {number} qty
+   * @returns {Promise<StokLapak|null>}
+   */
+  async decrementStokTransfer(lapakId, produkId, qty) {
+    const cleanLapakId = lapakId.trim();
+    const cleanProdukId = produkId.trim();
+    const subQty = Number(qty || 0);
+
+    const snapshot = await this.collection
+      .where('lapak_id', '==', cleanLapakId)
+      .where('produk_id', '==', cleanProdukId)
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) return null;
+
+    const docRef = snapshot.docs[0].ref;
+    const now = new Date();
+
+    await db.runTransaction(async (transaction) => {
+      const doc = await transaction.get(docRef);
+      if (!doc.exists) return;
+
+      const current = doc.data();
+      const newStokTransfer = Math.max(0, Number(current.stok_transfer || 0) - subQty);
+      const stokAwal = Number(current.stok_awal || 0);
+      const stokMasuk = Number(current.stok_masuk || 0);
+      const stokTerjual = Number(current.stok_terjual || 0);
+      const stokAkhir = stokAwal + stokMasuk - stokTerjual - newStokTransfer;
+
+      transaction.update(docRef, {
+        stok_transfer: newStokTransfer,
         stok_akhir: stokAkhir,
         updatedAt: now,
       });

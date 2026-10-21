@@ -1,4 +1,6 @@
 const pengirimanService = require('../services/pengiriman.service');
+const { uploadImageBuffer, deleteR2Asset } = require('../utils/r2');
+const { assertValidImageFile } = require('../utils/fileValidation');
 
 /**
  * Pengiriman Controller
@@ -10,12 +12,26 @@ class PengirimanController {
    * Create a new shipment and line items atomically
    */
   async create(req, res) {
-    const result = await pengirimanService.createPengiriman(req.body, req.user);
-    return res.status(201).json({
-      success: true,
-      message: 'Shipment created successfully.',
-      data: result,
-    });
+    let uploadRes = null;
+    if (req.file) {
+      assertValidImageFile(req.file, req.file.fieldname || 'ttd_pengirim');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_pengiriman_ttd' });
+      req.body.ttd_pengirim_url = uploadRes.secure_url;
+    }
+
+    try {
+      const result = await pengirimanService.createPengiriman(req.body, req.user);
+      return res.status(201).json({
+        success: true,
+        message: 'Shipment created successfully.',
+        data: result,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteR2Asset(uploadRes.public_id, 'image').catch(() => {});
+      }
+      throw err;
+    }
   }
 
   /**
@@ -55,16 +71,30 @@ class PengirimanController {
 
   /**
    * PUT /api/v1/pengiriman/:id
-   * Update shipment metadata (lapak_id, tanggal)
+   * Update shipment metadata (lapak_id, tanggal, ttd_pengirim)
    */
   async update(req, res) {
     const { id } = req.params;
-    const updated = await pengirimanService.updatePengiriman(id, req.body);
-    return res.status(200).json({
-      success: true,
-      message: 'Shipment updated successfully.',
-      data: updated,
-    });
+    let uploadRes = null;
+    if (req.file) {
+      assertValidImageFile(req.file, req.file.fieldname || 'ttd_pengirim');
+      uploadRes = await uploadImageBuffer(req.file.buffer, { folder: 'pot_pengiriman_ttd' });
+      req.body.ttd_pengirim_url = uploadRes.secure_url;
+    }
+
+    try {
+      const updated = await pengirimanService.updatePengiriman(id, req.body);
+      return res.status(200).json({
+        success: true,
+        message: 'Shipment updated successfully.',
+        data: updated,
+      });
+    } catch (err) {
+      if (uploadRes && uploadRes.public_id) {
+        await deleteR2Asset(uploadRes.public_id, 'image').catch(() => {});
+      }
+      throw err;
+    }
   }
 
   /**

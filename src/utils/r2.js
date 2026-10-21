@@ -27,7 +27,7 @@ function getPublicUrl(key) {
   }
 
   // Route through the server's public storage streaming endpoint (supports Render automatic URL)
-  const baseUrl = (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 3000}`).trim().replace(/\/$/, '');
+  const baseUrl = (process.env.APP_URL || process.env.RENDER_EXTERNAL_URL).trim().replace(/\/$/, '');
   return `${baseUrl}/api/v1/storage/${key}`;
 }
 
@@ -83,7 +83,7 @@ async function uploadPdfBuffer(buffer, { folder = 'pot_slip_gaji', public_id } =
   const key = folder ? `${folder}/${fileName}` : fileName;
 
   const command = new PutObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME || 'pot-storage',
+    Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
     Body: buffer,
     ContentType: 'application/pdf',
@@ -120,7 +120,7 @@ async function uploadImageBuffer(buffer, { folder = 'pot_images', public_id, for
   const key = folder ? `${folder}/${fileName}` : fileName;
 
   const command = new PutObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME || 'pot-storage',
+    Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
     Body: buffer,
     ContentType: mimeType,
@@ -147,7 +147,7 @@ async function deleteR2Asset(key, resourceType) {
   if (!key) return null;
   try {
     const command = new DeleteObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME || 'pot-storage',
+      Bucket: process.env.R2_BUCKET_NAME,
       Key: key,
     });
     return await r2Client.send(command);
@@ -164,7 +164,7 @@ async function deleteR2Asset(key, resourceType) {
  */
 async function getObjectStream(key) {
   const command = new GetObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME || 'pot-storage',
+    Bucket: process.env.R2_BUCKET_NAME,
     Key: key,
   });
 

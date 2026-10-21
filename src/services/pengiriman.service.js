@@ -1,3 +1,4 @@
+const { db } = require('../firebase');
 const pengirimanRepository = require('../repositories/pengiriman.repository');
 const pengirimanDetailRepository = require('../repositories/pengirimanDetail.repository');
 const penerimaanRepository = require('../repositories/penerimaan.repository');
@@ -5,6 +6,7 @@ const lapakRepository = require('../repositories/lapak.repository');
 const lapakService = require('./lapak.service');
 const produkRepository = require('../repositories/produk.repository');
 const userRepository = require('../repositories/user.repository');
+const stokLapakRepository = require('../repositories/stokLapak.repository');
 const { VALID_PENGIRIMAN_STATUSES, PENGIRIMAN_STATUS } = require('../constants/pengirimanStatus');
 const { BadRequestError, NotFoundError, ConflictError } = require('../errors/AppError');
 const { parseDateOrDefault } = require('../utils/validators');
@@ -17,11 +19,11 @@ const { parseDateOrDefault } = require('../utils/validators');
 class PengirimanService {
   /**
    * Create a new shipment with detail items atomically
-   * @param {Object} data { tanggal, lapak_id, items }
+   * @param {Object} data { tanggal, lapak_id, pengirim_id, items, asal_lapak_id, ttd_pengirim_url }
    * @param {Object} currentUser Authenticated user from auth middleware
    * @returns {Promise<Object>} Created shipment with populated lapak and items
    */
-  async createPengiriman({ tanggal, lapak_id, pengirim_id, items }, currentUser) {
+  async createPengiriman({ tanggal, lapak_id, pengirim_id, items, asal_lapak_id, ttd_pengirim_url }, currentUser) {
     if (!lapak_id || typeof lapak_id !== 'string' || !lapak_id.trim()) {
       throw new BadRequestError('Field "lapak_id" is required.');
     }
@@ -36,12 +38,22 @@ class PengirimanService {
 
     const trimmedLapakId = lapak_id.trim();
     const trimmedPengirimId = pengirim_id.trim();
+    const cleanAsalLapakId = asal_lapak_id && typeof asal_lapak_id === 'string' && asal_lapak_id.trim() ? asal_lapak_id.trim() : null;
 
-    // 1. Verify lapak existence and pengirim existence in parallel
-    const [lapak, pengirimUser] = await Promise.all([
+    if (cleanAsalLapakId && cleanAsalLapakId === trimmedLapakId) {
+      throw new BadRequestError('Outlet asal dan outlet tujuan tidak boleh sama.');
+    }
+
+    // 1. Verify lapak existence, pengirim existence, and optional asal_lapak in parallel
+    const checks = [
       lapakRepository.findById(trimmedLapakId),
       userRepository.findById(trimmedPengirimId),
-    ]);
+    ];
+    if (cleanAsalLapakId) {
+      checks.push(lapakRepository.findById(cleanAsalLapakId));
+    }
+
+    const [lapak, pengirimUser, asalLapak] = await Promise.all(checks);
 
     if (!lapak) {
       throw new NotFoundError(`Lapak with ID '${trimmedLapakId}' does not exist.`);
@@ -49,6 +61,10 @@ class PengirimanService {
 
     if (!pengirimUser) {
       throw new NotFoundError(`Pengirim user with ID '${trimmedPengirimId}' does not exist.`);
+    }
+
+    if (cleanAsalLapakId && !asalLapak) {
+      throw new NotFoundError(`Lapak asal with ID '${cleanAsalLapakId}' does not exist.`);
     }
 
     // 2. Validate and parse tanggal (defaults to now if omitted or empty)
@@ -88,6 +104,17 @@ class PengirimanService {
         throw new NotFoundError(`Product with ID '${produkId}' was not found in the database.`);
       }
 
+      // If transfer from origin lapak, verify stock availability at origin stall
+      if (cleanAsalLapakId) {
+        const originStock = await stokLapakRepository.findByLapakAndProduk(cleanAsalLapakId, produkId);
+        const availableStock = originStock ? originStock.calculateStokAkhir() : 0;
+        if (availableStock < totalItemQty) {
+          throw new BadRequestError(
+            `Stok produk "${product.nama}" di lapak asal tidak mencukupi (Tersedia: ${availableStock}, Diminta transfer: ${totalItemQty}).`
+          );
+        }
+      }
+
       snapshotItems.push({
         produk_id: product.id,
         qty: totalItemQty,
@@ -101,23 +128,34 @@ class PengirimanService {
 
     const createdBy = currentUser ? currentUser.id || currentUser.uid : '';
 
-    // 5. Execute atomic creation of pengiriman header and pengiriman_detail line items
+    // 5. If origin stall exists, atomically increment stok_transfer at origin stall
+    if (cleanAsalLapakId) {
+      for (const item of snapshotItems) {
+        await stokLapakRepository.incrementStokTransfer(cleanAsalLapakId, item.produk_id, item.qty);
+      }
+    }
+
+    // 6. Execute atomic creation of pengiriman header and pengiriman_detail line items
     const { pengiriman, items: createdDetails } = await pengirimanRepository.createWithDetails(
       {
         tanggal: parsedTanggal,
         lapak_id: trimmedLapakId,
+        asal_lapak_id: cleanAsalLapakId,
         created_by: createdBy,
         pengirim_id: trimmedPengirimId,
         status: PENGIRIMAN_STATUS.DRAFT,
+        ttd_pengirim_url: ttd_pengirim_url && typeof ttd_pengirim_url === 'string' ? ttd_pengirim_url.trim() : null,
       },
       snapshotItems
     );
 
     const enrichedLapak = await lapakService.getLapakById(trimmedLapakId);
+    const enrichedAsalLapak = cleanAsalLapakId ? await lapakService.getLapakById(cleanAsalLapakId) : null;
 
     return {
       ...pengiriman.toJSON(),
       lapak: enrichedLapak ? enrichedLapak.toJSON() : null,
+      asal_lapak: enrichedAsalLapak ? enrichedAsalLapak.toJSON() : null,
       creator: currentUser
         ? {
             id: currentUser.id,
@@ -150,7 +188,12 @@ class PengirimanService {
     }
 
     // Populate lapak, creator, and pengirim details efficiently in batch
-    const uniqueLapakIds = [...new Set(shipments.map((s) => s.lapak_id).filter(Boolean))];
+    const uniqueLapakIds = [
+      ...new Set([
+        ...shipments.map((s) => s.lapak_id),
+        ...shipments.map((s) => s.asal_lapak_id),
+      ].filter(Boolean)),
+    ];
     const uniqueCreatorIds = [...new Set(shipments.map((s) => s.created_by).filter(Boolean))];
     const uniquePengirimIds = [...new Set(shipments.map((s) => s.pengirim_id).filter(Boolean))];
     const allUserIds = [...new Set([...uniqueCreatorIds, ...uniquePengirimIds])];
@@ -164,10 +207,12 @@ class PengirimanService {
     return shipments.map((s) => {
       const json = s.toJSON();
       const lapak = lapakMap.get(s.lapak_id);
+      const asalLapak = s.asal_lapak_id ? lapakMap.get(s.asal_lapak_id) : null;
       const creator = usersMap.get(s.created_by);
       const pengirimUser = s.pengirim_id ? usersMap.get(s.pengirim_id) : creator;
 
       json.lapak = lapak ? lapak.toJSON() : null;
+      json.asal_lapak = asalLapak ? asalLapak.toJSON() : null;
       json.creator = creator
         ? {
             id: creator.id,
@@ -206,9 +251,10 @@ class PengirimanService {
       throw new NotFoundError(`Shipment with ID '${id}' was not found.`);
     }
 
-    const [items, lapak, creator, pengirimUser] = await Promise.all([
+    const [items, lapak, asalLapak, creator, pengirimUser] = await Promise.all([
       pengirimanDetailRepository.findByPengirimanId(id),
       shipment.lapak_id ? lapakService.getLapakById(shipment.lapak_id) : null,
+      shipment.asal_lapak_id ? lapakService.getLapakById(shipment.asal_lapak_id) : null,
       shipment.created_by ? userRepository.findById(shipment.created_by) : null,
       shipment.pengirim_id ? userRepository.findById(shipment.pengirim_id) : null,
     ]);
@@ -218,6 +264,7 @@ class PengirimanService {
     return {
       ...shipment.toJSON(),
       lapak: lapak ? lapak.toJSON() : null,
+      asal_lapak: asalLapak ? asalLapak.toJSON() : null,
       creator: creator
         ? {
             id: creator.id,
@@ -296,6 +343,185 @@ class PengirimanService {
       payload.status = cleanStatus;
     }
 
+    const hasItemsUpdate = updateData.items !== undefined;
+    if (hasItemsUpdate && existing.status !== 'draft') {
+      throw new BadRequestError('Tidak dapat memperbarui item produk pada pengiriman dengan status selain draft.');
+    }
+
+    let cleanNewAsalLapakId = undefined;
+    if (updateData.asal_lapak_id !== undefined) {
+      cleanNewAsalLapakId = updateData.asal_lapak_id && typeof updateData.asal_lapak_id === 'string' && updateData.asal_lapak_id.trim()
+        ? updateData.asal_lapak_id.trim()
+        : null;
+
+      const targetLapakId = payload.lapak_id || existing.lapak_id;
+      if (cleanNewAsalLapakId && cleanNewAsalLapakId === targetLapakId) {
+        throw new BadRequestError('Outlet asal dan outlet tujuan tidak boleh sama.');
+      }
+
+      if (cleanNewAsalLapakId) {
+        const asalLapak = await lapakRepository.findById(cleanNewAsalLapakId);
+        if (!asalLapak) {
+          throw new NotFoundError(`Lapak asal with ID '${cleanNewAsalLapakId}' does not exist.`);
+        }
+      }
+
+      payload.asal_lapak_id = cleanNewAsalLapakId;
+    }
+
+    const effectiveAsalLapakId = payload.asal_lapak_id !== undefined ? payload.asal_lapak_id : existing.asal_lapak_id;
+    const oldAsalLapakId = existing.asal_lapak_id || null;
+
+    if (hasItemsUpdate) {
+      const oldDetails = existing.items || (await pengirimanDetailRepository.findByPengirimanId(id));
+
+      // 1. Rollback old origin stall stok_transfer if previously a transfer
+      if (oldAsalLapakId) {
+        for (const item of oldDetails) {
+          if (item.produk_id && item.qty > 0) {
+            await stokLapakRepository.decrementStokTransfer(oldAsalLapakId, item.produk_id, item.qty);
+          }
+        }
+      }
+
+      // 2. Merge duplicate items by produk_id and validate quantities
+      const mergedItemsMap = new Map();
+      for (let i = 0; i < updateData.items.length; i++) {
+        const item = updateData.items[i];
+        if (!item || typeof item !== 'object') {
+          throw new BadRequestError(`Invalid item structure at index ${i}.`);
+        }
+
+        const { produk_id, qty } = item;
+        if (!produk_id || typeof produk_id !== 'string' || !produk_id.trim()) {
+          throw new BadRequestError(`Item at index ${i} is missing a valid "produk_id".`);
+        }
+
+        const parsedQty = Number(qty);
+        if (isNaN(parsedQty) || !Number.isInteger(parsedQty) || parsedQty <= 0) {
+          throw new BadRequestError(`Item at index ${i} has an invalid "qty". Quantity must be a positive integer.`);
+        }
+
+        const cleanProdukId = produk_id.trim();
+        const currentQty = mergedItemsMap.get(cleanProdukId) || 0;
+        mergedItemsMap.set(cleanProdukId, currentQty + parsedQty);
+      }
+
+      // 3. Validate all products exist and capture snapshot data
+      const productIds = Array.from(mergedItemsMap.keys());
+      const productsMap = await produkRepository.findByIds(productIds);
+      const snapshotItems = [];
+
+      for (const [produkId, totalItemQty] of mergedItemsMap.entries()) {
+        const product = productsMap.get(produkId);
+        if (!product) {
+          if (oldAsalLapakId) {
+            for (const item of oldDetails) {
+              if (item.produk_id && item.qty > 0) {
+                await stokLapakRepository.incrementStokTransfer(oldAsalLapakId, item.produk_id, item.qty);
+              }
+            }
+          }
+          throw new NotFoundError(`Product with ID '${produkId}' was not found in the database.`);
+        }
+
+        if (effectiveAsalLapakId) {
+          const originStock = await stokLapakRepository.findByLapakAndProduk(effectiveAsalLapakId, produkId);
+          const availableStock = originStock ? originStock.calculateStokAkhir() : 0;
+          if (availableStock < totalItemQty) {
+            if (oldAsalLapakId) {
+              for (const item of oldDetails) {
+                if (item.produk_id && item.qty > 0) {
+                  await stokLapakRepository.incrementStokTransfer(oldAsalLapakId, item.produk_id, item.qty);
+                }
+              }
+            }
+            throw new BadRequestError(
+              `Stok produk "${product.nama}" di lapak asal tidak mencukupi (Tersedia: ${availableStock}, Diminta transfer: ${totalItemQty}).`
+            );
+          }
+        }
+
+        snapshotItems.push({
+          produk_id: product.id,
+          qty: totalItemQty,
+          nama_produk: product.nama,
+          harga_produk: product.harga,
+          jenis_satuan: product.jenis_satuan,
+          kategori_id: product.kategori_id || null,
+          nama_kategori: product.nama_kategori || null,
+        });
+      }
+
+      // 4. Increment stok_transfer at effective origin stall
+      if (effectiveAsalLapakId) {
+        for (const item of snapshotItems) {
+          await stokLapakRepository.incrementStokTransfer(effectiveAsalLapakId, item.produk_id, item.qty);
+        }
+      }
+
+      // 5. Replace detail records atomically
+      await pengirimanDetailRepository.deleteByPengirimanId(id);
+      const batch = db.batch();
+      pengirimanDetailRepository.prepareBatchCreate(
+        snapshotItems.map((item) => ({
+          pengiriman_id: id,
+          pengiriman_unique_id: existing.unique_id,
+          ...item,
+        })),
+        batch
+      );
+      await batch.commit();
+
+      const totalQty = snapshotItems.reduce((acc, i) => acc + i.qty, 0);
+      payload.total_qty = totalQty;
+      payload.total_items = snapshotItems.length;
+      payload.qty_kirim = totalQty;
+    } else if (cleanNewAsalLapakId !== undefined && cleanNewAsalLapakId !== oldAsalLapakId) {
+      // Items didn't change, but origin stall changed
+      const details = existing.items || (await pengirimanDetailRepository.findByPengirimanId(id));
+
+      if (oldAsalLapakId) {
+        for (const item of details) {
+          if (item.produk_id && item.qty > 0) {
+            await stokLapakRepository.decrementStokTransfer(oldAsalLapakId, item.produk_id, item.qty);
+          }
+        }
+      }
+
+      if (cleanNewAsalLapakId) {
+        for (const item of details) {
+          if (item.produk_id && item.qty > 0) {
+            const originStock = await stokLapakRepository.findByLapakAndProduk(cleanNewAsalLapakId, item.produk_id);
+            const availableStock = originStock ? originStock.calculateStokAkhir() : 0;
+            if (availableStock < item.qty) {
+              if (oldAsalLapakId) {
+                for (const rollbackItem of details) {
+                  if (rollbackItem.produk_id && rollbackItem.qty > 0) {
+                    await stokLapakRepository.incrementStokTransfer(oldAsalLapakId, rollbackItem.produk_id, rollbackItem.qty);
+                  }
+                }
+              }
+              throw new BadRequestError(
+                `Stok produk "${item.nama_produk || item.produk_id}" di lapak asal tidak mencukupi (Tersedia: ${availableStock}, Diminta transfer: ${item.qty}).`
+              );
+            }
+            await stokLapakRepository.incrementStokTransfer(cleanNewAsalLapakId, item.produk_id, item.qty);
+          }
+        }
+      }
+    }
+
+    const effectiveOrigin = payload.asal_lapak_id !== undefined ? payload.asal_lapak_id : existing.asal_lapak_id;
+    const effectiveDestination = payload.lapak_id || existing.lapak_id;
+    if (effectiveOrigin && effectiveOrigin === effectiveDestination) {
+      throw new BadRequestError('Outlet asal dan outlet tujuan tidak boleh sama.');
+    }
+
+    if (updateData.ttd_pengirim_url !== undefined) {
+      payload.ttd_pengirim_url = updateData.ttd_pengirim_url;
+    }
+
     if (Object.keys(payload).length === 0) {
       return existing;
     }
@@ -351,10 +577,20 @@ class PengirimanService {
       );
     }
 
-    // 3. Cascade delete all child items in 'pengiriman_detail'
+    // 3. Rollback origin stall's stok_transfer if this was a transfer shipment
+    if (existing.asal_lapak_id) {
+      const details = await pengirimanDetailRepository.findByPengirimanId(id);
+      for (const item of details) {
+        if (item.produk_id && item.qty > 0) {
+          await stokLapakRepository.decrementStokTransfer(existing.asal_lapak_id, item.produk_id, item.qty);
+        }
+      }
+    }
+
+    // 4. Cascade delete all child items in 'pengiriman_detail'
     await pengirimanDetailRepository.deleteByPengirimanId(id);
 
-    // 4. Delete parent 'pengiriman' document
+    // 5. Delete parent 'pengiriman' document
     return await pengirimanRepository.delete(id);
   }
 }

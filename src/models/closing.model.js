@@ -14,6 +14,7 @@ class Closing {
     tanggal,
     stok_sistem = 0,
     stok_fisik = 0,
+    stok_transfer = 0,
     total_omset = 0,
     tunai_sistem = 0,
     qris_sistem = 0,
@@ -37,6 +38,7 @@ class Closing {
     this.tanggal = tanggal || getLocalDateString(new Date());
     this.stok_sistem = Number(stok_sistem || 0);
     this.stok_fisik = Number(stok_fisik || 0);
+    this.stok_transfer = Number(stok_transfer || 0);
     this.total_omset = Number(total_omset || 0);
     this.tunai_sistem = Number(tunai_sistem || 0);
     this.qris_sistem = Number(qris_sistem || 0);
@@ -75,6 +77,7 @@ class Closing {
       tanggal: this.tanggal,
       stok_sistem: this.stok_sistem,
       stok_fisik: this.stok_fisik,
+      stok_transfer: this.stok_transfer,
       total_omset: this.total_omset,
       tunai_sistem: this.tunai_sistem,
       qris_sistem: this.qris_sistem,
@@ -106,6 +109,7 @@ class Closing {
       tanggal: this.tanggal,
       stok_sistem: this.stok_sistem,
       stok_fisik: this.stok_fisik,
+      stok_transfer: this.stok_transfer,
       total_omset: this.total_omset,
       tunai_sistem: this.tunai_sistem,
       qris_sistem: this.qris_sistem,
@@ -157,6 +161,7 @@ class Closing {
       tanggal: data.tanggal || '',
       stok_sistem: data.stok_sistem !== undefined ? data.stok_sistem : 0,
       stok_fisik: data.stok_fisik !== undefined ? data.stok_fisik : 0,
+      stok_transfer: data.stok_transfer !== undefined ? data.stok_transfer : 0,
       total_omset: data.total_omset !== undefined ? data.total_omset : 0,
       tunai_sistem: data.tunai_sistem !== undefined ? data.tunai_sistem : 0,
       qris_sistem: data.qris_sistem !== undefined ? data.qris_sistem : 0,

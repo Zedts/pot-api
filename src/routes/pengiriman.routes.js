@@ -3,6 +3,7 @@ const pengirimanController = require('../controllers/pengiriman.controller');
 const authenticate = require('../middlewares/auth.middleware');
 const { authorizePermission } = require('../middlewares/rbac.middleware');
 const asyncWrapper = require('../middlewares/asyncWrapper');
+const uploadImage = require('../middlewares/uploadImage.middleware');
 const {
   validateCreatePengiriman,
   validateUpdatePengiriman,
@@ -14,15 +15,29 @@ const router = Router();
 // =========================================================================
 // Pengiriman Management Endpoints (Protected with 30-Day Bearer Token)
 // RBAC controlled via centralized PERMISSIONS.PENGIRIMAN matrix:
-//   - Admin, Owner: Full CRUD + Status transition
-//   - Produksi, Viar, SPG: Read access
+//   - Admin, Owner, Produksi, Viar, SPG: Create & Read access
 // =========================================================================
+
+const uploadTtdPengirimMiddleware = (req, res, next) => {
+  uploadImage.single('ttd_pengirim')(req, res, (err) => {
+    if (err) return next(err);
+    if (typeof req.body.items === 'string') {
+      try {
+        req.body.items = JSON.parse(req.body.items);
+      } catch {
+        // Will be caught by validateCreatePengiriman
+      }
+    }
+    next();
+  });
+};
 
 // Create new shipment with items atomically
 router.post(
   '/',
   authenticate,
   authorizePermission('PENGIRIMAN', 'CREATE'),
+  uploadTtdPengirimMiddleware,
   validateCreatePengiriman,
   asyncWrapper((req, res) => pengirimanController.create(req, res))
 );
@@ -43,11 +58,12 @@ router.get(
   asyncWrapper((req, res) => pengirimanController.getById(req, res))
 );
 
-// Update shipment metadata (lapak_id, tanggal)
+// Update shipment metadata (lapak_id, tanggal, ttd_pengirim)
 router.put(
   '/:id',
   authenticate,
   authorizePermission('PENGIRIMAN', 'UPDATE'),
+  uploadTtdPengirimMiddleware,
   validateUpdatePengiriman,
   asyncWrapper((req, res) => pengirimanController.update(req, res))
 );

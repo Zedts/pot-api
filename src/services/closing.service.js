@@ -45,10 +45,13 @@ class ClosingService {
     // 4. Calculate discrepancies automatically
     const stokSistem = Number(data.stok_sistem || 0);
     const stokFisik = Number(data.stok_fisik || 0);
+    const stokTransfer = Number(data.stok_transfer || 0);
     const totalOmset = Number(data.total_omset || 0);
-    const tunaiSistem = Number(data.tunai_sistem || 0);
     const qrisSistem = Number(data.qris_sistem || 0);
     const transferSistem = Number(data.transfer_sistem || 0);
+    const tunaiSistem = data.tunai_sistem !== undefined
+      ? Number(data.tunai_sistem)
+      : Math.max(0, totalOmset - qrisSistem - transferSistem);
     const uangTunaiFisik = Number(data.uang_tunai_fisik || 0);
 
     const selisihStok = data.selisih_stok !== undefined
@@ -56,7 +59,7 @@ class ClosingService {
       : (stokFisik - stokSistem);
     const selisihUang = data.selisih_uang !== undefined
       ? Number(data.selisih_uang)
-      : (uangTunaiFisik - totalOmset);
+      : (uangTunaiFisik - tunaiSistem);
 
     // 5. Persist closing document
     const created = await closingRepository.create({
@@ -65,6 +68,7 @@ class ClosingService {
       tanggal,
       stok_sistem: stokSistem,
       stok_fisik: stokFisik,
+      stok_transfer: stokTransfer,
       total_omset: totalOmset,
       tunai_sistem: tunaiSistem,
       qris_sistem: qrisSistem,
@@ -156,6 +160,7 @@ class ClosingService {
 
     if (updateData.stok_sistem !== undefined) payload.stok_sistem = Number(updateData.stok_sistem);
     if (updateData.stok_fisik !== undefined) payload.stok_fisik = Number(updateData.stok_fisik);
+    if (updateData.stok_transfer !== undefined) payload.stok_transfer = Number(updateData.stok_transfer);
     if (updateData.total_omset !== undefined) payload.total_omset = Number(updateData.total_omset);
     if (updateData.tunai_sistem !== undefined) payload.tunai_sistem = Number(updateData.tunai_sistem);
     if (updateData.qris_sistem !== undefined) payload.qris_sistem = Number(updateData.qris_sistem);
@@ -168,10 +173,15 @@ class ClosingService {
     const currentStokFisik = payload.stok_fisik !== undefined ? payload.stok_fisik : existing.stok_fisik;
     payload.selisih_stok = currentStokFisik - currentStokSistem;
 
-    // Recompute selisih_uang if either cash or total omset changed
+    // Recompute selisih_uang if either cash or revenue components changed
     const currentTotalOmset = payload.total_omset !== undefined ? payload.total_omset : existing.total_omset;
+    const currentQrisSistem = payload.qris_sistem !== undefined ? payload.qris_sistem : (existing.qris_sistem || 0);
+    const currentTransferSistem = payload.transfer_sistem !== undefined ? payload.transfer_sistem : (existing.transfer_sistem || 0);
+    const currentTunaiSistem = payload.tunai_sistem !== undefined
+      ? payload.tunai_sistem
+      : (existing.tunai_sistem !== undefined ? existing.tunai_sistem : Math.max(0, currentTotalOmset - currentQrisSistem - currentTransferSistem));
     const currentUangTunaiFisik = payload.uang_tunai_fisik !== undefined ? payload.uang_tunai_fisik : existing.uang_tunai_fisik;
-    payload.selisih_uang = currentUangTunaiFisik - currentTotalOmset;
+    payload.selisih_uang = currentUangTunaiFisik - currentTunaiSistem;
 
     if (Object.keys(payload).length === 0) {
       return await this.getClosingById(id);
