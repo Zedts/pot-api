@@ -28,11 +28,7 @@ class PenjualanRepository {
     const calculatedTotal = itemsData.reduce((sum, item) => sum + Number(item.subtotal || 0), 0);
 
     const rawBukti = headerData.bukti_bayar_url || headerData.bukti_qris_url || null;
-    const rawKembalian = Number(
-      headerData.kembalian_disimpan !== undefined
-        ? headerData.kembalian_disimpan
-        : (headerData.keep_changes || 0)
-    );
+    const rawKembalian = Number(headerData.kembalian_disimpan || 0);
 
     const penjualanEntity = new Penjualan({
       id: headerRef.id,
@@ -45,7 +41,6 @@ class PenjualanRepository {
       bukti_qris_url: rawBukti,
       catatan: headerData.catatan || '',
       kembalian_disimpan: rawKembalian,
-      keep_changes: rawKembalian,
       createdAt: now,
       updatedAt: now,
     });
@@ -93,11 +88,7 @@ class PenjualanRepository {
     const headerRef = this.collection.doc();
     const calculatedTotal = itemsData.reduce((sum, item) => sum + Number(item.subtotal || 0), 0);
     const rawBukti = headerData.bukti_bayar_url || headerData.bukti_qris_url || null;
-    const rawKembalian = Number(
-      headerData.kembalian_disimpan !== undefined
-        ? headerData.kembalian_disimpan
-        : (headerData.keep_changes || 0)
-    );
+    const rawKembalian = Number(headerData.kembalian_disimpan || 0);
 
     const penjualanEntity = new Penjualan({
       id: headerRef.id,
@@ -110,7 +101,6 @@ class PenjualanRepository {
       bukti_qris_url: rawBukti,
       catatan: headerData.catatan || '',
       kembalian_disimpan: rawKembalian,
-      keep_changes: rawKembalian,
       createdAt: now,
       updatedAt: now,
     });

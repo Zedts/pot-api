@@ -85,11 +85,7 @@ class PenjualanService {
 
     // 5. Persist transaction header, details, and inventory stock atomically
     const rawBuktiUrl = (data.bukti_bayar_url || data.bukti_qris_url || '').trim() || null;
-    const rawKembalian = Number(
-      data.kembalian_disimpan !== undefined
-        ? data.kembalian_disimpan
-        : (data.keep_changes || 0)
-    );
+    const rawKembalian = Number(data.kembalian_disimpan || 0);
 
     const { penjualan } = await penjualanRepository.createWithDetailsAndStock(
       {
@@ -101,7 +97,6 @@ class PenjualanService {
         bukti_qris_url: rawBuktiUrl,
         catatan: catatan ? catatan.trim() : '',
         kembalian_disimpan: rawKembalian,
-        keep_changes: rawKembalian,
       },
       snapshotItems,
       targetLapakId
@@ -189,15 +184,10 @@ class PenjualanService {
     if (updateData.catatan !== undefined) {
       payload.catatan = typeof updateData.catatan === 'string' ? updateData.catatan.trim() : '';
     }
-    if (updateData.kembalian_disimpan !== undefined || updateData.keep_changes !== undefined) {
-      const val = Number(
-        updateData.kembalian_disimpan !== undefined
-          ? updateData.kembalian_disimpan
-          : updateData.keep_changes
-      );
+    if (updateData.kembalian_disimpan !== undefined) {
+      const val = Number(updateData.kembalian_disimpan);
       if (!isNaN(val) && val >= 0) {
         payload.kembalian_disimpan = val;
-        payload.keep_changes = val;
       }
     }
 

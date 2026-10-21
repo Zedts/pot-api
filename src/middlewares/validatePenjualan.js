@@ -25,7 +25,6 @@ function validateCreatePenjualan(req, res, next) {
     bukti_qris_url,
     catatan,
     kembalian_disimpan,
-    keep_changes,
     items,
   } = req.body;
   const errors = [];
@@ -89,19 +88,16 @@ function validateCreatePenjualan(req, res, next) {
     errors.push('Field "catatan" must be a string.');
   }
 
-  // 7. Validate kembalian_disimpan / keep_changes if provided
-  const rawKembalian = kembalian_disimpan !== undefined ? kembalian_disimpan : keep_changes;
-  if (rawKembalian !== undefined && rawKembalian !== null) {
-    const numKembalian = Number(rawKembalian);
+  // 7. Validate kembalian_disimpan if provided
+  if (kembalian_disimpan !== undefined && kembalian_disimpan !== null) {
+    const numKembalian = Number(kembalian_disimpan);
     if (isNaN(numKembalian) || numKembalian < 0) {
       errors.push('Field "kembalian_disimpan" must be a non-negative number.');
     } else {
       req.body.kembalian_disimpan = numKembalian;
-      req.body.keep_changes = numKembalian;
     }
   } else {
     req.body.kembalian_disimpan = 0;
-    req.body.keep_changes = 0;
   }
 
   // 7. Validate items array
@@ -146,18 +142,16 @@ function validateUpdatePenjualan(req, res, next) {
     bukti_qris_url,
     catatan,
     kembalian_disimpan,
-    keep_changes,
   } = req.body;
   const errors = [];
 
   const rawBukti = bukti_bayar_url !== undefined ? bukti_bayar_url : bukti_qris_url;
-  const rawKembalian = kembalian_disimpan !== undefined ? kembalian_disimpan : keep_changes;
 
   if (
     metode_pembayaran === undefined &&
     rawBukti === undefined &&
     catatan === undefined &&
-    rawKembalian === undefined
+    kembalian_disimpan === undefined
   ) {
     return next(
       new BadRequestError(
@@ -192,13 +186,12 @@ function validateUpdatePenjualan(req, res, next) {
     errors.push('Field "catatan" must be a string.');
   }
 
-  if (rawKembalian !== undefined && rawKembalian !== null) {
-    const numKembalian = Number(rawKembalian);
+  if (kembalian_disimpan !== undefined && kembalian_disimpan !== null) {
+    const numKembalian = Number(kembalian_disimpan);
     if (isNaN(numKembalian) || numKembalian < 0) {
       errors.push('Field "kembalian_disimpan" must be a non-negative number.');
     } else {
       req.body.kembalian_disimpan = numKembalian;
-      req.body.keep_changes = numKembalian;
     }
   }
 

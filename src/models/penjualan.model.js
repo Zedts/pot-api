@@ -17,7 +17,6 @@ class Penjualan {
     bukti_qris_url = null,
     catatan = '',
     kembalian_disimpan = 0,
-    keep_changes = 0,
     spg = null,
     lapak = null,
     items = [],
@@ -35,9 +34,7 @@ class Penjualan {
     this.bukti_qris_url = resolvedBukti;
     this.catatan = catatan ? catatan.trim() : '';
     this.kembalian_disimpan = Number(
-      kembalian_disimpan !== undefined && kembalian_disimpan !== null
-        ? kembalian_disimpan
-        : (keep_changes || 0)
+      kembalian_disimpan !== undefined && kembalian_disimpan !== null ? kembalian_disimpan : 0
     );
     this.spg = spg || null;
     this.lapak = lapak || null;
@@ -60,7 +57,6 @@ class Penjualan {
       bukti_qris_url: this.bukti_qris_url,
       catatan: this.catatan,
       kembalian_disimpan: this.kembalian_disimpan,
-      keep_changes: this.kembalian_disimpan,
       updatedAt: this.updatedAt || new Date(),
     };
 
@@ -85,7 +81,6 @@ class Penjualan {
       bukti_qris_url: normalizeStorageUrl(this.bukti_qris_url),
       catatan: this.catatan,
       kembalian_disimpan: this.kembalian_disimpan,
-      keep_changes: this.kembalian_disimpan,
       spg: this.spg
         ? {
             id: this.spg.id || this.spg.spg_id || '',
@@ -127,7 +122,6 @@ class Penjualan {
       bukti_qris_url: resolvedBukti,
       catatan: data.catatan || '',
       kembalian_disimpan: rawKembalian,
-      keep_changes: rawKembalian,
       spg: spg,
       lapak: lapak,
       items: items,
